@@ -1,42 +1,120 @@
 ---
-// /free-trial/ — dedicated route so every CTA that links here (header,
-// sticky mobile bar, ProgramCard, LocationCard, homepage final CTA) has
-// a real destination instead of a same-page anchor. Reuses the exact
-// same TrialForm the homepage embeds — no duplicated form logic.
-// Full build-out (this being its own richly-designed page rather than
-// a thin wrapper) is Phase 9 per docs/roadmap.md; this is the minimum
-// needed to keep Phase 4's links working.
+// /free-trial/ — Phase 9 per docs/roadmap.md (built out fully now; was a
+// thin wrapper since Phase 4, just enough to keep CTA links working).
+// Reuses the same TrialForm the homepage embeds — no duplicated form
+// logic. Trust bullets are generic/safe (no fabricated claims); the
+// location list reuses real, already-published data.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Container from '../components/Container.astro';
 import SectionHeading from '../components/SectionHeading.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 import TrialForm from '../components/TrialForm.astro';
+import { locations } from '../../data/locations';
+
+const trustPoints = [
+  'No experience needed — classes welcome complete beginners',
+  'No pressure, no obligation to continue',
+  'Meet the coaches and see the training space for yourself',
+];
 ---
 
 <BaseLayout
   title="Book a Free Trial — Warriors Den MMA"
   description="Book your free trial class at Warriors Den MMA in Kolkata. Fill in your details and our team will confirm your session."
 >
-  <section class="page">
-    <Container class="page__inner">
+  <section class="page-header">
+    <Container>
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Free Trial' }]} />
       <SectionHeading
         eyebrow="Get Started"
         title="Book Your Free Trial"
-        description="Fill in your details and our team will confirm your trial class."
-        align="center"
+        description="Fill in your details and our team will confirm your trial class — no experience or equipment needed."
       />
-      <TrialForm />
+      <ul class="trust-list">
+        {trustPoints.map((point) => <li class="text-small">{point}</li>)}
+      </ul>
+    </Container>
+  </section>
+
+  <section class="section">
+    <Container class="layout">
+      <div class="layout__form">
+        <TrialForm />
+      </div>
+
+      <aside class="layout__aside">
+        <h2 class="text-h4">Our locations</h2>
+        <ul class="location-list">
+          {
+            locations.map((location) => (
+              <li>
+                <a href={`/locations/${location.slug}/`} class="text-small">
+                  {location.name}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="text-caption text-muted">
+          Not sure which branch? Leave it blank in the form and we'll help you pick.
+        </p>
+      </aside>
     </Container>
   </section>
 </BaseLayout>
 
 <style>
-  .page {
-    padding-block: var(--space-20);
+  .page-header {
+    padding-block: var(--space-12) var(--space-8);
   }
-  .page__inner {
-    max-width: 760px;
+  .page-header :global(.breadcrumbs) {
+    margin-bottom: var(--space-8);
   }
-  .page__inner :global(.trial-form-wrap) {
-    margin-top: var(--space-12);
+
+  .trust-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-top: var(--space-8);
+    max-width: 52ch;
+  }
+  .trust-list li {
+    padding-left: var(--space-6);
+    position: relative;
+    color: var(--color-text-muted);
+  }
+  .trust-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--color-success);
+    font-weight: 700;
+  }
+
+  .section {
+    padding-block: var(--space-8) var(--space-20);
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+  }
+
+  .location-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin: var(--space-4) 0 var(--space-6);
+  }
+  .location-list a {
+    color: var(--color-primary-hover);
+    font-weight: 600;
+  }
+
+  @media (min-width: 900px) {
+    .layout {
+      grid-template-columns: 2fr 1fr;
+    }
   }
 </style>
