@@ -1,0 +1,182 @@
+---
+// /programs/[slug]/ — one page per confirmed program. Phase 5 per
+// docs/roadmap.md. Static paths generated from data/programs.ts, so
+// adding a program to that file is enough to get a new page.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/Container.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Badge from '../../components/Badge.astro';
+import Button from '../../components/Button.astro';
+import Card from '../../components/Card.astro';
+import { programs, type Program } from '../../../data/programs';
+
+export function getStaticPaths() {
+  return programs.map((program) => ({
+    params: { slug: program.slug },
+    props: { program },
+  }));
+}
+
+interface Props {
+  program: Program;
+}
+
+const { program } = Astro.props;
+
+const otherPrograms = programs.filter((p) => p.id !== program.id);
+---
+
+<BaseLayout
+  title={`${program.name} Training — Warriors Den MMA, Kolkata`}
+  description={program.shortDescription}
+>
+  <section class="page-header">
+    <Container>
+      <Breadcrumbs
+        items={[
+          { label: 'Home', href: '/' },
+          { label: 'Programs', href: '/programs/' },
+          { label: program.name },
+        ]}
+      />
+      <Badge tone="primary" class="page-header__badge">{program.audience}</Badge>
+      <h1 class="text-display page-header__title">{program.name}</h1>
+      <p class="text-body text-muted page-header__lede">{program.shortDescription}</p>
+      <div class="page-header__actions">
+        <Button href={`/free-trial/?program=${program.id}`} variant="primary">
+          Book a Free Trial
+        </Button>
+        <Button href="/#locations" variant="outline">View Locations</Button>
+      </div>
+    </Container>
+  </section>
+
+  <section class="section">
+    <Container class="content-grid">
+      <div class="content-grid__main">
+        <h2 class="text-h2">About {program.name}</h2>
+        {program.overview.map((paragraph) => <p class="text-body">{paragraph}</p>)}
+      </div>
+
+      <Card as="aside" class="content-grid__aside">
+        <h2 class="text-h4">What you'll build</h2>
+        <ul class="benefits-list">
+          {program.benefits.map((benefit) => <li class="text-small">{benefit}</li>)}
+        </ul>
+        <Button href={`/free-trial/?program=${program.id}`} variant="primary" class="aside-cta">
+          Try {program.name}
+        </Button>
+      </Card>
+    </Container>
+  </section>
+
+  <section class="section section--surface">
+    <Container>
+      <h2 class="text-h2">Explore other programs</h2>
+      <div class="other-programs">
+        {
+          otherPrograms.map((p) => (
+            <a href={`/programs/${p.slug}/`} class="other-programs__link text-h4">
+              {p.name} →
+            </a>
+          ))
+        }
+      </div>
+    </Container>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-block: var(--space-12) var(--space-12);
+  }
+  .page-header :global(.breadcrumbs) {
+    margin-bottom: var(--space-6);
+  }
+  .page-header__badge {
+    margin-bottom: var(--space-4);
+  }
+  .page-header__title {
+    color: var(--color-secondary);
+  }
+  .page-header__lede {
+    margin-top: var(--space-4);
+    max-width: 60ch;
+  }
+  .page-header__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin-top: var(--space-8);
+  }
+
+  .section {
+    padding-block: var(--space-12);
+  }
+  .section--surface {
+    background: var(--color-surface);
+  }
+
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
+  .content-grid__main {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    max-width: 68ch;
+  }
+
+  .benefits-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin: var(--space-4) 0 var(--space-6);
+    color: var(--color-text-muted);
+  }
+  .benefits-list li {
+    padding-left: var(--space-4);
+    position: relative;
+  }
+  .benefits-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-primary);
+  }
+  .content-grid__aside :global(.aside-cta) {
+    width: 100%;
+  }
+
+  .other-programs {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+    margin-top: var(--space-8);
+  }
+  .other-programs__link {
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    color: var(--color-secondary);
+  }
+  .other-programs__link:hover {
+    border-color: var(--color-primary);
+  }
+
+  @media (min-width: 900px) {
+    .content-grid {
+      grid-template-columns: 2fr 1fr;
+    }
+    .other-programs {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+</style>
