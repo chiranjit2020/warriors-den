@@ -19,6 +19,14 @@ const ctaHref = '/free-trial/';
 const ctaLabel = 'Book Free Trial';
 ---
 
+<div class="announcement-bar">
+  <Container>
+    <p class="text-caption announcement-bar__text">
+      Training now open across 3 Kolkata locations — Bablatala · Kestopur · Madhyamgram
+    </p>
+  </Container>
+</div>
+
 <header class="site-header">
   <Container class="site-header__bar">
     <a href="/" class="site-header__logo text-h3">Warriors Den <span>MMA</span></a>
@@ -70,6 +78,15 @@ const ctaLabel = 'Book Free Trial';
 </div>
 
 <style>
+  .announcement-bar {
+    background: var(--color-secondary);
+  }
+  .announcement-bar__text {
+    color: var(--color-text-inverse-muted);
+    text-align: center;
+    padding-block: var(--space-2);
+  }
+
   .site-header {
     position: sticky;
     top: 0;
