@@ -1,0 +1,79 @@
+---
+// /gallery/ — Phase 8 per docs/roadmap.md. No real Warriors Den
+// photography has been supplied yet (docs/research.md §9), and
+// master-prompt.md §35 explicitly rules out generic stock photography
+// standing in for it. Rather than leave this route 404ing (it's linked
+// from Header/Footer since Phase 3) or fake it with stock photos, this
+// ships the same honest, clearly-labeled placeholder treatment used on
+// the homepage — grouped by category so the page structure is proven
+// and real photos drop in later with no markup changes.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Container from '../components/Container.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Gallery from '../components/Gallery.astro';
+import Button from '../components/Button.astro';
+
+const categories = [
+  { title: 'Training Sessions', count: 4 },
+  { title: 'Facility', count: 3 },
+  { title: 'Community & Events', count: 3 },
+];
+---
+
+<BaseLayout
+  title="Gallery — Warriors Den MMA"
+  description="A look inside Warriors Den MMA's training facilities in Kolkata. Real training photography is coming soon."
+>
+  <section class="page-header">
+    <Container>
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Gallery' }]} />
+      <SectionHeading
+        eyebrow="Gallery"
+        title="Inside the Den"
+        description="Real training photography is coming soon. Here's the layout it'll fill."
+      />
+    </Container>
+  </section>
+
+  <section class="section">
+    <Container class="gallery-sections">
+      {
+        categories.map((category) => (
+          <div class="gallery-section">
+            <h2 class="text-h3">{category.title}</h2>
+            <Gallery count={category.count} />
+          </div>
+        ))
+      }
+      <div class="cta-row">
+        <Button href="/free-trial/" variant="primary">Book a Free Trial</Button>
+      </div>
+    </Container>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-block: var(--space-12) var(--space-8);
+  }
+  .page-header :global(.breadcrumbs) {
+    margin-bottom: var(--space-8);
+  }
+  .section {
+    padding-block: var(--space-8) var(--space-20);
+  }
+  .gallery-sections {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+  }
+  .gallery-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+  .cta-row {
+    margin-top: var(--space-4);
+  }
+</style>
