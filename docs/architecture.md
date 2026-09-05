@@ -110,7 +110,11 @@ Implemented at the component level per `design-system.md` §13: semantic landmar
 
 ## 7. Deployment (MVP)
 
-GitHub repository → GitHub Pages (or an equivalent GitHub-connected static host) building `dist/` on push to `main`, via a simple CI workflow (`astro build` → deploy). No environment secrets needed at this stage since there's no backend.
+`.github/workflows/deploy.yml` builds and deploys `dist/` to GitHub Pages on every push to `master` (Phase 12). No environment secrets needed since there's no backend.
+
+**One manual step required, not automatable from here:** GitHub Pages must be switched to "GitHub Actions" as its source once, in the repo's Settings → Pages → Build and deployment. This session has no `gh` CLI or token to flip that toggle itself.
+
+**Root-domain assumption — read before attaching a domain.** Every internal link in this site (nav, footer, cross-links, canonical URLs) is root-relative (e.g. `/programs/mma/`), which only resolves correctly when served from a domain root: either a custom domain attached to GitHub Pages, or another root-serving host (Netlify, etc.) — both work with the code exactly as it is. If instead served at the raw project subpath `https://<user>.github.io/warriors-den/` with **no** custom domain, every internal link breaks. That needs an Astro `base` path plus a link-prefixing pass across the whole codebase, which this project deliberately does not have — add it only if that specific subpath scenario is the actual target, not speculatively.
 
 ## 7.1 Form submission — decided: staying stubbed (2026-09-05)
 

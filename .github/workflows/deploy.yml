@@ -1,0 +1,58 @@
+name: Deploy to GitHub Pages
+
+# Phase 12 (docs/roadmap.md) — builds and deploys the static site on every
+# push to master. This workflow itself needs no manual step beyond what's
+# below, but GitHub Pages must be switched to "GitHub Actions" as its
+# source once (Settings -> Pages -> Build and deployment -> Source) —
+# this repo has no gh CLI/token available to flip that setting itself.
+#
+# IMPORTANT — root-domain assumption: every internal link in this site
+# (nav, footer, cross-links, canonical URLs) is root-relative (e.g.
+# /programs/mma/), which only resolves correctly when the site is served
+# from a domain root — either a custom domain attached to GitHub Pages,
+# or another root-serving host (Netlify, etc.). If this repo is instead
+# served at the raw project subpath https://<user>.github.io/warriors-den/
+# with no custom domain, every internal link breaks — that needs an
+# Astro `base` path plus a link-prefixing pass this project doesn't have
+# yet. Don't add one speculatively; only if that specific subpath
+# scenario is actually the deployment target.
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
