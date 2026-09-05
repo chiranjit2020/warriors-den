@@ -1,0 +1,92 @@
+---
+// Toast — global notification stack. Include ONCE per layout (e.g. in
+// BaseLayout). Other components trigger it via window.wdToast.show(...).
+// docs/design-system.md §14.
+---
+
+<div id="wd-toast-region" class="toast-region" aria-live="polite" aria-atomic="false"></div>
+
+<style>
+  .toast-region {
+    position: fixed;
+    z-index: 100;
+    bottom: var(--space-4);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    width: min(360px, calc(100vw - var(--space-8)));
+    pointer-events: none;
+  }
+
+  :global(.toast) {
+    /*
+      Deliberately a LIGHT surface with a colored accent border, not a
+      dark background — a toast is an overlay that can appear on top of
+      any section, including dark ones (e.g. the footer). A dark toast
+      on --color-secondary blended into a dark footer with too little
+      contrast to read; a light card + tone-colored border stays legible
+      regardless of what's behind it.
+    */
+    pointer-events: auto;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    background: var(--color-background);
+    color: var(--color-text);
+    box-shadow: var(--shadow-elevated);
+    font-size: var(--text-small-size);
+    line-height: var(--text-small-line-height);
+    animation: toast-in var(--duration-base) var(--ease-standard);
+  }
+
+  :global(.toast--success) {
+    border-left: 4px solid var(--color-success);
+  }
+  :global(.toast--error) {
+    border-left: 4px solid var(--color-error);
+  }
+  :global(.toast--warning) {
+    border-left: 4px solid var(--color-warning);
+  }
+
+  @keyframes toast-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+
+<script>
+  type ToastTone = 'success' | 'error' | 'warning' | 'neutral';
+
+  function showToast(message: string, tone: ToastTone = 'neutral', duration = 5000) {
+    const region = document.getElementById('wd-toast-region');
+    if (!region) return;
+
+    const toast = document.createElement('div');
+    toast.className = `toast toast--${tone}`;
+    toast.setAttribute('role', tone === 'error' ? 'alert' : 'status');
+    toast.textContent = message;
+
+    region.appendChild(toast);
+    window.setTimeout(() => toast.remove(), duration);
+  }
+
+  declare global {
+    interface Window {
+      wdToast: { show: typeof showToast };
+    }
+  }
+
+  window.wdToast = { show: showToast };
+</script>
