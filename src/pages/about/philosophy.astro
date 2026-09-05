@@ -1,0 +1,136 @@
+---
+// /about/philosophy/ — Phase 7 per docs/roadmap.md. "We don't just
+// create fighters. We forge warriors." is supplied in master-prompt.md
+// §4 as the brand's existing philosophy statement — used here per that
+// section's explicit instruction to develop it carefully, with
+// violence NOT the primary message (§4), built around the 7 warrior
+// traits master-prompt.md §4 names.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/Container.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AboutNav from '../../components/AboutNav.astro';
+import Card from '../../components/Card.astro';
+import Button from '../../components/Button.astro';
+
+const traits = [
+  { title: 'Discipline', description: 'Showing up, doing the work, and building habits that hold under pressure.' },
+  { title: 'Courage', description: 'Stepping onto the mat, trying the technique, taking the class you\'re nervous about.' },
+  { title: 'Confidence', description: 'Earned through progress you can feel — not given, built session by session.' },
+  { title: 'Respect', description: 'For your training partners, your coaches, and yourself.' },
+  { title: 'Resilience', description: 'Getting back up — on the mat and everywhere else.' },
+  { title: 'Focus', description: 'The ability to be fully present, one round, one rep, one class at a time.' },
+  { title: 'Continuous Improvement', description: 'There\'s always a next level. Training never really "finishes."' },
+];
+---
+
+<BaseLayout
+  title="Our Philosophy — Warriors Den MMA"
+  description={`"We don't just create fighters. We forge warriors." What that means at Warriors Den MMA — discipline, courage, confidence, respect, resilience, focus, and continuous improvement.`}
+>
+  <section class="page-header">
+    <Container>
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'About', href: '/about/' }, { label: 'Philosophy' }]} />
+      <SectionHeading eyebrow="About Warriors Den" title="Our Philosophy" />
+      <AboutNav active="philosophy" />
+    </Container>
+  </section>
+
+  <section class="section">
+    <Container class="philosophy-intro">
+      <p class="text-display philosophy-intro__statement">
+        "We don't just create fighters.<br />We forge warriors."
+      </p>
+      <p class="text-body text-muted">
+        At Warriors Den, "warrior" isn't about aggression. It's about what training builds in you
+        over time — on the mat and off it.
+      </p>
+    </Container>
+  </section>
+
+  <section class="section section--surface">
+    <Container>
+      <SectionHeading eyebrow="What a warrior means to us" title="Seven traits we train for" align="center" />
+      <div class="traits-grid">
+        {
+          traits.map((trait) => (
+            <Card>
+              <h3 class="text-h4">{trait.title}</h3>
+              <p class="text-small text-muted" style="margin-top: var(--space-2);">
+                {trait.description}
+              </p>
+            </Card>
+          ))
+        }
+      </div>
+    </Container>
+  </section>
+
+  <section class="final-cta">
+    <Container class="final-cta__inner">
+      <h2 class="text-h1 final-cta__title">Ready to start?</h2>
+      <Button href="/free-trial/" variant="primary">Book a Free Trial</Button>
+    </Container>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-block: var(--space-12) var(--space-8);
+  }
+  .page-header :global(.breadcrumbs) {
+    margin-bottom: var(--space-8);
+  }
+  .page-header :global(.about-nav) {
+    margin-top: var(--space-8);
+  }
+
+  .section {
+    padding-block: var(--space-12);
+  }
+  .section--surface {
+    background: var(--color-surface);
+  }
+
+  .philosophy-intro {
+    max-width: 60ch;
+  }
+  .philosophy-intro__statement {
+    color: var(--color-secondary);
+    margin-bottom: var(--space-6);
+  }
+
+  .traits-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    margin-top: var(--space-12);
+  }
+
+  .final-cta {
+    background: var(--color-secondary);
+    color: var(--color-text-inverse);
+    padding-block: var(--space-16);
+  }
+  .final-cta__inner {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-6);
+  }
+  .final-cta__title {
+    color: var(--color-text-inverse);
+  }
+
+  @media (min-width: 600px) {
+    .traits-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1024px) {
+    .traits-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

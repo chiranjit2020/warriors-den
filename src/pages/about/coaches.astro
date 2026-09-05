@@ -1,0 +1,69 @@
+---
+// /about/coaches/ — Phase 7 per docs/roadmap.md. Only the 2 confirmed
+// founder names (data/coaches.ts) — no invented credentials, belts, or
+// competition history, per master-prompt.md §30/§44.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/Container.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AboutNav from '../../components/AboutNav.astro';
+import CoachCard from '../../components/CoachCard.astro';
+import Button from '../../components/Button.astro';
+import { coaches } from '../../../data/coaches';
+---
+
+<BaseLayout
+  title="Our Coaches — Warriors Den MMA"
+  description="Meet the founders and coaches behind Warriors Den MMA's training program in Kolkata."
+>
+  <section class="page-header">
+    <Container>
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'About', href: '/about/' }, { label: 'Coaches' }]} />
+      <SectionHeading eyebrow="About Warriors Den" title="Meet the Team" />
+      <AboutNav active="coaches" />
+    </Container>
+  </section>
+
+  <section class="section">
+    <Container>
+      <p class="text-body text-muted intro">
+        Full coach bios and credentials are on the way — for now, here's who's behind Warriors Den
+        MMA.
+      </p>
+      <div class="coaches-grid">
+        {coaches.map((coach) => <CoachCard coach={coach} />)}
+      </div>
+      <div class="cta-row">
+        <Button href="/free-trial/" variant="primary">Book a Free Trial</Button>
+      </div>
+    </Container>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-block: var(--space-12) var(--space-8);
+  }
+  .page-header :global(.breadcrumbs) {
+    margin-bottom: var(--space-8);
+  }
+  .page-header :global(.about-nav) {
+    margin-top: var(--space-8);
+  }
+  .section {
+    padding-block: var(--space-8) var(--space-20);
+  }
+  .intro {
+    max-width: 60ch;
+  }
+  .coaches-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+    margin-top: var(--space-12);
+    max-width: 640px;
+  }
+  .cta-row {
+    margin-top: var(--space-12);
+  }
+</style>

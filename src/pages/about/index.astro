@@ -1,0 +1,94 @@
+---
+// /about/ — Our Story. Phase 7 per docs/roadmap.md. Content is drawn
+// directly from denmma.netlify.app (docs/research.md §1) — the founder
+// names, the Terminus Building -> Bablatala move, and the mission quote
+// are all real. The expansion to Kestopur and Madhyamgram is stated as
+// fact because it's owner-confirmed (docs/research.md §2.1), even
+// though the live site's own copy predates it. No dates, student
+// counts, or achievements are invented — none were supplied.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/Container.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AboutNav from '../../components/AboutNav.astro';
+import Button from '../../components/Button.astro';
+---
+
+<BaseLayout
+  title="Our Story — Warriors Den MMA"
+  description="How Warriors Den MMA grew from a single Newtown training space into a martial arts academy across 3 Kolkata locations."
+>
+  <section class="page-header">
+    <Container>
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'About' }]} />
+      <SectionHeading eyebrow="About Warriors Den" title="Our Story" />
+      <AboutNav active="story" />
+    </Container>
+  </section>
+
+  <section class="section">
+    <Container class="story">
+      <p class="text-body">
+        Warriors Den MMA was founded by <strong>Ranjit Sharma</strong> and <strong>Adarsh Pal</strong>,
+        who set out to build more than a fight gym — a place where martial arts training could
+        shape both serious competitors and everyday people looking to build real skill.
+      </p>
+      <p class="text-body">
+        The academy began at the Terminus Building in Newtown before moving to its Bablatala
+        (Gopalpur) location to expand training space and grow its program offering. Since then,
+        Warriors Den has grown to three locations across Kolkata — Bablatala, Kestopur, and
+        Madhyamgram — each run on the same training standard.
+      </p>
+      <blockquote class="story__quote">
+        <p class="text-h3">
+          "We aim to shape not only professional fighters but also to equip every member with the
+          skills needed to protect themselves."
+        </p>
+      </blockquote>
+      <p class="text-body">
+        That founding idea still shapes how classes are run today — training that works whether
+        you're chasing a competitive career or simply want to walk in feeling stronger, more
+        confident, and more disciplined than when you started.
+      </p>
+      <div class="story__cta">
+        <Button href="/free-trial/" variant="primary">Book a Free Trial</Button>
+        <Button href="/about/philosophy/" variant="outline">Read Our Philosophy</Button>
+      </div>
+    </Container>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-block: var(--space-12) var(--space-8);
+  }
+  .page-header :global(.breadcrumbs) {
+    margin-bottom: var(--space-8);
+  }
+  .page-header :global(.about-nav) {
+    margin-top: var(--space-8);
+  }
+  .section {
+    padding-block: var(--space-8) var(--space-20);
+  }
+  .story {
+    max-width: 68ch;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+  .story__quote {
+    margin: var(--space-4) 0;
+    padding-left: var(--space-6);
+    border-left: 4px solid var(--color-primary);
+  }
+  .story__quote p {
+    color: var(--color-secondary);
+  }
+  .story__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin-top: var(--space-4);
+  }
+</style>
