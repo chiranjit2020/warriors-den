@@ -109,6 +109,8 @@ const ctaLabel = 'Book Free Trial';
     white-space: nowrap;
   }
   .site-header__logo span {
+    /* text-h3, bold — large text, so primary-hover's 3.28:1 clears the 3:1
+       threshold here; see design-system.md §1 for why smaller text can't. */
     color: var(--color-primary-hover);
   }
 
@@ -126,7 +128,7 @@ const ctaLabel = 'Book Free Trial';
     font-weight: 500;
   }
   .site-header__nav-link:hover {
-    color: var(--color-primary-hover);
+    color: var(--color-primary-strong); /* hover state — primary-hover fails 4.5:1, see design-system.md §1 */
   }
 
   .site-header__actions {

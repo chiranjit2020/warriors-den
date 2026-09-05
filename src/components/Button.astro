@@ -103,7 +103,7 @@ const classes = ['btn', `btn--${variant}`, className].filter(Boolean).join(' ');
 
   .btn--text {
     background: transparent;
-    color: var(--color-primary-hover);
+    color: var(--color-primary-strong); /* 15px normal weight — primary-hover fails 4.5:1, see design-system.md §1 */
     padding-inline: 0;
     min-height: auto;
   }

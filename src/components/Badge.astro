@@ -36,7 +36,7 @@ const { tone = 'neutral', class: className } = Astro.props;
 
   .badge--primary {
     background: color-mix(in srgb, var(--color-primary) 15%, white);
-    color: var(--color-primary-hover);
+    color: var(--color-primary-strong); /* small text — primary-hover fails 4.5:1, see design-system.md §1 */
   }
 
   .badge--success {

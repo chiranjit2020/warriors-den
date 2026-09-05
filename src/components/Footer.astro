@@ -37,7 +37,7 @@ const year = new Date().getFullYear();
     <div class="site-footer__grid">
       <div class="site-footer__brand">
         <p class="text-h3">Warriors Den <span>MMA</span></p>
-        <p class="text-small text-muted">
+        <p class="text-small site-footer__tagline">
           Martial arts &amp; combat sports training in Kolkata, West Bengal.
         </p>
         <a class="site-footer__phone text-body" href="tel:+918851084372">+91 88510 84372</a>
@@ -96,6 +96,11 @@ const year = new Date().getFullYear();
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
+  }
+  .site-footer__tagline {
+    /* NOT the .text-muted utility (--color-text-muted is for LIGHT
+       backgrounds, 2.78:1 here — caught by an axe-core audit, Phase 11) */
+    color: var(--color-text-inverse-muted);
   }
   .site-footer__phone {
     color: var(--color-primary);
