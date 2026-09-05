@@ -1,0 +1,54 @@
+---
+// CoachCard — docs/design-system.md §9. No fabricated bio/photo — shows
+// a clearly-labeled placeholder when those fields aren't supplied yet.
+import type { Coach } from '../../data/coaches';
+import Card from './Card.astro';
+
+interface Props {
+  coach: Coach;
+}
+
+const { coach } = Astro.props;
+const initials = coach.name
+  .split(' ')
+  .map((part) => part[0])
+  .join('');
+---
+
+<Card as="article" class="coach-card">
+  <div class="coach-card__avatar" aria-hidden="true">
+    {coach.photo ? <img src={coach.photo} alt="" /> : <span>{initials}</span>}
+  </div>
+  <h3 class="text-h3">{coach.name}</h3>
+  <p class="text-small text-muted">{coach.role}</p>
+  <p class="text-caption coach-card__pending">{coach.bio ?? 'Full bio coming soon'}</p>
+</Card>
+
+<style>
+  .coach-card {
+    text-align: center;
+  }
+  .coach-card__avatar {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto var(--space-4);
+    border-radius: 50%;
+    background: var(--color-secondary);
+    color: var(--color-text-inverse);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-h3-size);
+    font-weight: 700;
+    overflow: hidden;
+  }
+  .coach-card__avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .coach-card__pending {
+    margin-top: var(--space-3);
+    color: var(--color-text-muted);
+  }
+</style>

@@ -1,0 +1,54 @@
+---
+// FAQItem — built on native <details>/<summary>: keyboard-operable and
+// screen-reader-friendly with zero JS. docs/design-system.md §14.
+interface Props {
+  question: string;
+  class?: string;
+}
+
+const { question, class: className } = Astro.props;
+---
+
+<details class:list={['faq-item', className]}>
+  <summary class="text-h4 faq-item__question">
+    <span>{question}</span>
+    <svg class="faq-item__icon" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+      <path d="M4 7l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </summary>
+  <div class="text-body text-muted faq-item__answer">
+    <slot />
+  </div>
+</details>
+
+<style>
+  .faq-item {
+    border-bottom: 1px solid var(--color-border);
+    padding-block: var(--space-4);
+  }
+
+  .faq-item__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    cursor: pointer;
+    list-style: none;
+  }
+  .faq-item__question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-item__icon {
+    flex-shrink: 0;
+    transition: transform var(--duration-base) var(--ease-standard);
+  }
+  .faq-item[open] .faq-item__icon {
+    transform: rotate(180deg);
+  }
+
+  .faq-item__answer {
+    padding-top: var(--space-3);
+    max-width: 65ch;
+  }
+</style>

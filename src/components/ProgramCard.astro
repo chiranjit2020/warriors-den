@@ -1,0 +1,70 @@
+---
+// ProgramCard — docs/design-system.md §9. Links to /free-trial/ (built
+// this phase) rather than a program detail page (/programs/[slug]/,
+// which doesn't exist until Phase 5) so it never ships a broken link.
+import type { Program } from '../../data/programs';
+import Card from './Card.astro';
+import Badge from './Badge.astro';
+import Button from './Button.astro';
+
+interface Props {
+  program: Program;
+}
+
+const { program } = Astro.props;
+---
+
+<Card as="article" interactive class="program-card">
+  <Badge tone="primary">{program.audience}</Badge>
+  <h3 class="text-h3 program-card__name">{program.name}</h3>
+  <p class="text-small text-muted program-card__description">{program.shortDescription}</p>
+  <ul class="program-card__benefits">
+    {program.benefits.map((benefit) => <li class="text-small">{benefit}</li>)}
+  </ul>
+  <Button
+    href={`/free-trial/?program=${program.id}`}
+    variant="outline"
+    class="program-card__cta"
+  >
+    Try {program.name}
+  </Button>
+</Card>
+
+<style>
+  .program-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .program-card__name {
+    margin-top: var(--space-3);
+  }
+  .program-card__description {
+    margin-top: var(--space-2);
+  }
+  .program-card__benefits {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    margin: var(--space-4) 0;
+    color: var(--color-text-muted);
+  }
+  .program-card__benefits li {
+    padding-left: var(--space-4);
+    position: relative;
+  }
+  .program-card__benefits li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-primary);
+  }
+  .program-card :global(.program-card__cta) {
+    margin-top: auto;
+    align-self: flex-start;
+  }
+</style>

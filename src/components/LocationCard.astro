@@ -1,0 +1,58 @@
+---
+// LocationCard — docs/design-system.md §9. Only renders fields that are
+// actually present on the Location record; TODO fields (hours,
+// instructor, WhatsApp) are omitted rather than shown blank or faked.
+import type { Location } from '../../data/locations';
+import Card from './Card.astro';
+import Button from './Button.astro';
+
+interface Props {
+  location: Location;
+}
+
+const { location } = Astro.props;
+const mapsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location.mapsQuery)}`;
+---
+
+<Card as="article" class="location-card">
+  <h3 class="text-h3">{location.name}</h3>
+  <p class="text-small text-muted location-card__address">{location.address}</p>
+
+  {
+    location.googleRating && (
+      <p class="text-small location-card__rating">
+        <strong>{location.googleRating.toFixed(1)}★</strong> · {location.googleReviewCount} Google reviews
+      </p>
+    )
+  }
+
+  <div class="location-card__actions">
+    {location.phone && (
+      <Button href={`tel:${location.phone.replace(/\s+/g, '')}`} variant="ghost">
+        Call {location.phone}
+      </Button>
+    )}
+    <Button href={mapsHref} variant="outline">Get Directions</Button>
+    <Button href={`/free-trial/?location=${location.id}`} variant="primary">Book Free Trial</Button>
+  </div>
+</Card>
+
+<style>
+  .location-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .location-card__address {
+    max-width: 40ch;
+  }
+  .location-card__rating {
+    color: var(--color-primary-hover);
+  }
+  .location-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+  }
+</style>
