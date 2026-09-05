@@ -1,0 +1,42 @@
+---
+// /free-trial/ — dedicated route so every CTA that links here (header,
+// sticky mobile bar, ProgramCard, LocationCard, homepage final CTA) has
+// a real destination instead of a same-page anchor. Reuses the exact
+// same TrialForm the homepage embeds — no duplicated form logic.
+// Full build-out (this being its own richly-designed page rather than
+// a thin wrapper) is Phase 9 per docs/roadmap.md; this is the minimum
+// needed to keep Phase 4's links working.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Container from '../components/Container.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import TrialForm from '../components/TrialForm.astro';
+---
+
+<BaseLayout
+  title="Book a Free Trial — Warriors Den MMA"
+  description="Book your free trial class at Warriors Den MMA in Kolkata. Fill in your details and our team will confirm your session."
+>
+  <section class="page">
+    <Container class="page__inner">
+      <SectionHeading
+        eyebrow="Get Started"
+        title="Book Your Free Trial"
+        description="Fill in your details and our team will confirm your trial class."
+        align="center"
+      />
+      <TrialForm />
+    </Container>
+  </section>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: var(--space-20);
+  }
+  .page__inner {
+    max-width: 760px;
+  }
+  .page__inner :global(.trial-form-wrap) {
+    margin-top: var(--space-12);
+  }
+</style>
