@@ -1,0 +1,176 @@
+---
+// /locations/[slug]/ — one page per confirmed location. Phase 6 per
+// docs/roadmap.md. Per master-prompt.md §19, each page must have
+// genuinely unique content, not a templated city-name swap — the
+// areaNote, address, and (where present) real Google rating differ per
+// branch. Per-branch program availability is NOT confirmed (see
+// data/programs.ts), so all 6 programs are listed with an honest
+// disclaimer rather than asserting a specific, unverified subset.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/Container.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Badge from '../../components/Badge.astro';
+import Button from '../../components/Button.astro';
+import Card from '../../components/Card.astro';
+import { locations, type Location } from '../../../data/locations';
+import { programs } from '../../../data/programs';
+
+export function getStaticPaths() {
+  return locations.map((location) => ({
+    params: { slug: location.slug },
+    props: { location },
+  }));
+}
+
+interface Props {
+  location: Location;
+}
+
+const { location } = Astro.props;
+const otherLocations = locations.filter((l) => l.id !== location.id);
+const mapsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location.mapsQuery)}`;
+---
+
+<BaseLayout
+  title={`${location.name} — Warriors Den MMA, Kolkata`}
+  description={`${location.areaNote} Book a free trial class at Warriors Den MMA's ${location.name} branch.`}
+>
+  <section class="page-header">
+    <Container>
+      <Breadcrumbs
+        items={[
+          { label: 'Home', href: '/' },
+          { label: 'Locations', href: '/locations/' },
+          { label: location.name },
+        ]}
+      />
+      {
+        location.googleRating && (
+          <Badge tone="primary" class="page-header__badge">
+            {location.googleRating.toFixed(1)}★ · {location.googleReviewCount} Google reviews
+          </Badge>
+        )
+      }
+      <h1 class="text-display page-header__title">{location.name}</h1>
+      <p class="text-body text-muted page-header__note">{location.areaNote}</p>
+      <p class="text-small text-muted page-header__address">{location.address}</p>
+
+      <div class="page-header__actions">
+        {location.phone && (
+          <Button href={`tel:${location.phone.replace(/\s+/g, '')}`} variant="ghost">
+            Call {location.phone}
+          </Button>
+        )}
+        <Button href={mapsHref} variant="outline">Get Directions</Button>
+        <Button href={`/free-trial/?location=${location.id}`} variant="primary">Book Free Trial</Button>
+      </div>
+    </Container>
+  </section>
+
+  <section class="section section--surface">
+    <Container>
+      <h2 class="text-h2">Programs at this branch</h2>
+      <p class="text-small text-muted">
+        We haven't confirmed exact per-branch program availability yet — ask us when you book
+        your trial. Here's everything we teach across Warriors Den MMA:
+      </p>
+      <div class="programs-row">
+        {
+          programs.map((program) => (
+            <a href={`/programs/${program.slug}/`} class="programs-row__link text-small">
+              {program.name}
+            </a>
+          ))
+        }
+      </div>
+    </Container>
+  </section>
+
+  {
+    otherLocations.length > 0 && (
+      <section class="section">
+        <Container>
+          <h2 class="text-h2">Other locations</h2>
+          <div class="other-locations">
+            {otherLocations.map((l) => (
+              <Card as="a" href={`/locations/${l.slug}/`} interactive class="other-locations__card">
+                <h3 class="text-h4">{l.name}</h3>
+                <p class="text-small text-muted">{l.areaNote}</p>
+              </Card>
+            ))}
+          </div>
+        </Container>
+      </section>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-block: var(--space-12);
+  }
+  .page-header :global(.breadcrumbs) {
+    margin-bottom: var(--space-6);
+  }
+  .page-header__badge {
+    margin-bottom: var(--space-4);
+  }
+  .page-header__title {
+    color: var(--color-secondary);
+  }
+  .page-header__note {
+    margin-top: var(--space-4);
+    max-width: 60ch;
+  }
+  .page-header__address {
+    margin-top: var(--space-2);
+    max-width: 50ch;
+  }
+  .page-header__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-8);
+  }
+
+  .section {
+    padding-block: var(--space-12);
+  }
+  .section--surface {
+    background: var(--color-surface);
+  }
+
+  .programs-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+  .programs-row__link {
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-pill);
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    color: var(--color-secondary);
+  }
+  .programs-row__link:hover {
+    border-color: var(--color-primary);
+  }
+
+  .other-locations {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    margin-top: var(--space-8);
+  }
+  .other-locations__card {
+    display: block;
+    text-decoration: none;
+  }
+
+  @media (min-width: 600px) {
+    .other-locations {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

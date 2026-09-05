@@ -1,0 +1,60 @@
+---
+// /locations/ — overview. Phase 6 per docs/roadmap.md.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/Container.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import LocationCard from '../../components/LocationCard.astro';
+import { locations } from '../../../data/locations';
+---
+
+<BaseLayout
+  title="Our Locations — Warriors Den MMA, Kolkata"
+  description="Warriors Den MMA trains out of 3 Kolkata locations — Bablatala, Kestopur, and Madhyamgram. Find your nearest branch and book a free trial."
+>
+  <section class="page-header">
+    <Container>
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Locations' }]} />
+      <SectionHeading
+        eyebrow="Locations"
+        title="Train near you"
+        description="Three Kolkata locations, one training standard."
+      />
+    </Container>
+  </section>
+
+  <section class="section">
+    <Container>
+      <div class="locations-grid">
+        {locations.map((location) => <LocationCard location={location} />)}
+      </div>
+    </Container>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-block: var(--space-12) var(--space-8);
+  }
+  .page-header :global(.breadcrumbs) {
+    margin-bottom: var(--space-8);
+  }
+  .section {
+    padding-block: var(--space-8) var(--space-20);
+  }
+  .locations-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+  @media (min-width: 600px) {
+    .locations-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1024px) {
+    .locations-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>
