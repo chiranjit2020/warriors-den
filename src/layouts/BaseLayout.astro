@@ -8,16 +8,22 @@ import '../styles/base.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Toast from '../components/Toast.astro';
+import { organizationSchema } from '../lib/schema';
 
 interface Props {
   title: string;
   description: string;
   canonical?: string;
   noindex?: boolean;
+  /** Extra JSON-LD objects for this page (LocalBusiness, Person, FAQPage,
+   * etc.) — Organization is already included on every page below. */
+  schema?: Record<string, unknown>[];
 }
 
-const { title, description, canonical, noindex = false } = Astro.props;
+const { title, description, canonical, noindex = false, schema = [] } = Astro.props;
 const canonicalURL = canonical ?? new URL(Astro.url.pathname, Astro.site).toString();
+const siteUrl = Astro.site?.toString() ?? '/';
+const allSchema = [organizationSchema(siteUrl), ...schema];
 ---
 
 <!doctype html>
@@ -39,6 +45,12 @@ const canonicalURL = canonical ?? new URL(Astro.url.pathname, Astro.site).toStri
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+
+    {
+      allSchema.map((entry) => (
+        <script type="application/ld+json" is:inline set:html={JSON.stringify(entry)} />
+      ))
+    }
   </head>
   <body>
     <a href="#main" class="sr-only">Skip to content</a>

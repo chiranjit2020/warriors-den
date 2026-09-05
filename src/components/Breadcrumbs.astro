@@ -1,7 +1,8 @@
 ---
-// Breadcrumbs — semantic nav for sub-pages. docs/architecture.md §4.
-// Plain semantic markup only for now; JSON-LD BreadcrumbList structured
-// data is Phase 10 (SEO + Structured Data) per docs/roadmap.md.
+// Breadcrumbs — semantic nav for sub-pages, paired with a matching
+// JSON-LD BreadcrumbList (docs/architecture.md §4, master-prompt.md §18)
+// built from the exact same `items` array the visible nav renders, so
+// the structured data can never drift from what's actually on the page.
 interface Crumb {
   label: string;
   href?: string; // omit on the current page
@@ -12,7 +13,21 @@ interface Props {
 }
 
 const { items } = Astro.props;
+
+const currentPageUrl = new URL(Astro.url.pathname, Astro.site).toString();
+const breadcrumbList = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: items.map((item, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: item.label,
+    item: item.href ? new URL(item.href, Astro.site).toString() : currentPageUrl,
+  })),
+};
 ---
+
+<script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbList)} />
 
 <nav aria-label="Breadcrumb" class="breadcrumbs">
   <ol class="breadcrumbs__list">
