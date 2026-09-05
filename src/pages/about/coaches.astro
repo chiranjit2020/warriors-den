@@ -10,11 +10,15 @@ import AboutNav from '../../components/AboutNav.astro';
 import CoachCard from '../../components/CoachCard.astro';
 import Button from '../../components/Button.astro';
 import { coaches } from '../../../data/coaches';
+import { personSchema } from '../../lib/schema';
+
+const siteUrl = Astro.site?.toString() ?? '/';
 ---
 
 <BaseLayout
   title="Our Coaches — Warriors Den MMA"
   description="Meet the founders and coaches behind Warriors Den MMA's training program in Kolkata."
+  schema={coaches.map((coach) => personSchema(coach, siteUrl))}
 >
   <section class="page-header">
     <Container>

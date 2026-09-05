@@ -19,6 +19,7 @@ import TrialForm from '../components/TrialForm.astro';
 import { programs } from '../../data/programs';
 import { locations } from '../../data/locations';
 import { coaches } from '../../data/coaches';
+import { faqPageSchema } from '../lib/schema';
 
 const goals = [
   { label: 'Learn Self-Defence', description: 'Practical skills that work when it matters.' },
@@ -66,6 +67,7 @@ const faqs = [
 <BaseLayout
   title="Warriors Den MMA — Martial Arts & Combat Sports Training in Kolkata"
   description="Book a free trial class at Warriors Den MMA. MMA, Boxing, Kickboxing, Muay Thai, Jiu-Jitsu & Judo training across 3 Kolkata locations."
+  schema={[faqPageSchema(faqs.map((f) => ({ question: f.q, answer: f.a })))]}
 >
   <!-- Hero -->
   <section class="hero">

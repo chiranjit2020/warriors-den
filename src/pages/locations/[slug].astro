@@ -14,6 +14,7 @@ import Button from '../../components/Button.astro';
 import Card from '../../components/Card.astro';
 import { locations, type Location } from '../../../data/locations';
 import { programs } from '../../../data/programs';
+import { localBusinessSchema } from '../../lib/schema';
 
 export function getStaticPaths() {
   return locations.map((location) => ({
@@ -29,11 +30,13 @@ interface Props {
 const { location } = Astro.props;
 const otherLocations = locations.filter((l) => l.id !== location.id);
 const mapsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location.mapsQuery)}`;
+const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 
 <BaseLayout
   title={`${location.name} — Warriors Den MMA, Kolkata`}
   description={`${location.areaNote} Book a free trial class at Warriors Den MMA's ${location.name} branch.`}
+  schema={[localBusinessSchema(location, pageUrl)]}
 >
   <section class="page-header">
     <Container>
