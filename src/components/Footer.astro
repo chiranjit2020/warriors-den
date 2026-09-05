@@ -1,0 +1,146 @@
+---
+// Footer — site-wide footer nav + contact + legal. docs/design-system.md §14.
+// Only the primary phone number already public on the live site
+// (denmma.netlify.app) is shown here; per-location contact details are
+// built out on their own pages in Phase 6 once fully confirmed
+// (see docs/research.md §9).
+import Container from './Container.astro';
+
+const programLinks = [
+  { label: 'MMA', href: '/programs/mma/' },
+  { label: 'Boxing', href: '/programs/boxing/' },
+  { label: 'Kickboxing', href: '/programs/kickboxing/' },
+  { label: 'Muay Thai', href: '/programs/muay-thai/' },
+  { label: 'Jiu-Jitsu', href: '/programs/jiu-jitsu/' },
+  { label: 'Judo', href: '/programs/judo/' },
+];
+
+const locationLinks = [
+  { label: 'Bablatala', href: '/locations/bablatala/' },
+  { label: 'Kestopur', href: '/locations/kestopur/' },
+  { label: 'Madhyamgram', href: '/locations/madhyamgram/' },
+];
+
+const companyLinks = [
+  { label: 'About Us', href: '/about/' },
+  { label: 'Coaches', href: '/about/coaches/' },
+  { label: 'Gallery', href: '/gallery/' },
+  { label: 'Reviews', href: '/reviews/' },
+];
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <Container>
+    <div class="site-footer__grid">
+      <div class="site-footer__brand">
+        <p class="text-h3">Warriors Den <span>MMA</span></p>
+        <p class="text-small text-muted">
+          Martial arts &amp; combat sports training in Kolkata, West Bengal.
+        </p>
+        <a class="site-footer__phone text-body" href="tel:+918851084372">+91 88510 84372</a>
+      </div>
+
+      <nav class="site-footer__col" aria-label="Programs">
+        <p class="text-caption">Programs</p>
+        <ul>
+          {programLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+        </ul>
+      </nav>
+
+      <nav class="site-footer__col" aria-label="Locations">
+        <p class="text-caption">Locations</p>
+        <ul>
+          {locationLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+        </ul>
+      </nav>
+
+      <nav class="site-footer__col" aria-label="Company">
+        <p class="text-caption">Company</p>
+        <ul>
+          {companyLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+        </ul>
+      </nav>
+
+      <div class="site-footer__col">
+        <p class="text-caption">Get Started</p>
+        <a class="site-footer__trial-link text-body" href="/free-trial/">Book a Free Trial →</a>
+      </div>
+    </div>
+
+    <div class="site-footer__bottom">
+      <p class="text-small text-inverse-muted">&copy; {year} Warriors Den MMA. All rights reserved.</p>
+    </div>
+  </Container>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--color-background-dark);
+    color: var(--color-text-inverse);
+    padding-block: var(--space-16) var(--space-24);
+  }
+
+  .site-footer__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+  }
+
+  .site-footer__brand p:first-child span {
+    color: var(--color-primary);
+  }
+  .site-footer__brand {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .site-footer__phone {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .site-footer__col p.text-caption {
+    color: var(--color-text-inverse-muted);
+    margin-bottom: var(--space-4);
+  }
+  .site-footer__col ul {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .site-footer__col a,
+  .site-footer__trial-link {
+    color: var(--color-text-inverse-muted);
+  }
+  .site-footer__col a:hover,
+  .site-footer__trial-link:hover {
+    color: var(--color-text-inverse);
+  }
+  .site-footer__trial-link {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .site-footer__bottom {
+    margin-top: var(--space-16);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-border-dark);
+  }
+  .text-inverse-muted {
+    color: var(--color-text-inverse-muted);
+  }
+
+  @media (min-width: 600px) {
+    .site-footer__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .site-footer__grid {
+      grid-template-columns: 1.5fr repeat(3, 1fr) 1fr;
+    }
+  }
+</style>
