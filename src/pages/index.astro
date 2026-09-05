@@ -1,0 +1,389 @@
+---
+// Homepage — Phase 4. Sections per master-prompt.md §12, adapted to what's
+// actually confirmed (docs/research.md): "Martial Arts Benefits" is folded
+// into "Why Warriors Den" and "Student Success Stories" is deferred to
+// Phase 8 (no real testimonial text is available yet to avoid fabricating
+// quotes) rather than shipping empty/placeholder sections for either.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Container from '../components/Container.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import Button from '../components/Button.astro';
+import Card from '../components/Card.astro';
+import Stats from '../components/Stats.astro';
+import ProgramCard from '../components/ProgramCard.astro';
+import LocationCard from '../components/LocationCard.astro';
+import CoachCard from '../components/CoachCard.astro';
+import Gallery from '../components/Gallery.astro';
+import FAQItem from '../components/FAQItem.astro';
+import TrialForm from '../components/TrialForm.astro';
+import { programs } from '../../data/programs';
+import { locations } from '../../data/locations';
+import { coaches } from '../../data/coaches';
+
+const goals = [
+  { label: 'Learn Self-Defence', description: 'Practical skills that work when it matters.' },
+  { label: 'Get Fit', description: 'High-intensity training that builds real fitness.' },
+  { label: 'Build Confidence', description: 'Progress you can feel, class after class.' },
+  { label: 'Train for Competition', description: 'Structured, technical, competition-focused work.' },
+  { label: 'Improve Discipline', description: 'Structure, focus, and consistency on and off the mat.' },
+];
+
+const whyPoints = [
+  {
+    title: 'Structured, Progressive Training',
+    description: 'Classes built to take you from your first session to real, lasting skill — at your own pace.',
+  },
+  {
+    title: 'A Welcoming Community',
+    description: "Beginners, competitors, and everyone in between train side by side, in an environment built on respect.",
+  },
+  {
+    title: 'More Than Fighting',
+    description: "We don't just build fighters — we build discipline, confidence, and resilience that carries into everyday life.",
+  },
+];
+
+const faqs = [
+  {
+    q: 'Do I need any experience to join?',
+    a: 'No. Classes are structured to welcome complete beginners alongside more experienced students — everyone starts where they are.',
+  },
+  {
+    q: 'What should I bring to my first class?',
+    a: 'Comfortable clothing you can move freely in and a water bottle. Your first trial class is about seeing how training feels — no equipment required.',
+  },
+  {
+    q: 'Can I try a class before committing to a program?',
+    a: "Yes — that's exactly what our free trial class is for. Book one below and our team will confirm the details with you directly.",
+  },
+  {
+    q: 'How do I choose the right location?',
+    a: 'We currently train out of three Kolkata locations — Bablatala, Kestopur, and Madhyamgram. Pick whichever is most convenient, or ask us when you book your trial.',
+  },
+];
+---
+
+<BaseLayout
+  title="Warriors Den MMA — Martial Arts & Combat Sports Training in Kolkata"
+  description="Book a free trial class at Warriors Den MMA. MMA, Boxing, Kickboxing, Muay Thai, Jiu-Jitsu & Judo training across 3 Kolkata locations."
+>
+  <!-- Hero -->
+  <section class="hero">
+    <Container class="hero__inner">
+      <div class="hero__content">
+        <p class="text-caption hero__eyebrow">Warriors Den MMA · Kolkata, West Bengal</p>
+        <h1 class="text-display hero__headline">Forge Strength. Build Discipline. Become a Warrior.</h1>
+        <p class="text-body hero__subhead">
+          Martial arts &amp; combat sports training for kids, teens, adults, and competitive
+          athletes — build confidence, discipline, and real fitness, one class at a time.
+        </p>
+        <div class="hero__actions">
+          <Button href="/free-trial/" variant="primary">Book a Free Trial</Button>
+          <Button href="#programs" variant="outline">Explore Programs</Button>
+        </div>
+        <p class="text-small hero__trust">★ 5.0 rated on Google — Madhyamgram branch</p>
+      </div>
+    </Container>
+  </section>
+
+  <!-- Social Proof -->
+  <section class="section">
+    <Container>
+      <Stats
+        stats={[
+          { value: '5.0★', label: 'Google rating (Madhyamgram)' },
+          { value: '34', label: 'Google reviews (Madhyamgram)' },
+          { value: '3', label: 'Locations across Kolkata' },
+          { value: '6', label: 'Disciplines taught' },
+        ]}
+      />
+    </Container>
+  </section>
+
+  <!-- Why Warriors Den -->
+  <section class="section" id="why">
+    <Container>
+      <SectionHeading eyebrow="Why Warriors Den" title="More than a gym" align="center" />
+      <div class="why-grid">
+        {
+          whyPoints.map((point) => (
+            <Card>
+              <h3 class="text-h3">{point.title}</h3>
+              <p class="text-small text-muted" style="margin-top: var(--space-2);">
+                {point.description}
+              </p>
+            </Card>
+          ))
+        }
+      </div>
+    </Container>
+  </section>
+
+  <!-- Choose Your Goal -->
+  <section class="section section--surface" id="goals">
+    <Container>
+      <SectionHeading
+        eyebrow="Not sure where to start?"
+        title="Choose Your Goal"
+        description="Tell us what you're training for — we'll point you to the right class."
+        align="center"
+      />
+      <div class="goals-grid">
+        {
+          goals.map((goal) => (
+            <a href="#programs" class="goal-card">
+              <span class="text-h4">{goal.label}</span>
+              <span class="text-small text-muted">{goal.description}</span>
+            </a>
+          ))
+        }
+      </div>
+    </Container>
+  </section>
+
+  <!-- Programs -->
+  <section class="section" id="programs">
+    <Container>
+      <SectionHeading
+        eyebrow="Programs"
+        title="Train in what moves you"
+        description="Six disciplines, one training philosophy: build real skill, safely and progressively."
+        align="center"
+      />
+      <div class="programs-grid">
+        {programs.map((program) => <ProgramCard program={program} />)}
+      </div>
+    </Container>
+  </section>
+
+  <!-- Coaches -->
+  <section class="section section--surface" id="coaches">
+    <Container>
+      <SectionHeading eyebrow="Your Coaches" title="Meet the team" align="center" />
+      <div class="coaches-grid">
+        {coaches.map((coach) => <CoachCard coach={coach} />)}
+      </div>
+    </Container>
+  </section>
+
+  <!-- Training Gallery -->
+  <section class="section" id="gallery">
+    <Container>
+      <SectionHeading
+        eyebrow="Gallery"
+        title="Inside the Den"
+        description="Real training photography is coming soon — the full gallery lands in a later phase."
+        align="center"
+      />
+      <Gallery count={6} />
+    </Container>
+  </section>
+
+  <!-- Locations -->
+  <section class="section section--surface" id="locations">
+    <Container>
+      <SectionHeading eyebrow="Locations" title="Train near you" align="center" />
+      <div class="locations-grid">
+        {locations.map((location) => <LocationCard location={location} />)}
+      </div>
+    </Container>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" id="faq">
+    <Container class="faq-container">
+      <SectionHeading eyebrow="FAQ" title="Common questions" align="center" />
+      <div class="faq-list">
+        {faqs.map((item) => <FAQItem question={item.q}>{item.a}</FAQItem>)}
+      </div>
+    </Container>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="final-cta">
+    <Container class="final-cta__inner">
+      <h2 class="text-h1 final-cta__title">Ready to start training?</h2>
+      <p class="text-body final-cta__subhead">
+        Book your free trial class today — no experience, no equipment, no pressure.
+      </p>
+      <Button href="/free-trial/" variant="primary">Book a Free Trial</Button>
+    </Container>
+  </section>
+
+  <!-- Contact / Free Trial Form -->
+  <section class="section" id="free-trial">
+    <Container class="trial-container">
+      <SectionHeading
+        eyebrow="Get Started"
+        title="Book Your Free Trial"
+        description="Fill in your details and our team will confirm your trial class."
+        align="center"
+      />
+      <TrialForm />
+    </Container>
+  </section>
+</BaseLayout>
+
+<style>
+  .section {
+    padding-block: var(--space-20);
+  }
+  .section--surface {
+    background: var(--color-surface);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-background) 100%);
+    padding-block: var(--space-24) var(--space-20);
+  }
+  .hero__content {
+    max-width: 680px;
+  }
+  .hero__eyebrow {
+    color: var(--color-primary-hover);
+    margin-bottom: var(--space-4);
+  }
+  .hero__headline {
+    color: var(--color-secondary);
+  }
+  .hero__subhead {
+    margin-top: var(--space-6);
+    max-width: 56ch;
+    color: var(--color-text-muted);
+  }
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin-top: var(--space-8);
+  }
+  .hero__trust {
+    margin-top: var(--space-6);
+    color: var(--color-text-muted);
+  }
+
+  /* Why grid */
+  .why-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    margin-top: var(--space-12);
+  }
+
+  /* Goals */
+  .goals-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+    margin-top: var(--space-12);
+  }
+  .goal-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-6);
+    border-radius: var(--radius-lg);
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    transition: border-color var(--duration-base) var(--ease-standard), box-shadow var(--duration-base) var(--ease-standard);
+  }
+  .goal-card:hover {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-medium);
+  }
+
+  /* Programs */
+  .programs-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    margin-top: var(--space-12);
+  }
+
+  /* Coaches */
+  .coaches-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+    margin-top: var(--space-12);
+    max-width: 640px;
+    margin-inline: auto;
+  }
+
+  /* Locations */
+  .locations-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    margin-top: var(--space-12);
+  }
+
+  /* FAQ */
+  .faq-container {
+    max-width: 760px;
+  }
+  .faq-list {
+    margin-top: var(--space-12);
+  }
+
+  /* Final CTA */
+  .final-cta {
+    background: var(--color-secondary);
+    color: var(--color-text-inverse);
+    padding-block: var(--space-20);
+  }
+  .final-cta__inner {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+  }
+  .final-cta__title {
+    color: var(--color-text-inverse);
+  }
+  .final-cta__subhead {
+    color: var(--color-text-inverse-muted);
+    max-width: 48ch;
+  }
+  .final-cta :global(.btn) {
+    margin-top: var(--space-4);
+  }
+
+  /* Trial form section */
+  .trial-container {
+    max-width: 760px;
+  }
+  .trial-container :global(form),
+  .trial-container :global(.trial-form-wrap) {
+    margin-top: var(--space-12);
+  }
+
+  @media (min-width: 600px) {
+    .why-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .goals-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .programs-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .locations-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .goals-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .programs-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .locations-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>
