@@ -35,7 +35,9 @@
   --color-error: #d92d20;
 
   /* ---- Typography ---- */
-  --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* Self-hosted via @fontsource-variable/manrope, imported once in BaseLayout. */
+  --font-family-base: 'Manrope Variable', 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Roboto, sans-serif;
 
   --text-display-size: 2.25rem;
   --text-display-weight: 800;

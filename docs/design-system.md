@@ -52,10 +52,10 @@ Rule: color is never the only signal for state (form errors, success, etc. alway
 
 ## 2. Typography
 
-Mobile-first modern humanist sans for both headings and body — prioritizes readability over decorative display type, per master prompt. Recommend **Inter** (or **Manrope** for headings if a touch more character is wanted) loaded via a self-hosted/Google Fonts stack with a system-font fallback.
+Mobile-first modern humanist sans for both headings and body — prioritizes readability over decorative display type, per master prompt. **Decided: Manrope** (variable weight), self-hosted via `@fontsource-variable/manrope` rather than a Google Fonts `<link>` — no third-party request, no external font-loading CLS risk, imported once in `BaseLayout.astro`.
 
 ```css
---font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+--font-family-base: 'Manrope Variable', 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 ```
 
 | Token | Size (mobile → desktop) | Weight | Line-height | Use |
