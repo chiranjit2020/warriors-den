@@ -1,0 +1,97 @@
+---
+// /reviews/ — Phase 8 per docs/roadmap.md. Roadmap: "real reviews only
+// (or section omitted until reviews are supplied)". We have a real
+// AGGREGATE stat for Madhyamgram (5.0*, 34 reviews) but no real review
+// TEXT for any branch — inventing testimonial quotes is exactly what
+// master-prompt.md §34/§44 forbids ("Do not manufacture testimonials").
+// So: show the real stat, link out to the actual Google listing so
+// visitors can read genuine reviews themselves, and say plainly that
+// individual review text will be added once supplied — no fabricated
+// quotes, no empty testimonial cards standing in for them.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Container from '../components/Container.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Stats from '../components/Stats.astro';
+import Button from '../components/Button.astro';
+import { locations } from '../../data/locations';
+
+const rated = locations.filter((l) => l.googleRating);
+---
+
+<BaseLayout
+  title="Reviews — Warriors Den MMA"
+  description="Warriors Den MMA's Google reviews and ratings across our Kolkata locations."
+>
+  <section class="page-header">
+    <Container>
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Reviews' }]} />
+      <SectionHeading eyebrow="Reviews" title="What students are saying" />
+    </Container>
+  </section>
+
+  <section class="section">
+    <Container>
+      {
+        rated.length > 0 && (
+          <Stats
+            stats={rated.flatMap((l) => [
+              { value: `${l.googleRating!.toFixed(1)}★`, label: `${l.name} — Google rating` },
+              { value: String(l.googleReviewCount), label: `${l.name} — Google reviews` },
+            ])}
+          />
+        )
+      }
+
+      <p class="text-body notice">
+        We don't have permission to republish individual review text yet, so rather than invent
+        quotes, here's the real thing — read verified reviews directly on Google for each branch.
+      </p>
+
+      <div class="location-links">
+        {
+          locations.map((location) => {
+            const mapsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location.mapsQuery)}`;
+            return (
+              <Button href={mapsHref} variant="outline">
+                {location.googleRating
+                  ? `Read ${location.name} reviews (${location.googleRating.toFixed(1)}★)`
+                  : `Find ${location.name} on Google`}
+              </Button>
+            );
+          })
+        }
+      </div>
+
+      <div class="cta-row">
+        <Button href="/free-trial/" variant="primary">Book a Free Trial</Button>
+      </div>
+    </Container>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-block: var(--space-12) var(--space-8);
+  }
+  .page-header :global(.breadcrumbs) {
+    margin-bottom: var(--space-8);
+  }
+  .section {
+    padding-block: var(--space-8) var(--space-20);
+  }
+  .notice {
+    max-width: 60ch;
+    margin-top: var(--space-12);
+    color: var(--color-text-muted);
+  }
+  .location-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+  }
+  .cta-row {
+    margin-top: var(--space-12);
+  }
+</style>
