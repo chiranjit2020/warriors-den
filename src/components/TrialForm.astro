@@ -1,0 +1,316 @@
+---
+// TrialForm — primary conversion form. docs/design-system.md §8,
+// master-prompt.md §17.
+//
+// IMPORTANT — submission is NOT wired to a real backend yet. Per
+// master-prompt.md §24/§29, no backend/form service has been approved,
+// and this project's MVP hosting target (GitHub Pages, per
+// docs/architecture.md) doesn't include one natively — unlike the
+// CURRENT live site, which is on Netlify and could use Netlify Forms
+// for free. That's a real open decision (see the final Phase 4 report),
+// not something to silently pick. Until it's decided, the client script
+// below simulates a network request so every UI state (loading/success/
+// error) is real and testable — but no submitted lead actually reaches
+// the business yet. Search "TODO: wire real submission" to find the spot.
+import type { Location } from '../../data/locations';
+import type { Program } from '../../data/programs';
+import { locations } from '../../data/locations';
+import { programs } from '../../data/programs';
+import Button from './Button.astro';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div class:list={['trial-form-wrap', className]}>
+  <form id="trial-form" class="trial-form" novalidate>
+    <div class="trial-form__row">
+      <label class="trial-form__field">
+        <span class="text-small trial-form__label">Full Name <span aria-hidden="true">*</span></span>
+        <input type="text" name="fullName" required autocomplete="name" />
+        <span class="text-caption trial-form__error" data-error-for="fullName"></span>
+      </label>
+
+      <label class="trial-form__field">
+        <span class="text-small trial-form__label">Mobile Number <span aria-hidden="true">*</span></span>
+        <input type="tel" name="mobile" required autocomplete="tel" inputmode="tel" />
+        <span class="text-caption trial-form__error" data-error-for="mobile"></span>
+      </label>
+    </div>
+
+    <div class="trial-form__row">
+      <label class="trial-form__field">
+        <span class="text-small trial-form__label">Email</span>
+        <input type="email" name="email" autocomplete="email" />
+        <span class="text-caption trial-form__error" data-error-for="email"></span>
+      </label>
+
+      <label class="trial-form__field">
+        <span class="text-small trial-form__label">Age</span>
+        <input type="number" name="age" min="4" max="99" inputmode="numeric" />
+      </label>
+    </div>
+
+    <div class="trial-form__row">
+      <label class="trial-form__field">
+        <span class="text-small trial-form__label">Preferred Location <span aria-hidden="true">*</span></span>
+        <select name="location" required>
+          <option value="" disabled selected>Select a location</option>
+          {locations.map((loc: Location) => <option value={loc.id}>{loc.name}</option>)}
+        </select>
+        <span class="text-caption trial-form__error" data-error-for="location"></span>
+      </label>
+
+      <label class="trial-form__field">
+        <span class="text-small trial-form__label">Program Interested In</span>
+        <select name="program">
+          <option value="">No preference</option>
+          {programs.map((p: Program) => <option value={p.id}>{p.name}</option>)}
+        </select>
+      </label>
+    </div>
+
+    <label class="trial-form__field">
+      <span class="text-small trial-form__label">Preferred Training Time</span>
+      <select name="preferredTime">
+        <option value="">No preference</option>
+        <option value="morning">Morning</option>
+        <option value="afternoon">Afternoon</option>
+        <option value="evening">Evening</option>
+      </select>
+    </label>
+
+    <label class="trial-form__field">
+      <span class="text-small trial-form__label">Message</span>
+      <textarea name="message" rows="3"></textarea>
+    </label>
+
+    <div class="trial-form__banner trial-form__banner--error" data-form-error hidden role="alert">
+      Please fix the highlighted fields and try again.
+    </div>
+
+    <Button type="submit" variant="primary" class="trial-form__submit">
+      <span class="trial-form__submit-label">Book My Free Trial</span>
+    </Button>
+  </form>
+
+  <div class="trial-form__success" data-form-success hidden role="status">
+    <h3 class="text-h3">You're booked in! 🥋</h3>
+    <p class="text-body text-muted">
+      Thanks — we've received your request. Our team will reach out shortly to confirm your free
+      trial class.
+    </p>
+  </div>
+</div>
+
+<style>
+  .trial-form__row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .trial-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  /* Author-origin `display: flex` above beats the UA stylesheet's
+     `[hidden]{display:none}` (author beats user-agent regardless of
+     specificity), so form.hidden = true from the script silently does
+     nothing unless we say so explicitly here. */
+  .trial-form[hidden] {
+    display: none;
+  }
+
+  .trial-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .trial-form__label {
+    font-weight: 600;
+    color: var(--color-text);
+  }
+  .trial-form__label span[aria-hidden] {
+    color: var(--color-error);
+  }
+
+  .trial-form input,
+  .trial-form select,
+  .trial-form textarea {
+    font: inherit;
+    font-size: var(--text-body-size);
+    padding: var(--space-3);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+    background: var(--color-background);
+    color: var(--color-text);
+    min-height: 44px;
+  }
+  .trial-form textarea {
+    min-height: 88px;
+    resize: vertical;
+  }
+  .trial-form input:focus-visible,
+  .trial-form select:focus-visible,
+  .trial-form textarea:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 1px;
+  }
+
+  .trial-form__error {
+    color: var(--color-error);
+    min-height: 1em;
+  }
+
+  .trial-form [aria-invalid='true'] {
+    border-color: var(--color-error);
+  }
+
+  .trial-form__banner {
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-sm);
+  }
+  .trial-form__banner--error {
+    background: color-mix(in srgb, var(--color-error) 10%, white);
+    color: var(--color-error);
+  }
+
+  .trial-form :global(.trial-form__submit) {
+    align-self: flex-start;
+    min-width: 220px;
+  }
+
+  /* JS toggles aria-busy on submit; Button.astro only renders its own
+     spinner span from a server-side `loading` prop, so give the busy
+     state a visual treatment here too (dim label + spinner via ::after). */
+  .trial-form :global(.trial-form__submit[aria-busy='true']) {
+    position: relative;
+    color: transparent;
+    pointer-events: none;
+  }
+  .trial-form :global(.trial-form__submit[aria-busy='true']::after) {
+    content: '';
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid var(--color-primary-text);
+    border-top-color: transparent;
+    animation: trial-form-spin var(--duration-slow) linear infinite;
+  }
+  @keyframes trial-form-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .trial-form__success {
+    text-align: center;
+    padding: var(--space-12) var(--space-4);
+  }
+
+  @media (min-width: 600px) {
+    .trial-form__row {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
+
+<script>
+  const form = document.getElementById('trial-form') as HTMLFormElement | null;
+  const successEl = document.querySelector<HTMLElement>('[data-form-success]');
+  const errorBanner = document.querySelector<HTMLElement>('[data-form-error]');
+
+  // Prefill from query params set by ProgramCard/LocationCard CTAs
+  // (?program=mma, ?location=bablatala).
+  const params = new URLSearchParams(window.location.search);
+  const programField = form?.elements.namedItem('program') as HTMLSelectElement | null;
+  const locationField = form?.elements.namedItem('location') as HTMLSelectElement | null;
+  if (programField && params.get('program')) programField.value = params.get('program')!;
+  if (locationField && params.get('location')) locationField.value = params.get('location')!;
+
+  function setFieldError(name: string, message: string) {
+    const field = form?.elements.namedItem(name) as HTMLElement | null;
+    field?.setAttribute('aria-invalid', 'true');
+    const errorEl = form?.querySelector<HTMLElement>(`[data-error-for="${name}"]`);
+    if (errorEl) errorEl.textContent = message;
+  }
+
+  function clearErrors() {
+    form?.querySelectorAll('[aria-invalid]').forEach((el) => el.removeAttribute('aria-invalid'));
+    form?.querySelectorAll('[data-error-for]').forEach((el) => (el.textContent = ''));
+    errorBanner?.setAttribute('hidden', '');
+  }
+
+  function validate(data: FormData): boolean {
+    let valid = true;
+    const fullName = String(data.get('fullName') ?? '').trim();
+    const mobile = String(data.get('mobile') ?? '').trim();
+    const location = String(data.get('location') ?? '').trim();
+    const email = String(data.get('email') ?? '').trim();
+
+    if (!fullName) {
+      setFieldError('fullName', 'Please enter your name.');
+      valid = false;
+    }
+    if (!mobile || mobile.replace(/\D/g, '').length < 10) {
+      setFieldError('mobile', 'Please enter a valid mobile number.');
+      valid = false;
+    }
+    if (!location) {
+      setFieldError('location', 'Please choose a location.');
+      valid = false;
+    }
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setFieldError('email', 'Please enter a valid email address.');
+      valid = false;
+    }
+    return valid;
+  }
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    clearErrors();
+
+    const data = new FormData(form);
+    if (!validate(data)) {
+      errorBanner?.removeAttribute('hidden');
+      form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+      return;
+    }
+
+    const submitBtn = form.querySelector<HTMLButtonElement>('.trial-form__submit');
+    submitBtn?.setAttribute('aria-busy', 'true');
+    submitBtn?.setAttribute('disabled', 'true');
+
+    try {
+      // TODO: wire real submission once a backend/form-service decision is made
+      // (see the component-level comment at the top of TrialForm.astro).
+      // Simulated for now so the loading/success/error states are all real
+      // and testable end to end.
+      await new Promise((resolve) => setTimeout(resolve, 900));
+
+      form.hidden = true;
+      successEl?.removeAttribute('hidden');
+      // The form collapsing can leave the success message scrolled out of
+      // view (the user was scrolled down to the submit button a moment
+      // ago) — bring it into view so the confirmation is actually seen.
+      successEl?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      window.wdToast?.show("You're booked in — we'll be in touch shortly!", 'success');
+    } catch {
+      errorBanner?.removeAttribute('hidden');
+      window.wdToast?.show('Something went wrong. Please try again.', 'error');
+    } finally {
+      submitBtn?.removeAttribute('aria-busy');
+      submitBtn?.removeAttribute('disabled');
+    }
+  });
+</script>
