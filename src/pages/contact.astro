@@ -1,0 +1,109 @@
+---
+// /contact/ — Phase 9 per docs/roadmap.md. General inquiries (ContactForm)
+// distinct from booking a trial (/free-trial/, TrialForm). Contact details
+// shown are the real per-location phone numbers already used on the
+// location pages — nothing new invented here.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Container from '../components/Container.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ContactForm from '../components/ContactForm.astro';
+import { locations } from '../../data/locations';
+---
+
+<BaseLayout
+  title="Contact Us — Warriors Den MMA"
+  description="Get in touch with Warriors Den MMA — call any of our 3 Kolkata locations or send us a message."
+>
+  <section class="page-header">
+    <Container>
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Contact' }]} />
+      <SectionHeading
+        eyebrow="Contact"
+        title="Get in touch"
+        description="Have a question before you book a trial? Reach out any way that works for you."
+      />
+    </Container>
+  </section>
+
+  <section class="section">
+    <Container class="contact-layout">
+      <div class="contact-layout__form">
+        <h2 class="text-h3">Send a message</h2>
+        <ContactForm />
+      </div>
+
+      <aside class="contact-layout__info">
+        <h2 class="text-h3">Call a branch directly</h2>
+        <ul class="branch-list">
+          {
+            locations.map((location) => (
+              <li class="branch-list__item">
+                <p class="text-h4">{location.name}</p>
+                {location.phone && (
+                  <a href={`tel:${location.phone.replace(/\s+/g, '')}`} class="text-body branch-list__phone">
+                    {location.phone}
+                  </a>
+                )}
+                <p class="text-small text-muted">{location.address}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </aside>
+    </Container>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-block: var(--space-12) var(--space-8);
+  }
+  .page-header :global(.breadcrumbs) {
+    margin-bottom: var(--space-8);
+  }
+  .section {
+    padding-block: var(--space-8) var(--space-20);
+  }
+
+  .contact-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+  }
+  .contact-layout__form,
+  .contact-layout__info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .branch-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+  .branch-list__item {
+    padding-bottom: var(--space-6);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .branch-list__item:last-child {
+    border-bottom: none;
+  }
+  .branch-list__phone {
+    display: inline-block;
+    margin-top: var(--space-1);
+    color: var(--color-primary-hover);
+    font-weight: 600;
+  }
+  .branch-list__item p.text-small {
+    margin-top: var(--space-2);
+    max-width: 40ch;
+  }
+
+  @media (min-width: 900px) {
+    .contact-layout {
+      grid-template-columns: 3fr 2fr;
+    }
+  }
+</style>
