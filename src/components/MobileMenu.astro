@@ -1,0 +1,81 @@
+---
+// MobileMenu — collapsible nav panel for small viewports, opened by the
+// hamburger button in Header.astro. docs/design-system.md §11/§13,
+// master-prompt.md §33 (mobile navigation is first-class).
+interface NavItem {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  items: NavItem[];
+  ctaHref: string;
+  ctaLabel: string;
+}
+
+const { items, ctaHref, ctaLabel } = Astro.props;
+---
+
+<nav id="wd-mobile-menu" class="mobile-menu" aria-label="Mobile" hidden>
+  <ul class="mobile-menu__list">
+    {
+      items.map((item) => (
+        <li>
+          <a class="mobile-menu__link" href={item.href}>
+            {item.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+  <a class="mobile-menu__cta" href={ctaHref}>{ctaLabel}</a>
+</nav>
+
+<style>
+  .mobile-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--color-background);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: var(--shadow-medium);
+    padding: var(--space-6) var(--gutter-mobile) var(--space-8);
+  }
+
+  .mobile-menu__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    margin-bottom: var(--space-6);
+  }
+
+  .mobile-menu__link {
+    display: block;
+    padding: var(--space-3) var(--space-2);
+    font-size: var(--text-h4-size);
+    font-weight: 600;
+    color: var(--color-text);
+    border-radius: var(--radius-sm);
+  }
+  .mobile-menu__link:hover {
+    background: var(--color-surface);
+  }
+
+  .mobile-menu__cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    border-radius: var(--radius-md);
+    background: var(--color-primary);
+    color: var(--color-primary-text);
+    font-weight: var(--text-button-weight);
+  }
+
+  @media (min-width: 900px) {
+    .mobile-menu {
+      display: none;
+    }
+  }
+</style>
