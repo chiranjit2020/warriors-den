@@ -1,5 +1,7 @@
 ---
 // AboutNav — sub-nav shared across the 3 /about/* pages.
+import { withBase } from '../lib/base';
+
 interface Props {
   active: 'story' | 'philosophy' | 'coaches';
 }
@@ -18,7 +20,7 @@ const items = [
       items.map((item) => (
         <li>
           <a
-            href={item.href}
+            href={withBase(item.href)}
             class="about-nav__link text-small"
             aria-current={item.id === active ? 'page' : undefined}
           >

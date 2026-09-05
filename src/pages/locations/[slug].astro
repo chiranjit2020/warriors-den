@@ -15,6 +15,7 @@ import Card from '../../components/Card.astro';
 import { locations, type Location } from '../../../data/locations';
 import { programs } from '../../../data/programs';
 import { localBusinessSchema } from '../../lib/schema';
+import { withBase, stripBase } from '../../lib/base';
 
 export function getStaticPaths() {
   return locations.map((location) => ({
@@ -30,7 +31,9 @@ interface Props {
 const { location } = Astro.props;
 const otherLocations = locations.filter((l) => l.id !== location.id);
 const mapsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location.mapsQuery)}`;
-const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
+// stripBase: schema.org URL represents the eventual real domain, not
+// this deployment's staging subpath (see src/lib/base.ts).
+const pageUrl = new URL(stripBase(Astro.url.pathname), Astro.site).toString();
 ---
 
 <BaseLayout
@@ -65,7 +68,7 @@ const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
           </Button>
         )}
         <Button href={mapsHref} variant="outline">Get Directions</Button>
-        <Button href={`/free-trial/?location=${location.id}`} variant="primary">Book Free Trial</Button>
+        <Button href={withBase(`/free-trial/?location=${location.id}`)} variant="primary">Book Free Trial</Button>
       </div>
     </Container>
   </section>
@@ -80,7 +83,7 @@ const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
       <div class="programs-row">
         {
           programs.map((program) => (
-            <a href={`/programs/${program.slug}/`} class="programs-row__link text-small">
+            <a href={withBase(`/programs/${program.slug}/`)} class="programs-row__link text-small">
               {program.name}
             </a>
           ))
@@ -96,7 +99,7 @@ const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
           <h2 class="text-h2">Other locations</h2>
           <div class="other-locations">
             {otherLocations.map((l) => (
-              <Card as="a" href={`/locations/${l.slug}/`} interactive class="other-locations__card">
+              <Card as="a" href={withBase(`/locations/${l.slug}/`)} interactive class="other-locations__card">
                 <h3 class="text-h4">{l.name}</h3>
                 <p class="text-small text-muted">{l.areaNote}</p>
               </Card>

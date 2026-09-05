@@ -11,6 +11,7 @@ import Card from '../../components/Card.astro';
 import Stats from '../../components/Stats.astro';
 import Loader from '../../components/Loader.astro';
 import Modal from '../../components/Modal.astro';
+import { withBase } from '../../lib/base';
 
 const colorTokens = [
   ['--color-primary', 'Primary'],
@@ -97,7 +98,7 @@ const spacingTokens = ['4', '8', '12', '16', '24', '32', '48', '64', '80', '96',
       <div style="display:flex; flex-wrap:wrap; gap: var(--space-4); align-items:center; margin-bottom: var(--space-4);">
         <Button variant="primary" loading>Loading</Button>
         <Button variant="primary" disabled>Disabled</Button>
-        <Button variant="primary" href="/free-trial/">As link (href)</Button>
+        <Button variant="primary" href={withBase('/free-trial/')}>As link (href)</Button>
       </div>
     </section>
 

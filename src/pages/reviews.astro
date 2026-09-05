@@ -15,6 +15,7 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
 import Stats from '../components/Stats.astro';
 import Button from '../components/Button.astro';
 import { locations } from '../../data/locations';
+import { withBase } from '../lib/base';
 
 const rated = locations.filter((l) => l.googleRating);
 ---
@@ -64,7 +65,7 @@ const rated = locations.filter((l) => l.googleRating);
       </div>
 
       <div class="cta-row">
-        <Button href="/free-trial/" variant="primary">Book a Free Trial</Button>
+        <Button href={withBase('/free-trial/')} variant="primary">Book a Free Trial</Button>
       </div>
     </Container>
   </section>

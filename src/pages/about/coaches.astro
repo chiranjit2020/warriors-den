@@ -11,6 +11,7 @@ import CoachCard from '../../components/CoachCard.astro';
 import Button from '../../components/Button.astro';
 import { coaches } from '../../../data/coaches';
 import { personSchema } from '../../lib/schema';
+import { withBase } from '../../lib/base';
 
 const siteUrl = Astro.site?.toString() ?? '/';
 ---
@@ -38,7 +39,7 @@ const siteUrl = Astro.site?.toString() ?? '/';
         {coaches.map((coach) => <CoachCard coach={coach} />)}
       </div>
       <div class="cta-row">
-        <Button href="/free-trial/" variant="primary">Book a Free Trial</Button>
+        <Button href={withBase('/free-trial/')} variant="primary">Book a Free Trial</Button>
       </div>
     </Container>
   </section>

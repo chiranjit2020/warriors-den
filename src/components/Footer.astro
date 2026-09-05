@@ -5,28 +5,29 @@
 // built out on their own pages in Phase 6 once fully confirmed
 // (see docs/research.md §9).
 import Container from './Container.astro';
+import { withBase } from '../lib/base';
 
 const programLinks = [
-  { label: 'MMA', href: '/programs/mma/' },
-  { label: 'Boxing', href: '/programs/boxing/' },
-  { label: 'Kickboxing', href: '/programs/kickboxing/' },
-  { label: 'Muay Thai', href: '/programs/muay-thai/' },
-  { label: 'Jiu-Jitsu', href: '/programs/jiu-jitsu/' },
-  { label: 'Judo', href: '/programs/judo/' },
+  { label: 'MMA', href: withBase('/programs/mma/') },
+  { label: 'Boxing', href: withBase('/programs/boxing/') },
+  { label: 'Kickboxing', href: withBase('/programs/kickboxing/') },
+  { label: 'Muay Thai', href: withBase('/programs/muay-thai/') },
+  { label: 'Jiu-Jitsu', href: withBase('/programs/jiu-jitsu/') },
+  { label: 'Judo', href: withBase('/programs/judo/') },
 ];
 
 const locationLinks = [
-  { label: 'Bablatala', href: '/locations/bablatala/' },
-  { label: 'Kestopur', href: '/locations/kestopur/' },
-  { label: 'Madhyamgram', href: '/locations/madhyamgram/' },
+  { label: 'Bablatala', href: withBase('/locations/bablatala/') },
+  { label: 'Kestopur', href: withBase('/locations/kestopur/') },
+  { label: 'Madhyamgram', href: withBase('/locations/madhyamgram/') },
 ];
 
 const companyLinks = [
-  { label: 'About Us', href: '/about/' },
-  { label: 'Coaches', href: '/about/coaches/' },
-  { label: 'Gallery', href: '/gallery/' },
-  { label: 'Reviews', href: '/reviews/' },
-  { label: 'Contact', href: '/contact/' },
+  { label: 'About Us', href: withBase('/about/') },
+  { label: 'Coaches', href: withBase('/about/coaches/') },
+  { label: 'Gallery', href: withBase('/gallery/') },
+  { label: 'Reviews', href: withBase('/reviews/') },
+  { label: 'Contact', href: withBase('/contact/') },
 ];
 
 const year = new Date().getFullYear();
@@ -66,7 +67,7 @@ const year = new Date().getFullYear();
 
       <div class="site-footer__col">
         <p class="text-caption">Get Started</p>
-        <a class="site-footer__trial-link text-body" href="/free-trial/">Book a Free Trial →</a>
+        <a class="site-footer__trial-link text-body" href={withBase('/free-trial/')}>Book a Free Trial →</a>
       </div>
     </div>
 

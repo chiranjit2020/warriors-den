@@ -10,6 +10,7 @@ import SectionHeading from '../components/SectionHeading.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import TrialForm from '../components/TrialForm.astro';
 import { locations } from '../../data/locations';
+import { withBase } from '../lib/base';
 
 const trustPoints = [
   'No experience needed — classes welcome complete beginners',
@@ -48,7 +49,7 @@ const trustPoints = [
           {
             locations.map((location) => (
               <li>
-                <a href={`/locations/${location.slug}/`} class="text-small">
+                <a href={withBase(`/locations/${location.slug}/`)} class="text-small">
                   {location.name}
                 </a>
               </li>

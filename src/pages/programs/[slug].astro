@@ -9,6 +9,7 @@ import Badge from '../../components/Badge.astro';
 import Button from '../../components/Button.astro';
 import Card from '../../components/Card.astro';
 import { programs, type Program } from '../../../data/programs';
+import { withBase } from '../../lib/base';
 
 export function getStaticPaths() {
   return programs.map((program) => ({
@@ -43,10 +44,10 @@ const otherPrograms = programs.filter((p) => p.id !== program.id);
       <h1 class="text-display page-header__title">{program.name}</h1>
       <p class="text-body text-muted page-header__lede">{program.shortDescription}</p>
       <div class="page-header__actions">
-        <Button href={`/free-trial/?program=${program.id}`} variant="primary">
+        <Button href={withBase(`/free-trial/?program=${program.id}`)} variant="primary">
           Book a Free Trial
         </Button>
-        <Button href="/#locations" variant="outline">View Locations</Button>
+        <Button href={withBase('/#locations')} variant="outline">View Locations</Button>
       </div>
     </Container>
   </section>
@@ -63,7 +64,7 @@ const otherPrograms = programs.filter((p) => p.id !== program.id);
         <ul class="benefits-list">
           {program.benefits.map((benefit) => <li class="text-small">{benefit}</li>)}
         </ul>
-        <Button href={`/free-trial/?program=${program.id}`} variant="primary" class="aside-cta">
+        <Button href={withBase(`/free-trial/?program=${program.id}`)} variant="primary" class="aside-cta">
           Try {program.name}
         </Button>
       </Card>
@@ -76,7 +77,7 @@ const otherPrograms = programs.filter((p) => p.id !== program.id);
       <div class="other-programs">
         {
           otherPrograms.map((p) => (
-            <a href={`/programs/${p.slug}/`} class="other-programs__link text-h4">
+            <a href={withBase(`/programs/${p.slug}/`)} class="other-programs__link text-h4">
               {p.name} →
             </a>
           ))

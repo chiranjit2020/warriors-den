@@ -20,6 +20,7 @@ import { programs } from '../../data/programs';
 import { locations } from '../../data/locations';
 import { coaches } from '../../data/coaches';
 import { faqPageSchema } from '../lib/schema';
+import { withBase } from '../lib/base';
 
 const goals = [
   { label: 'Learn Self-Defence', description: 'Practical skills that work when it matters.' },
@@ -80,7 +81,7 @@ const faqs = [
           athletes — build confidence, discipline, and real fitness, one class at a time.
         </p>
         <div class="hero__actions">
-          <Button href="/free-trial/" variant="primary">Book a Free Trial</Button>
+          <Button href={withBase('/free-trial/')} variant="primary">Book a Free Trial</Button>
           <Button href="#programs" variant="outline">Explore Programs</Button>
         </div>
         <p class="text-small hero__trust">★ 5.0 rated on Google — Madhyamgram branch</p>
@@ -208,7 +209,7 @@ const faqs = [
       <p class="text-body final-cta__subhead">
         Book your free trial class today — no experience, no equipment, no pressure.
       </p>
-      <Button href="/free-trial/" variant="primary">Book a Free Trial</Button>
+      <Button href={withBase('/free-trial/')} variant="primary">Book a Free Trial</Button>
     </Container>
   </section>
 

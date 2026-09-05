@@ -4,18 +4,21 @@
 import Container from './Container.astro';
 import Button from './Button.astro';
 import MobileMenu from './MobileMenu.astro';
+import { withBase } from '../lib/base';
 
 // Structural nav, not business data — matches docs/information-architecture.md.
+// Prefixed with withBase() here at the source, since MobileMenu just
+// renders whatever href string it's handed.
 const navItems = [
-  { label: 'About', href: '/about/' },
-  { label: 'Programs', href: '/programs/' },
-  { label: 'Locations', href: '/locations/' },
-  { label: 'Gallery', href: '/gallery/' },
-  { label: 'Reviews', href: '/reviews/' },
-  { label: 'Contact', href: '/contact/' },
+  { label: 'About', href: withBase('/about/') },
+  { label: 'Programs', href: withBase('/programs/') },
+  { label: 'Locations', href: withBase('/locations/') },
+  { label: 'Gallery', href: withBase('/gallery/') },
+  { label: 'Reviews', href: withBase('/reviews/') },
+  { label: 'Contact', href: withBase('/contact/') },
 ];
 
-const ctaHref = '/free-trial/';
+const ctaHref = withBase('/free-trial/');
 const ctaLabel = 'Book Free Trial';
 ---
 
@@ -29,7 +32,7 @@ const ctaLabel = 'Book Free Trial';
 
 <header class="site-header">
   <Container class="site-header__bar">
-    <a href="/" class="site-header__logo text-h3">Warriors Den <span>MMA</span></a>
+    <a href={withBase('/')} class="site-header__logo text-h3">Warriors Den <span>MMA</span></a>
 
     <nav class="site-header__nav" aria-label="Primary">
       <ul class="site-header__nav-list">

@@ -5,6 +5,7 @@
 import type { Location } from '../../data/locations';
 import Card from './Card.astro';
 import Button from './Button.astro';
+import { withBase } from '../lib/base';
 
 interface Props {
   location: Location;
@@ -33,7 +34,7 @@ const mapsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURICom
       </Button>
     )}
     <Button href={mapsHref} variant="outline">Get Directions</Button>
-    <Button href={`/free-trial/?location=${location.id}`} variant="primary">Book Free Trial</Button>
+    <Button href={withBase(`/free-trial/?location=${location.id}`)} variant="primary">Book Free Trial</Button>
   </div>
 </Card>
 

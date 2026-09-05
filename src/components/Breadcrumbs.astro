@@ -3,6 +3,8 @@
 // JSON-LD BreadcrumbList (docs/architecture.md §4, master-prompt.md §18)
 // built from the exact same `items` array the visible nav renders, so
 // the structured data can never drift from what's actually on the page.
+import { withBase, stripBase } from '../lib/base';
+
 interface Crumb {
   label: string;
   href?: string; // omit on the current page
@@ -14,7 +16,9 @@ interface Props {
 
 const { items } = Astro.props;
 
-const currentPageUrl = new URL(Astro.url.pathname, Astro.site).toString();
+// JSON-LD uses stripBase — it represents the eventual real domain, not
+// this deployment's staging subpath (see src/lib/base.ts).
+const currentPageUrl = new URL(stripBase(Astro.url.pathname), Astro.site).toString();
 const breadcrumbList = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
@@ -35,7 +39,7 @@ const breadcrumbList = {
       items.map((item, i) => (
         <li class="breadcrumbs__item">
           {item.href ? (
-            <a href={item.href} class="text-small">
+            <a href={withBase(item.href)} class="text-small">
               {item.label}
             </a>
           ) : (

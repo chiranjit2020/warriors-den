@@ -13,6 +13,7 @@ import SectionHeading from '../components/SectionHeading.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import Gallery from '../components/Gallery.astro';
 import Button from '../components/Button.astro';
+import { withBase } from '../lib/base';
 
 const categories = [
   { title: 'Training Sessions', count: 4 },
@@ -47,7 +48,7 @@ const categories = [
         ))
       }
       <div class="cta-row">
-        <Button href="/free-trial/" variant="primary">Book a Free Trial</Button>
+        <Button href={withBase('/free-trial/')} variant="primary">Book a Free Trial</Button>
       </div>
     </Container>
   </section>

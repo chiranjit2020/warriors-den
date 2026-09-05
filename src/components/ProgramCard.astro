@@ -6,6 +6,7 @@ import type { Program } from '../../data/programs';
 import Card from './Card.astro';
 import Badge from './Badge.astro';
 import Button from './Button.astro';
+import { withBase } from '../lib/base';
 
 interface Props {
   program: Program;
@@ -22,7 +23,7 @@ const { program } = Astro.props;
     {program.benefits.map((benefit) => <li class="text-small">{benefit}</li>)}
   </ul>
   <Button
-    href={`/free-trial/?program=${program.id}`}
+    href={withBase(`/free-trial/?program=${program.id}`)}
     variant="outline"
     class="program-card__cta"
   >

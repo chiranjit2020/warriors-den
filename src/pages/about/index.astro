@@ -12,6 +12,7 @@ import SectionHeading from '../../components/SectionHeading.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import AboutNav from '../../components/AboutNav.astro';
 import Button from '../../components/Button.astro';
+import { withBase } from '../../lib/base';
 ---
 
 <BaseLayout
@@ -51,8 +52,8 @@ import Button from '../../components/Button.astro';
         confident, and more disciplined than when you started.
       </p>
       <div class="story__cta">
-        <Button href="/free-trial/" variant="primary">Book a Free Trial</Button>
-        <Button href="/about/philosophy/" variant="outline">Read Our Philosophy</Button>
+        <Button href={withBase('/free-trial/')} variant="primary">Book a Free Trial</Button>
+        <Button href={withBase('/about/philosophy/')} variant="outline">Read Our Philosophy</Button>
       </div>
     </Container>
   </section>
