@@ -8,7 +8,8 @@
 :root {
   /* ---- Color: brand ---- */
   --color-primary: #ff7810;
-  --color-primary-hover: #e56a00;
+  --color-primary-hover: #e56a00; /* backgrounds/borders only — 3.28:1 on white, fails 4.5:1 as text */
+  --color-primary-strong: #ad4a00; /* orange-family TEXT/icons on light backgrounds — 5.59:1 on white, WCAG AA */
   --color-primary-text: #1c2045; /* required text color ON primary — 5.92:1 contrast */
   --color-secondary: #1c2045;
   --color-secondary-hover: #141733;

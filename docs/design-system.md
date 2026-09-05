@@ -14,11 +14,14 @@ Brand references from the master prompt: primary `#FF7810` (Warriors orange), se
 
 **Accessibility finding:** `#FF7810` against white text is only **2.64:1** contrast — fails WCAG AA for text. `#1C2045` (navy) text on `#FF7810` is **5.92:1** — passes AA comfortably. So the token rule below is deliberate: **primary-colored surfaces use dark navy text, not white**, unless the orange is used purely as a background behind an icon/image, never behind body or button text at small sizes.
 
+**Second accessibility finding (caught by an automated axe-core audit in Phase 11, not by eye):** `--color-primary-hover` (`#E56A00`) is only **3.28:1** against white — fails 4.5:1 for normal-weight text below ~18.66px. It was in real use as small/body text color in 9 places (eyebrow labels, badges, ratings, phone links, text-button/hover states) across every page. **Rule: `--color-primary-hover` is backgrounds/borders/hover-fills only. Any orange-family text or icon on a light background uses `--color-primary-strong` instead** (`#AD4A00`, 5.59:1 — WCAG AA with margin). Large bold text (≥24px, e.g. `Stats`' big numbers) is exempt — it only needs 3:1, which `--color-primary-hover` already clears.
+
 ```css
 :root {
   /* Brand */
   --color-primary:        #FF7810; /* Warriors Orange */
-  --color-primary-hover:  #E56A00; /* darkened ~10% for hover/active */
+  --color-primary-hover:  #E56A00; /* backgrounds/borders/hover-fills ONLY — fails 4.5:1 as text */
+  --color-primary-strong: #AD4A00; /* orange-family TEXT/icons on light backgrounds — 5.59:1, WCAG AA */
   --color-primary-text:   #1C2045; /* required text color ON primary — 5.92:1 */
   --color-secondary:      #1C2045; /* Deep Navy */
   --color-secondary-hover:#141733;
