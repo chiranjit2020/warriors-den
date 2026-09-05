@@ -1,0 +1,67 @@
+---
+// Breadcrumbs — semantic nav for sub-pages. docs/architecture.md §4.
+// Plain semantic markup only for now; JSON-LD BreadcrumbList structured
+// data is Phase 10 (SEO + Structured Data) per docs/roadmap.md.
+interface Crumb {
+  label: string;
+  href?: string; // omit on the current page
+}
+
+interface Props {
+  items: Crumb[];
+}
+
+const { items } = Astro.props;
+---
+
+<nav aria-label="Breadcrumb" class="breadcrumbs">
+  <ol class="breadcrumbs__list">
+    {
+      items.map((item, i) => (
+        <li class="breadcrumbs__item">
+          {item.href ? (
+            <a href={item.href} class="text-small">
+              {item.label}
+            </a>
+          ) : (
+            <span class="text-small" aria-current="page">
+              {item.label}
+            </span>
+          )}
+          {i < items.length - 1 && (
+            <span class="breadcrumbs__sep" aria-hidden="true">
+              /
+            </span>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</nav>
+
+<style>
+  .breadcrumbs__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  .breadcrumbs__item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  .breadcrumbs__item a {
+    color: var(--color-text-muted);
+  }
+  .breadcrumbs__item a:hover {
+    color: var(--color-primary-hover);
+  }
+  .breadcrumbs__item span[aria-current] {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+  .breadcrumbs__sep {
+    color: var(--color-border);
+  }
+</style>
