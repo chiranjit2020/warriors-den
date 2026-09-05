@@ -7,13 +7,16 @@ interface Props {
   dark?: boolean;
   interactive?: boolean; // enables hover elevation (desktop only)
   class?: string;
+  href?: string; // when set with as="a", makes the whole card a link
+  [key: `data-${string}`]: string | undefined;
 }
 
-const { as: Tag = 'div', dark = false, interactive = false, class: className } = Astro.props;
+const { as: Tag = 'div', dark = false, interactive = false, class: className, ...rest } = Astro.props;
 ---
 
 <Tag
   class:list={['card', dark && 'card--dark', interactive && 'card--interactive', className]}
+  {...rest}
 >
   <slot />
 </Tag>
