@@ -1,0 +1,187 @@
+---
+// Internal QA page only — NOT part of the public IA (docs/information-architecture.md).
+// Exists to visually verify Phase 3 base components against design-system.md
+// before any real content pages are built. noindex'd; not linked from nav.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/Container.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import Button from '../../components/Button.astro';
+import Badge from '../../components/Badge.astro';
+import Card from '../../components/Card.astro';
+import Stats from '../../components/Stats.astro';
+import Loader from '../../components/Loader.astro';
+import Modal from '../../components/Modal.astro';
+
+const colorTokens = [
+  ['--color-primary', 'Primary'],
+  ['--color-primary-hover', 'Primary Hover'],
+  ['--color-secondary', 'Secondary'],
+  ['--color-secondary-hover', 'Secondary Hover'],
+  ['--color-background', 'Background'],
+  ['--color-background-dark', 'Background Dark'],
+  ['--color-surface', 'Surface'],
+  ['--color-surface-dark', 'Surface Dark'],
+  ['--color-success', 'Success'],
+  ['--color-warning', 'Warning'],
+  ['--color-error', 'Error'],
+];
+
+const spacingTokens = ['4', '8', '12', '16', '24', '32', '48', '64', '80', '96', '120'];
+---
+
+<BaseLayout
+  title="Style Guide (Internal) — Warriors Den MMA"
+  description="Internal QA page for Phase 3 base components. Not part of the public site."
+  noindex={true}
+>
+  <Container>
+    <section style="padding-block: var(--space-16);">
+      <SectionHeading
+        eyebrow="Phase 3 — internal QA"
+        title="Style Guide"
+        description="Every base component from docs/design-system.md, rendered together for visual verification. This page is noindex'd and not linked from navigation."
+      />
+    </section>
+
+    <section style="padding-bottom: var(--space-16);">
+      <h2 class="text-h2" style="margin-bottom: var(--space-6);">Typography</h2>
+      <p class="text-display">Display — Forge Strength.</p>
+      <p class="text-h1">H1 — Build Discipline.</p>
+      <p class="text-h2">H2 — Become a Warrior.</p>
+      <p class="text-h3">H3 — Program heading</p>
+      <p class="text-h4">H4 — Card heading</p>
+      <p class="text-body">Body — Warriors Den MMA offers training across multiple disciplines for every age and skill level.</p>
+      <p class="text-small">Small — supporting text</p>
+      <p class="text-caption">Caption / eyebrow label</p>
+    </section>
+
+    <section style="padding-bottom: var(--space-16);">
+      <h2 class="text-h2" style="margin-bottom: var(--space-6);">Color tokens</h2>
+      <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: var(--space-4);">
+        {
+          colorTokens.map(([token, label]) => (
+            <div>
+              <div style={`background: var(${token}); height: 64px; border-radius: var(--radius-md); border: 1px solid var(--color-border);`} />
+              <p class="text-caption" style="margin-top: var(--space-2);">{label}</p>
+              <p class="text-small text-muted">{token}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section style="padding-bottom: var(--space-16);">
+      <h2 class="text-h2" style="margin-bottom: var(--space-6);">Spacing scale</h2>
+      <div style="display:flex; flex-direction:column; gap: var(--space-2);">
+        {
+          spacingTokens.map((s) => (
+            <div style="display:flex; align-items:center; gap: var(--space-4);">
+              <span class="text-small text-muted" style="width:48px;">{s}px</span>
+              <div style={`width:${s}px; height:16px; background:var(--color-primary); border-radius:2px;`} />
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section style="padding-bottom: var(--space-16);">
+      <h2 class="text-h2" style="margin-bottom: var(--space-6);">Buttons</h2>
+      <div style="display:flex; flex-wrap:wrap; gap: var(--space-4); align-items:center; margin-bottom: var(--space-4);">
+        <Button variant="primary">Primary</Button>
+        <Button variant="secondary">Secondary</Button>
+        <Button variant="outline">Outline</Button>
+        <Button variant="ghost">Ghost</Button>
+        <Button variant="text">Text Button</Button>
+        <Button variant="icon" ariaLabel="Icon button example">★</Button>
+      </div>
+      <div style="display:flex; flex-wrap:wrap; gap: var(--space-4); align-items:center; margin-bottom: var(--space-4);">
+        <Button variant="primary" loading>Loading</Button>
+        <Button variant="primary" disabled>Disabled</Button>
+        <Button variant="primary" href="/free-trial/">As link (href)</Button>
+      </div>
+    </section>
+
+    <section style="padding-bottom: var(--space-16);">
+      <h2 class="text-h2" style="margin-bottom: var(--space-6);">Badges</h2>
+      <div style="display:flex; gap: var(--space-3);">
+        <Badge tone="neutral">Neutral</Badge>
+        <Badge tone="primary">Primary</Badge>
+        <Badge tone="success">Success</Badge>
+        <Badge tone="warning">Warning</Badge>
+      </div>
+    </section>
+
+    <section style="padding-bottom: var(--space-16);">
+      <h2 class="text-h2" style="margin-bottom: var(--space-6);">Cards</h2>
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-6);">
+        <Card interactive>
+          <Badge tone="primary">Program</Badge>
+          <p class="text-h3" style="margin-top: var(--space-3);">Muay Thai</p>
+          <p class="text-small text-muted" style="margin-top: var(--space-2);">
+            Example card content — placeholder copy for QA only.
+          </p>
+        </Card>
+        <Card dark interactive>
+          <p class="text-h3">Dark surface card</p>
+          <p class="text-small" style="margin-top: var(--space-2); color: var(--color-text-inverse-muted);">
+            For use on dark sections.
+          </p>
+        </Card>
+      </div>
+    </section>
+
+    <section style="padding-bottom: var(--space-16);">
+      <h2 class="text-h2" style="margin-bottom: var(--space-6);">Stats</h2>
+      <Stats
+        stats={[
+          { value: '5.0★', label: 'Madhyamgram Google rating' },
+          { value: '34', label: 'Google reviews (Madhyamgram)' },
+          { value: '3', label: 'Confirmed locations' },
+        ]}
+      />
+      <p class="text-caption text-muted" style="margin-top: var(--space-4);">
+        Only real, confirmed figures shown — see docs/research.md §2.2.
+      </p>
+    </section>
+
+    <section style="padding-bottom: var(--space-16);">
+      <h2 class="text-h2" style="margin-bottom: var(--space-6);">Loader</h2>
+      <div style="display:flex; gap: var(--space-6); align-items:center;">
+        <Loader size="sm" />
+        <Loader size="md" />
+      </div>
+    </section>
+
+    <section style="padding-bottom: var(--space-24);">
+      <h2 class="text-h2" style="margin-bottom: var(--space-6);">Modal</h2>
+      <Button variant="outline" data-modal-open="qa-modal">Open example modal</Button>
+      <Modal id="qa-modal">
+        <h3 id="qa-modal-title" class="text-h3">Example modal</h3>
+        <p class="text-body" style="margin-top: var(--space-3);">
+          Built on the native &lt;dialog&gt; element — Escape and backdrop click both close it,
+          and focus is trapped automatically.
+        </p>
+      </Modal>
+    </section>
+
+    <section style="padding-bottom: var(--space-30);">
+      <h2 class="text-h2" style="margin-bottom: var(--space-6);">Toast</h2>
+      <div style="display:flex; gap: var(--space-3);">
+        <Button variant="primary" data-toast-demo="success">Show success toast</Button>
+        <Button variant="outline" data-toast-demo="error">Show error toast</Button>
+      </div>
+    </section>
+  </Container>
+</BaseLayout>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-toast-demo]').forEach((el) => {
+    el.addEventListener('click', () => {
+      const tone = el.dataset.toastDemo as 'success' | 'error';
+      window.wdToast.show(
+        tone === 'success' ? 'This is a success toast.' : 'This is an error toast.',
+        tone,
+      );
+    });
+  });
+</script>
