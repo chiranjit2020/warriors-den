@@ -1,0 +1,51 @@
+---
+// Stats — a row of stat tiles (e.g. "34 Google reviews", "5.0★ rating").
+// Only render stats that are real/confirmed — never a fabricated number.
+// docs/design-system.md §9/§14, master-prompt.md §34/§44.
+interface Stat {
+  value: string;
+  label: string;
+}
+
+interface Props {
+  stats: Stat[];
+  class?: string;
+}
+
+const { stats, class: className } = Astro.props;
+---
+
+<dl class:list={['stats', className]}>
+  {
+    stats.map((stat) => (
+      <div class="stats__item">
+        <dt class="text-display stats__value">{stat.value}</dt>
+        <dd class="text-small text-muted stats__label">{stat.label}</dd>
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: var(--space-8);
+    margin: 0;
+  }
+
+  .stats__item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .stats__value {
+    font-size: clamp(1.75rem, 4vw, var(--text-display-size));
+    color: var(--color-primary-hover);
+  }
+
+  .stats__label {
+    margin: 0;
+  }
+</style>

@@ -1,0 +1,149 @@
+---
+// Button — Primary / Secondary / Outline / Ghost / Text / Icon variants.
+// docs/design-system.md §7. Renders <a> when href is given, <button> otherwise.
+interface Props {
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'text' | 'icon';
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  loading?: boolean;
+  disabled?: boolean;
+  class?: string;
+  ariaLabel?: string; // required in practice for variant="icon"
+  [key: `data-${string}`]: string | undefined;
+}
+
+const {
+  variant = 'primary',
+  href,
+  type = 'button',
+  loading = false,
+  disabled = false,
+  class: className,
+  ariaLabel,
+  ...rest
+} = Astro.props;
+
+const Tag = href ? 'a' : 'button';
+const classes = ['btn', `btn--${variant}`, className].filter(Boolean).join(' ');
+---
+
+<Tag
+  class={classes}
+  href={href}
+  type={!href ? type : undefined}
+  disabled={!href && disabled ? true : undefined}
+  aria-disabled={href && disabled ? 'true' : undefined}
+  aria-busy={loading ? 'true' : undefined}
+  aria-label={ariaLabel}
+  {...rest}
+>
+  {loading && <span class="btn__spinner" aria-hidden="true"></span>}
+  <span class="btn__label"><slot /></span>
+</Tag>
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-height: 44px;
+    padding-inline: var(--space-6);
+    border-radius: var(--radius-md);
+    border: 2px solid transparent;
+    font-size: var(--text-button-size);
+    font-weight: var(--text-button-weight);
+    line-height: var(--text-button-line-height);
+    cursor: pointer;
+    transition: background-color var(--duration-base) var(--ease-standard),
+      border-color var(--duration-base) var(--ease-standard),
+      color var(--duration-base) var(--ease-standard),
+      opacity var(--duration-base) var(--ease-standard);
+  }
+
+  .btn[disabled],
+  .btn[aria-disabled='true'] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .btn--primary {
+    background: var(--color-primary);
+    color: var(--color-primary-text);
+  }
+  .btn--primary:hover {
+    background: var(--color-primary-hover);
+  }
+
+  .btn--secondary {
+    background: var(--color-secondary);
+    color: var(--color-text-inverse);
+  }
+  .btn--secondary:hover {
+    background: var(--color-secondary-hover);
+  }
+
+  .btn--outline {
+    background: transparent;
+    border-color: var(--color-secondary);
+    color: var(--color-secondary);
+  }
+  .btn--outline:hover {
+    background: var(--color-surface);
+  }
+
+  .btn--ghost {
+    background: transparent;
+    color: var(--color-secondary);
+  }
+  .btn--ghost:hover {
+    background: var(--color-surface);
+  }
+
+  .btn--text {
+    background: transparent;
+    color: var(--color-primary-hover);
+    padding-inline: 0;
+    min-height: auto;
+  }
+  .btn--text:hover {
+    text-decoration: underline;
+  }
+
+  .btn--icon {
+    padding: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-pill);
+    background: transparent;
+    color: var(--color-secondary);
+  }
+  .btn--icon:hover {
+    background: var(--color-surface);
+  }
+
+  .btn:active {
+    transform: scale(0.98);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .btn:active {
+      transform: none;
+    }
+  }
+
+  .btn__spinner {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    animation: btn-spin var(--duration-slow) linear infinite;
+  }
+
+  @keyframes btn-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+</style>

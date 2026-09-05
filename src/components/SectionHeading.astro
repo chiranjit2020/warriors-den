@@ -1,0 +1,43 @@
+---
+// SectionHeading — consistent eyebrow + title + optional supporting copy
+// for section intros. docs/design-system.md §2.
+interface Props {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  align?: 'left' | 'center';
+  level?: 'h1' | 'h2';
+}
+
+const { eyebrow, title, description, align = 'left', level = 'h2' } = Astro.props;
+const Heading = level;
+---
+
+<div class={`section-heading section-heading--${align}`}>
+  {eyebrow && <p class="text-caption section-heading__eyebrow">{eyebrow}</p>}
+  <Heading class={level === 'h1' ? 'text-h1' : 'text-h2'}>{title}</Heading>
+  {description && <p class="text-body text-muted section-heading__description">{description}</p>}
+</div>
+
+<style>
+  .section-heading {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    max-width: 640px;
+  }
+
+  .section-heading--center {
+    align-items: center;
+    text-align: center;
+    margin-inline: auto;
+  }
+
+  .section-heading__eyebrow {
+    color: var(--color-primary-hover);
+  }
+
+  .section-heading__description {
+    max-width: 60ch;
+  }
+</style>

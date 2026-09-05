@@ -1,0 +1,42 @@
+---
+// Card — shared primitive that ProgramCard/LocationCard/CoachCard/
+// TestimonialCard/FAQItem/etc. will compose in later phases.
+// docs/design-system.md §9.
+interface Props {
+  as?: keyof HTMLElementTagNameMap;
+  dark?: boolean;
+  interactive?: boolean; // enables hover elevation (desktop only)
+  class?: string;
+}
+
+const { as: Tag = 'div', dark = false, interactive = false, class: className } = Astro.props;
+---
+
+<Tag
+  class:list={['card', dark && 'card--dark', interactive && 'card--interactive', className]}
+>
+  <slot />
+</Tag>
+
+<style>
+  .card {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-subtle);
+    padding: var(--space-6);
+  }
+
+  .card--dark {
+    background: var(--color-surface-dark);
+    color: var(--color-text-inverse);
+  }
+
+  @media (hover: hover) {
+    .card--interactive {
+      transition: box-shadow var(--duration-base) var(--ease-standard);
+    }
+    .card--interactive:hover {
+      box-shadow: var(--shadow-medium);
+    }
+  }
+</style>

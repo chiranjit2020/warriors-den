@@ -1,0 +1,55 @@
+---
+// Loader — inline loading spinner for async states (form submit, content
+// fetch). Pairs with the `loading` state on Button/forms. docs/design-system.md §8.
+interface Props {
+  label?: string;
+  size?: 'sm' | 'md';
+  class?: string;
+}
+
+const { label = 'Loading…', size = 'md', class: className } = Astro.props;
+---
+
+<span class:list={['loader', `loader--${size}`, className]} role="status">
+  <span class="loader__spinner" aria-hidden="true"></span>
+  <span class="sr-only">{label}</span>
+</span>
+
+<style>
+  .loader {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .loader__spinner {
+    display: block;
+    border-radius: 50%;
+    border: 3px solid var(--color-border);
+    border-top-color: var(--color-primary);
+    animation: loader-spin var(--duration-slow) linear infinite;
+  }
+
+  .loader--sm .loader__spinner {
+    width: 16px;
+    height: 16px;
+    border-width: 2px;
+  }
+
+  .loader--md .loader__spinner {
+    width: 28px;
+    height: 28px;
+  }
+
+  @keyframes loader-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .loader__spinner {
+      animation-duration: 1.5s;
+    }
+  }
+</style>
