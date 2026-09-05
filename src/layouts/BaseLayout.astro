@@ -2,7 +2,18 @@
 // BaseLayout — shared shell: tokens/base CSS, meta/SEO slot, Header, Footer,
 // Toast region. Every real page (built from Phase 4 onward) wraps this.
 // docs/architecture.md §4.
-import '@fontsource-variable/manrope';
+// Static per-weight files, not the variable font — WebKit/Safari fails to
+// resolve the variable font's weight axis (font-weight computes correctly
+// as 800, but renders as a much lighter static instance regardless;
+// confirmed via Playwright across chromium/webkit/firefox against the
+// live site). Static @font-face per weight has no axis to mis-resolve,
+// so it's reliable everywhere. Only the weights the type scale actually
+// uses (tokens.css) are loaded.
+import '@fontsource/manrope/400.css';
+import '@fontsource/manrope/500.css';
+import '@fontsource/manrope/600.css';
+import '@fontsource/manrope/700.css';
+import '@fontsource/manrope/800.css';
 import '../styles/tokens.css';
 import '../styles/base.css';
 import Header from '../components/Header.astro';

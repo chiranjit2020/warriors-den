@@ -55,10 +55,12 @@ Rule: color is never the only signal for state (form errors, success, etc. alway
 
 ## 2. Typography
 
-Mobile-first modern humanist sans for both headings and body — prioritizes readability over decorative display type, per master prompt. **Decided: Manrope** (variable weight), self-hosted via `@fontsource-variable/manrope` rather than a Google Fonts `<link>` — no third-party request, no external font-loading CLS risk, imported once in `BaseLayout.astro`.
+Mobile-first modern humanist sans for both headings and body — prioritizes readability over decorative display type, per master prompt. **Decided: Manrope**, self-hosted via `@fontsource/manrope` (static per-weight files — 400/500/600/700/800, matching the type scale below) rather than a Google Fonts `<link>` — no third-party request, no external font-loading CLS risk, imported once in `BaseLayout.astro`.
+
+**Not the variable-font package.** `@fontsource-variable/manrope` was the original choice, but Playwright testing against the live site (cross-checked on chromium/webkit/firefox) found WebKit fails to resolve the variable font's weight axis: `font-weight: 800` computes correctly in DevTools, but WebKit renders a much lighter static instance regardless. Static per-weight `@font-face` files have no axis to mis-resolve, so switched to those — reliable on every engine, and only the 5 weights actually used ship, no wasted payload for interpolated weights nothing in the type scale uses anyway.
 
 ```css
---font-family-base: 'Manrope Variable', 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+--font-family-base: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 ```
 
 | Token | Size (mobile → desktop) | Weight | Line-height | Use |
