@@ -2,16 +2,13 @@
 // TrialForm — primary conversion form. docs/design-system.md §8,
 // master-prompt.md §17.
 //
-// IMPORTANT — submission is NOT wired to a real backend yet. Per
-// master-prompt.md §24/§29, no backend/form service has been approved,
-// and this project's MVP hosting target (GitHub Pages, per
-// docs/architecture.md) doesn't include one natively — unlike the
-// CURRENT live site, which is on Netlify and could use Netlify Forms
-// for free. That's a real open decision (see the final Phase 4 report),
-// not something to silently pick. Until it's decided, the client script
-// below simulates a network request so every UI state (loading/success/
-// error) is real and testable — but no submitted lead actually reaches
-// the business yet. Search "TODO: wire real submission" to find the spot.
+// IMPORTANT — submission is NOT wired to a real backend. Owner-confirmed
+// decision (docs/architecture.md §7.1): stay stubbed for now rather than
+// add Netlify Forms / a third-party endpoint / a custom backend. The
+// client script below simulates a network request so every UI state
+// (loading/success/error) is real and testable — but no submitted lead
+// actually reaches the business yet. Revisit before this site goes live.
+// Search "TODO: wire real submission" to find the spot.
 import type { Location } from '../../data/locations';
 import type { Program } from '../../data/programs';
 import { locations } from '../../data/locations';

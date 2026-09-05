@@ -112,6 +112,10 @@ Implemented at the component level per `design-system.md` §13: semantic landmar
 
 GitHub repository → GitHub Pages (or an equivalent GitHub-connected static host) building `dist/` on push to `main`, via a simple CI workflow (`astro build` → deploy). No environment secrets needed at this stage since there's no backend.
 
+## 7.1 Form submission — decided: staying stubbed (2026-09-05)
+
+`TrialForm`/`ContactForm` submission remains a simulated stub (see the component-level comment in `TrialForm.astro`) rather than being wired to Netlify Forms, a third-party endpoint (e.g. Formspree), or a custom backend. Owner-confirmed decision, not a default — revisit before this site actually replaces the live one, since a "Book a Free Trial" form that doesn't deliver leads anywhere is a real gap for a conversion-focused site once it's live. All UI states (loading/success/error) are real and fully testable regardless.
+
 ## 8. Forward-compatibility boundaries (not built now)
 
 To make §26–§29/§49–§67's future phases (PWA, Supabase auth, member dashboard, owner panel, chat) additive rather than a rewrite:
