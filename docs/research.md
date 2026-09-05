@@ -62,6 +62,22 @@ None of these are branded "Warriors Den MMA" on the Sanshinkan site, and none of
 
 This single answer determines whether the site ships with 1 location or up to 4, so it's the highest-priority open question in this report.
 
+### 2.1 Candidate location list (from directory search, unverified)
+
+A web search for "Warriors Den MMA" and the Sanshinkan affiliate names turned up more candidate addresses beyond the two already found. **None of the "unverified" rows below should be treated as confirmed** — third-party directories (Justdial, Bookmyplayer) are frequently stale, and a listing existing does not mean the branch is currently active. This table exists to give the business owner a concrete list to confirm/correct rather than to assert facts.
+
+| # | Name / brand shown | Address (as listed) | Source | Confidence |
+|---|---|---|---|---|
+| 1 | Warriors Den MMA | 1st Floor Krishti Abasan, Natunpara, Bablatala, Gopalpur I, Kolkata 700136 | Live site (denmma.netlify.app) | **Confirmed current** |
+| 2 | Warriors Den MMA | Second Floor, Terminus Building, Room 201, near Miraj Cinema, Newtown, Kolkata | Live site's own About copy ("moved from Terminus Building to Bablatala") + directory listings | **Confirmed former, not current** — directory listings for it are stale |
+| 3 | Warriors Den MMA | 130A, Netaji Subhash Chandra Bose Rd, Aswini Nagar, Regent Park, Kolkata 700001 | Bookmyplayer listing (5★, 1 rating) | Unverified — not mentioned anywhere on the live site |
+| 4 | Warriors Den MMA | "Action Area 1B," Kolkata (exact address not retrievable — Justdial blocked the fetch) | Justdial listing title | Unverified — needs manual lookup, could not confirm details |
+| 5 | Sanshinkan MMA FitZone / Fit & Fight Zone | Kestopur — Prafulla Kanan Balak Brinda Club, AC-62, Prafulla Kanan Rd, Rabindrapally, opposite Ashirbad Inn Hotel, Kolkata 700102 — contact Ranjit Sharma, +91-8697359951 | sanshinkan.org affiliate page + directory listings | Unverified relationship to Warriors Den brand — see question above |
+| 6 | Sanshinkan MMA FitZone | Baliadanga, Chakdah — Tender Buds School/Club, near Durgabari Rd, Edatas Sports Academy — contact Ranjit Sharma | sanshinkan.org affiliate page | Unverified relationship to Warriors Den brand |
+| 7 | Sanshinkan MMA FitZone | Kanchrapara — Probaho Club, near College More, North 24 Parganas 743145 — contact Ranjit Sharma | sanshinkan.org affiliate page | Unverified relationship to Warriors Den brand |
+
+Rows 3–7 collectively suggest the true active-location count could plausibly be the "3–4" the master prompt references, but **which specific rows are real, currently-active, Warriors Den-branded branches is a business question, not something inferable from public listings.** Recommend the owner simply confirm/strike each row directly.
+
 ---
 
 ## 3. UX Problems (current Warriors Den site)
@@ -111,8 +127,8 @@ This single answer determines whether the site ships with 1 location or up to 4,
 
 ## 9. Missing Information / Requires Business Confirmation
 
-1. **Branch list.** Confirm the definitive current list of active Warriors Den locations (name, full address, phone, WhatsApp, hours, instructor) — specifically resolving the Bablatala vs. Kestopur/Chakdah/Kanchrapara question above.
-2. **Google Business Profile data** — current rating, review count, categories, listed hours, listed services (screenshots referenced in the master prompt were not received in this session).
+1. **Branch list.** Confirm/correct each row in the §2.1 candidate table (up to 7 addresses across two brand names found via directory search) — which are currently active, under which brand, with what phone/WhatsApp/hours/instructor.
+2. **Google Business Profile data** — current rating, review count, categories, listed hours, listed services. Public search could not surface a resolvable Google Business listing for Warriors Den MMA directly (only third-party directory mirrors like Justdial/Bookmyplayer, one showing 5★/1 rating for the Regent Park address). Screenshots referenced in the master prompt were also not received in this session — the actual GBP listing (or its screenshots) is still needed.
 3. **Founder/coach bios and credentials** for Ranjit Sharma and Adarsh Pal (belts, certifications, competition history) — none published on the current site.
 4. **Real testimonials/reviews** with permission to publish (currently none on-site).
 5. **Pricing / membership plans** for any program.
