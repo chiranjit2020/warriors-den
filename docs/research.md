@@ -55,29 +55,24 @@ Sanshinkan is a much larger, established multi-branch martial arts organization 
 
 None of these are branded "Warriors Den MMA" on the Sanshinkan site, and none of the three appears on the current Warriors Den site, which instead shows a fourth address (Bablatala/Natunpara, Gopalpur) not listed on Sanshinkan's affiliate page.
 
-**This is a real discrepancy, not an assumption on our part — it needs a direct business answer before any Locations content is built:**
-- Are Kestopur, Chakdah, and Kanchrapara current, active Warriors Den branches operating under a different signboard name?
-- Has the brand consolidated/relocated to Bablatala and retired the other three?
-- Is "Warriors Den MMA" the umbrella consumer-facing brand for all of these, with "Sanshinkan Fit & Fight Zone" as the Sanshinkan-side franchise listing?
+**Resolved 2026-09-05 — owner-confirmed final branch count: 3.** Active locations are Bablatala, Kestopur, and Madhyamgram (see §2.1). Chakdah and Kanchrapara are not part of the site's location set.
 
-This single answer determines whether the site ships with 1 location or up to 4, so it's the highest-priority open question in this report.
+### 2.1 Location list — RESOLVED (owner-confirmed 2026-09-05)
 
-### 2.1 Candidate location list (from directory search, unverified)
+Final set: **3 active locations.** Non-active candidates are kept in the table below only as a record of what was checked and ruled out, so the question doesn't get re-litigated later.
 
-A web search for "Warriors Den MMA" and the Sanshinkan affiliate names turned up more candidate addresses beyond the two already found. **None of the "unverified" rows below should be treated as confirmed** — third-party directories (Justdial, Bookmyplayer) are frequently stale, and a listing existing does not mean the branch is currently active. This table exists to give the business owner a concrete list to confirm/correct rather than to assert facts.
-
-| # | Name / brand shown | Address (as listed) | Source | Confidence |
+| # | Name / brand shown | Address (as listed) | Source | Status |
 |---|---|---|---|---|
-| 1 | Warriors Den MMA | 1st Floor Krishti Abasan, Natunpara, Bablatala, Gopalpur I, Kolkata 700136 | Live site (denmma.netlify.app) | **Confirmed current** |
-| 2 | Warriors Den MMA | Second Floor, Terminus Building, Room 201, near Miraj Cinema, Newtown, Kolkata | Live site's own About copy ("moved from Terminus Building to Bablatala") + directory listings | **Confirmed former, not current** — directory listings for it are stale |
-| 3 | Warriors Den MMA | 130A, Netaji Subhash Chandra Bose Rd, Aswini Nagar, Regent Park, Kolkata 700001 | Bookmyplayer listing (5★, 1 rating) | Unverified — not mentioned anywhere on the live site |
-| 4 | Warriors Den MMA | "Action Area 1B," Kolkata (exact address not retrievable — Justdial blocked the fetch) | Justdial listing title | Unverified — needs manual lookup, could not confirm details |
-| 5 | Warriors Den MMA / Sanshinkan Fit & Fight Zone (Kestopur) | Prafulla Kanan Balak Brinda Club, AC-62, Prafulla Kanan Rd, Rabindrapally, opposite Ashirbad Inn Hotel, Kolkata 700102 — contact Ranjit Sharma, +91-8697359951 | sanshinkan.org affiliate page + directory listings | **Confirmed active** (owner-confirmed 2026-09-05) — public signage/brand name for this branch still to be confirmed |
-| 6 | Sanshinkan MMA FitZone | Baliadanga, Chakdah — Tender Buds School/Club, near Durgabari Rd, Edatas Sports Academy — contact Ranjit Sharma | sanshinkan.org affiliate page | Unverified relationship to Warriors Den brand |
-| 7 | Sanshinkan MMA FitZone | Kanchrapara — Probaho Club, near College More, North 24 Parganas 743145 — contact Ranjit Sharma | sanshinkan.org affiliate page | Unverified relationship to Warriors Den brand |
-| 8 | **Warriors Den MMA Fit Zone – Madhyamgram** | MFJ8+HQ6 Susheila Apartment, near Kazi Nazrul Islam Sarani, Doltala, Jessore Road, Dohoria Ln, Dohoria, Srijoni Housing, Madhyamgram, Kolkata, West Bengal 700132 (short form on signage: "Methopara, Dohoria, Madhyamgram") | Owner-supplied Google Business Profile screenshot (2026-09-05) | **Confirmed active** — real GBP listing |
+| 1 | Warriors Den MMA | 1st Floor Krishti Abasan, Natunpara, Bablatala, Gopalpur I, Kolkata 700136 | Live site (denmma.netlify.app) | **Active — confirmed** |
+| 5 | Warriors Den MMA / Sanshinkan Fit & Fight Zone (Kestopur) | Prafulla Kanan Balak Brinda Club, AC-62, Prafulla Kanan Rd, Rabindrapally, opposite Ashirbad Inn Hotel, Kolkata 700102 — contact Ranjit Sharma, +91-8697359951 | sanshinkan.org affiliate page + directory listings | **Active — confirmed**; public signage/brand name for this branch still to be confirmed |
+| 8 | **Warriors Den MMA Fit Zone – Madhyamgram** | MFJ8+HQ6 Susheila Apartment, near Kazi Nazrul Islam Sarani, Doltala, Jessore Road, Dohoria Ln, Dohoria, Srijoni Housing, Madhyamgram, Kolkata, West Bengal 700132 (short form on signage: "Methopara, Dohoria, Madhyamgram") | Owner-supplied Google Business Profile screenshot (2026-09-05) | **Active — confirmed** |
+| 2 | Warriors Den MMA | Second Floor, Terminus Building, Room 201, near Miraj Cinema, Newtown, Kolkata | Live site's own About copy | Not active — former location, site itself says they moved out |
+| 3 | Warriors Den MMA | 130A, Netaji Subhash Chandra Bose Rd, Aswini Nagar, Regent Park, Kolkata 700001 | Bookmyplayer listing | Not active — ruled out |
+| 4 | Warriors Den MMA | "Action Area 1B," Kolkata | Justdial listing title | Not active — ruled out |
+| 6 | Sanshinkan MMA FitZone | Baliadanga, Chakdah | sanshinkan.org affiliate page | Not active — ruled out |
+| 7 | Sanshinkan MMA FitZone | Kanchrapara | sanshinkan.org affiliate page | Not active — ruled out |
 
-Rows 3, 4, 6, 7 are still open; recommend the owner confirm/strike each directly. Row 8 is a genuinely new find — it wasn't surfaced by any of the earlier web searches (it doesn't appear to be linked from either denmma.netlify.app or sanshinkan.org), so there may be more GBP-only listings not yet accounted for.
+Numbering is kept from the original discovery order rather than renumbered, so this table stays traceable against earlier commits.
 
 ### 2.2 Madhyamgram branch — full Google Business Profile data (from owner screenshot)
 
@@ -140,7 +135,7 @@ Rows 3, 4, 6, 7 are still open; recommend the owner confirm/strike each directly
 
 ## 9. Missing Information / Requires Business Confirmation
 
-1. **Branch list.** Rows 1, 5, and 8 in the §2.1 table are now owner-confirmed active; rows 3, 4, 6, 7 still need a yes/no from the owner. For confirmed branches, still need: WhatsApp number, full weekly hours, instructor name, and (for Madhyamgram/Kestopur) which exact brand name/wording to display publicly.
+1. **Branch list — RESOLVED.** Final set is 3 active locations: Bablatala, Kestopur, Madhyamgram (§2.1). Still needed per branch: WhatsApp number, full weekly hours, instructor name, and (for Madhyamgram/Kestopur) which exact brand name/wording to display publicly.
 2. **Google Business Profile data** — current rating, review count, categories, listed hours, listed services. Public search could not surface a resolvable Google Business listing for Warriors Den MMA directly (only third-party directory mirrors like Justdial/Bookmyplayer, one showing 5★/1 rating for the Regent Park address). Screenshots referenced in the master prompt were also not received in this session — the actual GBP listing (or its screenshots) is still needed.
 3. **Founder/coach bios and credentials** for Ranjit Sharma and Adarsh Pal (belts, certifications, competition history) — none published on the current site.
 4. **Real testimonials/reviews** with permission to publish (currently none on-site).

@@ -23,7 +23,9 @@ This IA follows the master prompt's recommended structure (§11), adjusted for w
 /programs/kids-martial-arts/
 /programs/womens-self-defence/
 /locations/                Locations overview
-/locations/<slug>/         One page per CONFIRMED location only
+/locations/bablatala/      Gopalpur / Bablatala branch
+/locations/kestopur/       Kestopur branch
+/locations/madhyamgram/    Madhyamgram branch
 /gallery/
 /reviews/
 /blog/                     (content engine, later in MVP sequence)
@@ -33,7 +35,7 @@ This IA follows the master prompt's recommended structure (§11), adjusted for w
 
 Notes:
 - Grappling was listed as a program name on the current site; master prompt's recommended list uses Jiu-Jitsu/Judo instead, which already cover that skill area. Recommend folding "Grappling" into Jiu-Jitsu content rather than adding a ninth near-duplicate program page — flag for confirmation rather than deciding unilaterally.
-- Per master prompt §16 and §19: **no `/locations/<slug>/` page will be created until that specific location's data is verified.** At MVP kickoff this likely means shipping with exactly one location page (Bablatala) and adding others as they're confirmed — not stubbing out pages for unverified addresses.
+- Per master prompt §16 and §19: location pages are built only for verified locations. Branch count is now resolved (research.md §2.1, owner-confirmed 2026-09-05): **3 active locations — Bablatala, Kestopur, Madhyamgram.** Per-branch detail (hours, WhatsApp, instructor, exact public brand name for Kestopur/Madhyamgram) is still pending and tracked in research.md §9.
 - `/blog/` is sequenced later in the roadmap (Phase 10+) — included here for URL-structure planning only, not built at MVP launch.
 
 ## Primary navigation (header)

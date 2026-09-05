@@ -13,7 +13,7 @@ Full long-term roadmap is defined in `master-prompt.md` §46 (Phases 0–21) and
 | 3 | Project Setup + Base Components | Phase 1, 2 | Astro project scaffolded; Header, Footer, Button, Container, SectionHeading, Card primitives, Modal, Toast, Loader built and visually verified against tokens; no pages yet |
 | 4 | Homepage | Phase 3 | Sections per master-prompt §12 built with real/placeholder-marked data; desktop/tablet/mobile tested; primary CTA works |
 | 5 | Programs | Phase 4 | `/programs/` overview + one page per confirmed program, each with unique outcome-focused content |
-| 6 | Locations | Phase 4, and research.md open question #1 resolved | `/locations/` overview + one page per **confirmed** location only |
+| 6 | Locations | Phase 4 | `/locations/` overview + pages for the 3 confirmed locations (Bablatala, Kestopur, Madhyamgram — research.md §2.1) |
 | 7 | About / Coaches | Phase 4 | Story, philosophy, coach bios (real, confirmed credentials only) |
 | 8 | Gallery + Reviews | Phase 4 | Captioned gallery; real reviews only (or section omitted until reviews are supplied) |
 | 9 | Contact + Free Trial | Phase 4 | Working `TrialForm`/`ContactForm` with all states (loading/success/error) per design-system §8 |
@@ -29,4 +29,4 @@ One meaningful commit per unit of work within a phase (master prompt §39) — e
 
 ## What happens after this document
 
-Per master-prompt.md §45/§48, work **stops here** for review. Phase 3 (project scaffolding) does not begin until the open questions in `research.md` §9 are answered — most importantly the location-count question, since it changes the IA's route list and the Locations data model.
+Per master-prompt.md §45/§48, work **stops here** for review. The location-count question is now resolved (research.md §2.1/§9), but the remaining items in `research.md` §9 (per-branch hours/WhatsApp/instructor, coach bios, GBP data for all 3 branches, pricing, schedule, real testimonials, brand assets, domain, Sanshinkan-relationship wording) should be answered as far as possible before Phase 3 scaffolding begins.
