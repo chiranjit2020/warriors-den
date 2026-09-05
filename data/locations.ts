@@ -4,12 +4,20 @@
 // live site or an owner-supplied Google Business Profile screenshot —
 // nothing here is invented. Fields marked TODO are real gaps, not
 // guesses, and must stay visibly absent (not defaulted) until supplied.
+//
+// streetAddress/addressLocality/addressRegion/postalCode are the exact
+// same real address, split for schema.org PostalAddress (Phase 10) —
+// not new information.
 
 export interface Location {
   id: string;
   name: string;
   slug: string;
   address: string;
+  streetAddress: string;
+  addressLocality: string;
+  addressRegion: string;
+  postalCode: string;
   areaNote: string; // one factual sentence restating where the branch sits — not invented local color
   phone?: string;
   whatsapp?: string; // TODO — not yet confirmed for any branch
@@ -26,6 +34,10 @@ export const locations: Location[] = [
     name: 'Bablatala (Gopalpur)',
     slug: 'bablatala',
     address: '1st Floor, Krishti Abasan, Natunpara, Bablatala, Gopalpur I, Kolkata, West Bengal 700136',
+    streetAddress: '1st Floor, Krishti Abasan, Natunpara, Bablatala, Gopalpur I',
+    addressLocality: 'Kolkata',
+    addressRegion: 'West Bengal',
+    postalCode: '700136',
     areaNote: 'Our Gopalpur branch, on the 1st floor of Krishti Abasan in Bablatala.',
     phone: '+91 88510 84372',
     mapsQuery: '1st Floor Krishti Abasan, Natunpara, Bablatala, Gopalpur I, Kolkata, West Bengal 700136',
@@ -36,6 +48,10 @@ export const locations: Location[] = [
     slug: 'kestopur',
     address:
       'Prafulla Kanan Balak Brinda Club, AC-62, Prafulla Kanan Rd, Rabindrapally, opposite Ashirbad Inn Hotel, Kolkata, West Bengal 700102',
+    streetAddress: 'Prafulla Kanan Balak Brinda Club, AC-62, Prafulla Kanan Rd, Rabindrapally, opposite Ashirbad Inn Hotel',
+    addressLocality: 'Kolkata',
+    addressRegion: 'West Bengal',
+    postalCode: '700102',
     areaNote: 'Our Kestopur branch, at Prafulla Kanan Balak Brinda Club in Rabindrapally, opposite Ashirbad Inn Hotel.',
     phone: '+91 86973 59951',
     mapsQuery:
@@ -47,6 +63,11 @@ export const locations: Location[] = [
     slug: 'madhyamgram',
     address:
       'MFJ8+HQ6 Susheila Apartment, near Kazi Nazrul Islam Sarani, Doltala, Jessore Road, Dohoria Ln, Dohoria, Srijoni Housing, Madhyamgram, Kolkata, West Bengal 700132',
+    streetAddress:
+      'MFJ8+HQ6 Susheila Apartment, near Kazi Nazrul Islam Sarani, Doltala, Jessore Road, Dohoria Ln, Dohoria, Srijoni Housing, Madhyamgram',
+    addressLocality: 'Kolkata',
+    addressRegion: 'West Bengal',
+    postalCode: '700132',
     areaNote: 'Our Madhyamgram branch, off Jessore Road in Dohoria.',
     phone: '087773 44874',
     googleRating: 5.0,
