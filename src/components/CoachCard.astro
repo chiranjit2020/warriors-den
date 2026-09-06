@@ -1,9 +1,9 @@
 ---
-// CoachCard — docs/design-system.md §"Cards". No fabricated bio/photo —
-// shows a clearly-labeled placeholder when those fields aren't supplied.
-// Renders its own surface (rather than composing <Card>) so all of its
-// styling is in this component's scope.
+// CoachCard — docs/design-system.md §"Cards". Real photo when supplied,
+// otherwise an initials panel at the same aspect so cards stay aligned.
+// No fabricated bio — "Full bio coming soon" until one is supplied.
 import type { Coach } from '../../data/coaches';
+import { withBase } from '../lib/base';
 
 interface Props {
   coach: Coach;
@@ -17,49 +17,109 @@ const initials = coach.name
 ---
 
 <article class="coach-card">
-  <div class="coach-card__avatar" aria-hidden="true">
-    {coach.photo ? <img src={coach.photo} alt="" /> : <span>{initials}</span>}
+  <div class="coach-card__media">
+    {
+      coach.photo ? (
+        <img
+          class="coach-card__photo"
+          src={withBase(coach.photo)}
+          alt={`${coach.name}, ${coach.role} at Warriors Den MMA`}
+          width="760"
+          height="1013"
+          loading="lazy"
+          decoding="async"
+        />
+      ) : (
+        <span class="coach-card__initials" aria-hidden="true">{initials}</span>
+      )
+    }
+    <span class="coach-card__frame" aria-hidden="true"></span>
   </div>
-  <h3 class="coach-card__name">{coach.name}</h3>
-  <p class="text-micro coach-card__role">{coach.role}</p>
-  <p class="text-small text-muted coach-card__bio">{coach.bio ?? 'Full bio coming soon'}</p>
+  <div class="coach-card__body">
+    <h3 class="coach-card__name">{coach.name}</h3>
+    <p class="text-micro coach-card__role">{coach.role}</p>
+    <p class="text-small text-muted coach-card__bio">{coach.bio ?? 'Full bio coming soon'}</p>
+  </div>
 </article>
 
 <style>
   .coach-card {
-    text-align: center;
-    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: border-color var(--duration-base) var(--ease-standard);
   }
-  .coach-card__avatar {
-    width: 72px;
-    height: 72px;
-    margin: 0 auto var(--space-4);
-    border-radius: var(--radius-sm);
+  @media (hover: hover) {
+    .coach-card:hover {
+      border-color: var(--color-accent);
+    }
+  }
+
+  .coach-card__media {
+    position: relative;
+    aspect-ratio: 4 / 5;
     background: var(--color-surface-raised);
-    border: 1px solid var(--color-border-strong);
-    color: var(--color-text-strong);
+    overflow: hidden;
+  }
+  .coach-card__photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 20%;
+    display: block;
+    /* grade into the dark brand system (docs/design-system.md §"Image direction") */
+    filter: grayscale(0.2) saturate(0.8) contrast(1.05) brightness(0.92);
+    transition: filter var(--duration-slow) var(--ease-standard);
+  }
+  @media (hover: hover) {
+    .coach-card:hover .coach-card__photo {
+      filter: grayscale(0) saturate(1) contrast(1.02) brightness(1);
+    }
+  }
+
+  .coach-card__initials {
+    position: absolute;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: var(--font-display);
-    font-size: 1.75rem;
-    letter-spacing: 0.03em;
-    overflow: hidden;
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    letter-spacing: 0.04em;
+    color: var(--color-text-muted);
   }
-  .coach-card__avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+
+  /* thin inner frame line + accent corner, echoing the hero media frame */
+  .coach-card__frame {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    box-shadow: inset 0 0 0 1px var(--color-border);
+  }
+  .coach-card__frame::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 36px;
+    height: 36px;
+    border-top: 2px solid var(--color-accent);
+    border-left: 2px solid var(--color-accent);
+  }
+
+  .coach-card__body {
+    padding: var(--space-5) var(--space-5) var(--space-6);
   }
   .coach-card__name {
     font-family: var(--font-display);
     font-weight: 400;
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     text-transform: uppercase;
     letter-spacing: 0.02em;
+    line-height: 1;
     color: var(--color-text-strong);
   }
   .coach-card__role {

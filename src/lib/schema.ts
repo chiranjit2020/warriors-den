@@ -60,6 +60,9 @@ export function personSchema(coach: Coach, siteUrl: string) {
     },
   };
   if (coach.bio) schema.description = coach.bio;
+  // Absolute URL against the eventual real domain (siteUrl), not this
+  // deployment's base path — consistent with canonical/OG elsewhere.
+  if (coach.photo) schema.image = new URL(coach.photo, siteUrl).toString();
   return schema;
 }
 
