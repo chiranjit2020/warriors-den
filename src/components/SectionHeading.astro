@@ -1,20 +1,29 @@
 ---
-// SectionHeading — consistent eyebrow + title + optional supporting copy
-// for section intros. docs/design-system.md §2.
+// SectionHeading — eyebrow micro-label + Bebas title + optional supporting
+// copy. docs/design-system.md §"Typographic hierarchy".
 interface Props {
   eyebrow?: string;
   title: string;
   description?: string;
   align?: 'left' | 'center';
   level?: 'h1' | 'h2';
+  /** oversized editorial index, e.g. "03" */
+  index?: string;
 }
 
-const { eyebrow, title, description, align = 'left', level = 'h2' } = Astro.props;
+const { eyebrow, title, description, align = 'left', level = 'h2', index } = Astro.props;
 const Heading = level;
 ---
 
-<div class={`section-heading section-heading--${align}`}>
-  {eyebrow && <p class="text-caption section-heading__eyebrow">{eyebrow}</p>}
+<div class:list={['section-heading', `section-heading--${align}`]}>
+  {
+    (eyebrow || index) && (
+      <p class="section-heading__eyebrow">
+        {index && <span class="section-heading__index">{index}</span>}
+        {eyebrow && <span class="text-micro">{eyebrow}</span>}
+      </p>
+    )
+  }
   <Heading class={level === 'h1' ? 'text-h1' : 'text-h2'}>{title}</Heading>
   {description && <p class="text-body text-muted section-heading__description">{description}</p>}
 </div>
@@ -23,8 +32,8 @@ const Heading = level;
   .section-heading {
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
-    max-width: 640px;
+    gap: var(--space-4);
+    max-width: 46ch;
   }
 
   .section-heading--center {
@@ -34,10 +43,31 @@ const Heading = level;
   }
 
   .section-heading__eyebrow {
-    color: var(--color-primary-strong); /* small text — primary-hover fails 4.5:1, see design-system.md §1 */
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--color-accent-text);
+  }
+  .section-heading__eyebrow .text-micro {
+    color: var(--color-text-muted);
+  }
+  .section-heading__index {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    line-height: 1;
+    color: var(--color-accent);
+  }
+  .section-heading__eyebrow::before {
+    content: '';
+    width: 28px;
+    height: 1px;
+    background: var(--color-accent);
+  }
+  .section-heading--center .section-heading__eyebrow::before {
+    display: none;
   }
 
   .section-heading__description {
-    max-width: 60ch;
+    max-width: 58ch;
   }
 </style>

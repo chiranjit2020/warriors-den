@@ -130,11 +130,15 @@ const { class: className } = Astro.props;
   }
 
   .trial-form__label {
-    font-weight: 600;
-    color: var(--color-text);
+    font-family: var(--font-body);
+    font-size: var(--fs-micro);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-text-muted);
   }
   .trial-form__label span[aria-hidden] {
-    color: var(--color-error);
+    color: var(--color-accent);
   }
 
   .trial-form input,
@@ -144,10 +148,14 @@ const { class: className } = Astro.props;
     font-size: var(--text-body-size);
     padding: var(--space-3);
     border-radius: var(--radius-sm);
-    border: 1px solid var(--color-border);
-    background: var(--color-background);
+    border: 1px solid var(--color-border-strong);
+    background: var(--color-surface);
     color: var(--color-text);
-    min-height: 44px;
+    min-height: 46px;
+  }
+  .trial-form input::placeholder,
+  .trial-form textarea::placeholder {
+    color: var(--color-text-muted);
   }
   .trial-form textarea {
     min-height: 88px;
@@ -156,8 +164,9 @@ const { class: className } = Astro.props;
   .trial-form input:focus-visible,
   .trial-form select:focus-visible,
   .trial-form textarea:focus-visible {
-    outline: 2px solid var(--color-primary);
+    outline: 2px solid var(--color-accent);
     outline-offset: 1px;
+    border-color: var(--color-accent);
   }
 
   .trial-form__error {
@@ -174,8 +183,9 @@ const { class: className } = Astro.props;
     border-radius: var(--radius-sm);
   }
   .trial-form__banner--error {
-    background: color-mix(in srgb, var(--color-error) 10%, white);
+    background: var(--color-error-surface);
     color: var(--color-error);
+    border: 1px solid color-mix(in srgb, var(--color-error) 40%, transparent);
   }
 
   .trial-form :global(.trial-form__submit) {

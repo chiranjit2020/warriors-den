@@ -1,10 +1,10 @@
 ---
-// Gallery — docs/design-system.md §14, master-prompt.md §35.
-// No real Warriors Den photography has been supplied yet, and the
-// master prompt explicitly forbids generic stock photography standing
-// in for it. These tiles are honest, clearly-labeled placeholders (a
-// dashed outline + caption, not a fake photo) so the grid layout is
-// proven now and real photos drop in later with no markup changes.
+// Gallery — docs/design-system.md §"Image direction".
+// No real Warriors Den photography has been supplied yet, and generic
+// stock is explicitly forbidden as a stand-in. These tiles are honest,
+// clearly-labeled placeholders (a designed media frame + caption, not a
+// fake photo) so the layout is proven now and real photos drop in later
+// with no markup changes.
 interface Props {
   count?: number;
   class?: string;
@@ -16,9 +16,10 @@ const tiles = Array.from({ length: count });
 
 <div class:list={['gallery', className]}>
   {
-    tiles.map(() => (
+    tiles.map((_, i) => (
       <div class="gallery__tile" role="img" aria-label="Training photo placeholder — real photography pending">
-        <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true">
+        <span class="gallery__index text-micro">{String(i + 1).padStart(2, '0')}</span>
+        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
           <path
             d="M4 6a2 2 0 0 1 2-2h2l1.5-2h5L16 4h2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6Z"
             fill="none"
@@ -27,7 +28,7 @@ const tiles = Array.from({ length: count });
           />
           <circle cx="12" cy="13" r="3.5" fill="none" stroke="currentColor" stroke-width="1.5" />
         </svg>
-        <span class="text-caption">Photo pending</span>
+        <span class="text-micro">Photo pending</span>
       </div>
     ))
   }
@@ -37,20 +38,27 @@ const tiles = Array.from({ length: count });
   .gallery {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-3);
+    gap: var(--space-2);
   }
 
   .gallery__tile {
+    position: relative;
     aspect-ratio: 4 / 3;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: var(--space-2);
-    border: 2px dashed var(--color-border);
+    border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
     color: var(--color-text-muted);
     background: var(--color-surface);
+  }
+  .gallery__index {
+    position: absolute;
+    top: var(--space-3);
+    left: var(--space-3);
+    color: var(--color-accent);
   }
 
   @media (min-width: 600px) {

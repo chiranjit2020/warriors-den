@@ -6,6 +6,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Container from '../../components/Container.astro';
 import SectionHeading from '../../components/SectionHeading.astro';
 import Button from '../../components/Button.astro';
+import ThemeToggle from '../../components/ThemeToggle.astro';
 import Badge from '../../components/Badge.astro';
 import Card from '../../components/Card.astro';
 import Stats from '../../components/Stats.astro';
@@ -14,20 +15,22 @@ import Modal from '../../components/Modal.astro';
 import { withBase } from '../../lib/base';
 
 const colorTokens = [
-  ['--color-primary', 'Primary'],
-  ['--color-primary-hover', 'Primary Hover'],
-  ['--color-secondary', 'Secondary'],
-  ['--color-secondary-hover', 'Secondary Hover'],
-  ['--color-background', 'Background'],
-  ['--color-background-dark', 'Background Dark'],
+  ['--color-bg', 'Background'],
+  ['--color-bg-sunken', 'Background sunken'],
   ['--color-surface', 'Surface'],
-  ['--color-surface-dark', 'Surface Dark'],
+  ['--color-surface-raised', 'Surface raised'],
+  ['--color-text', 'Text'],
+  ['--color-text-strong', 'Text strong'],
+  ['--color-text-muted', 'Text muted'],
+  ['--color-accent', 'Accent (#EF0D33)'],
+  ['--color-accent-hover', 'Accent hover'],
+  ['--color-accent-text', 'Accent text (small)'],
   ['--color-success', 'Success'],
   ['--color-warning', 'Warning'],
   ['--color-error', 'Error'],
 ];
 
-const spacingTokens = ['4', '8', '12', '16', '24', '32', '48', '64', '80', '96', '120'];
+const spacingTokens = ['4', '8', '12', '16', '24', '32', '48', '64', '80', '96', '120', '160'];
 ---
 
 <BaseLayout
@@ -46,14 +49,20 @@ const spacingTokens = ['4', '8', '12', '16', '24', '32', '48', '64', '80', '96',
 
     <section style="padding-bottom: var(--space-16);">
       <h2 class="text-h2" style="margin-bottom: var(--space-6);">Typography</h2>
-      <p class="text-display">Display — Forge Strength.</p>
-      <p class="text-h1">H1 — Build Discipline.</p>
-      <p class="text-h2">H2 — Become a Warrior.</p>
-      <p class="text-h3">H3 — Program heading</p>
-      <p class="text-h4">H4 — Card heading</p>
+      <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-4);">
+        <span class="text-micro" style="color: var(--color-text-muted);">
+          Bebas Neue (display) · Manrope (interface) · theme:
+        </span>
+        <ThemeToggle />
+      </div>
+      <p class="text-display-xl">Display XL</p>
+      <p class="text-display-l">Display L</p>
+      <p class="text-display-m">Display M / heading</p>
+      <p class="text-h3">H3 — Manrope supporting heading</p>
+      <p class="text-h4">H4 — Manrope minor heading</p>
       <p class="text-body">Body — Warriors Den MMA offers training across multiple disciplines for every age and skill level.</p>
       <p class="text-small">Small — supporting text</p>
-      <p class="text-caption">Caption / eyebrow label</p>
+      <p class="text-micro">Micro technical label</p>
     </section>
 
     <section style="padding-bottom: var(--space-16);">

@@ -1,14 +1,13 @@
 ---
-// Homepage — Phase 4. Sections per master-prompt.md §12, adapted to what's
-// actually confirmed (docs/research.md): "Martial Arts Benefits" is folded
-// into "Why Warriors Den" and "Student Success Stories" is deferred to
-// Phase 8 (no real testimonial text is available yet to avoid fabricating
-// quotes) rather than shipping empty/placeholder sections for either.
+// Homepage — Phase 4 sections, visual system per docs/design-system.md.
+// Structure and content are unchanged from the approved build: "Martial
+// Arts Benefits" stays folded into "Why Warriors Den"; "Student Success
+// Stories" stays deferred to the reviews work rather than shipping
+// fabricated quotes.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Container from '../components/Container.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import Button from '../components/Button.astro';
-import Card from '../components/Card.astro';
 import Stats from '../components/Stats.astro';
 import ProgramCard from '../components/ProgramCard.astro';
 import LocationCard from '../components/LocationCard.astro';
@@ -37,7 +36,7 @@ const whyPoints = [
   },
   {
     title: 'A Welcoming Community',
-    description: "Beginners, competitors, and everyone in between train side by side, in an environment built on respect.",
+    description: 'Beginners, competitors, and everyone in between train side by side, in an environment built on respect.',
   },
   {
     title: 'More Than Fighting',
@@ -74,48 +73,72 @@ const faqs = [
   <section class="hero">
     <Container class="hero__inner">
       <div class="hero__content">
-        <p class="text-caption hero__eyebrow">Warriors Den MMA · Kolkata, West Bengal</p>
-        <h1 class="text-display hero__headline">Forge Strength. Build Discipline. Become a Warrior.</h1>
-        <p class="text-body hero__subhead">
+        <p class="text-micro hero__eyebrow">
+          <span class="hero__eyebrow-rule" aria-hidden="true"></span>
+          Warriors Den MMA — Kolkata, West Bengal
+        </p>
+        <h1 class="text-display-xl hero__headline">
+          Forge Strength.<br />Build Discipline.<br /><span class="hero__headline-accent">Become a Warrior.</span>
+        </h1>
+        <p class="text-body-lg hero__subhead">
           Martial arts &amp; combat sports training for kids, teens, adults, and competitive
           athletes — build confidence, discipline, and real fitness, one class at a time.
         </p>
         <div class="hero__actions">
-          <Button href={withBase('/free-trial/')} variant="primary">Book a Free Trial</Button>
+          <Button href={withBase('/free-trial/')} variant="primary" arrow>Book a Free Trial</Button>
           <Button href="#programs" variant="outline">Explore Programs</Button>
         </div>
-        <p class="text-small hero__trust">★ 5.0 rated on Google — Madhyamgram branch</p>
+        <p class="text-micro hero__trust">★ 5.0 rated on Google — Madhyamgram branch</p>
+      </div>
+
+      <div class="hero__media" aria-hidden="true">
+        <div class="media-frame">
+          <span class="media-frame__label media-frame__label--tl">Warriors Den / MMA</span>
+          <span class="media-frame__label media-frame__label--bl">Kolkata / India</span>
+          <span class="media-frame__label media-frame__label--br">Training System 01</span>
+          <div class="media-frame__crop">
+            <svg viewBox="0 0 120 150" class="media-frame__glyph" aria-hidden="true">
+              <path d="M60 12 L104 36 V96 L60 120 L16 96 V36 Z" fill="none" stroke="currentColor" stroke-width="2" />
+              <path d="M60 12 V120 M16 36 L104 96 M104 36 L16 96" stroke="currentColor" stroke-width="1" opacity="0.4" />
+            </svg>
+          </div>
+          <span class="media-frame__corner" aria-hidden="true"></span>
+        </div>
       </div>
     </Container>
   </section>
 
   <!-- Social Proof -->
-  <section class="section">
+  <section class="section section--tight">
     <Container>
-      <Stats
-        stats={[
-          { value: '5.0★', label: 'Google rating (Madhyamgram)' },
-          { value: '34', label: 'Google reviews (Madhyamgram)' },
-          { value: '3', label: 'Locations across Kolkata' },
-          { value: '6', label: 'Disciplines taught' },
-        ]}
-      />
+      <p class="text-micro section__kicker" data-reveal>By the numbers</p>
+      <div data-reveal>
+        <Stats
+          stats={[
+            { value: '5.0★', label: 'Google rating · Madhyamgram' },
+            { value: '34', label: 'Google reviews · Madhyamgram' },
+            { value: '03', label: 'Locations across Kolkata' },
+            { value: '06', label: 'Disciplines taught' },
+          ]}
+        />
+      </div>
     </Container>
   </section>
 
   <!-- Why Warriors Den -->
   <section class="section" id="why">
     <Container>
-      <SectionHeading eyebrow="Why Warriors Den" title="More than a gym" align="center" />
+      <div data-reveal>
+        <SectionHeading eyebrow="Why Warriors Den" title="More than a gym" index="01" />
+      </div>
       <div class="why-grid">
         {
-          whyPoints.map((point) => (
-            <Card>
-              <h3 class="text-h3">{point.title}</h3>
-              <p class="text-small text-muted" style="margin-top: var(--space-2);">
-                {point.description}
-              </p>
-            </Card>
+          whyPoints.map((point, i) => (
+            <article class="why-card" data-reveal>
+              <span class="why-card__index text-index">{String(i + 1).padStart(2, '0')}</span>
+              <h3 class="why-card__title">{point.title}</h3>
+              <p class="text-small text-muted">{point.description}</p>
+            </article>
           ))
         }
       </div>
@@ -125,18 +148,21 @@ const faqs = [
   <!-- Choose Your Goal -->
   <section class="section section--surface" id="goals">
     <Container>
-      <SectionHeading
-        eyebrow="Not sure where to start?"
-        title="Choose Your Goal"
-        description="Tell us what you're training for — we'll point you to the right class."
-        align="center"
-      />
+      <div data-reveal>
+        <SectionHeading
+          eyebrow="Not sure where to start?"
+          title="Choose Your Goal"
+          description="Tell us what you're training for — we'll point you to the right class."
+          index="02"
+        />
+      </div>
       <div class="goals-grid">
         {
           goals.map((goal) => (
-            <a href="#programs" class="goal-card">
-              <span class="text-h4">{goal.label}</span>
+            <a href="#programs" class="goal-card" data-reveal>
+              <span class="goal-card__label">{goal.label}</span>
               <span class="text-small text-muted">{goal.description}</span>
+              <span class="goal-card__arrow" aria-hidden="true">&rarr;</span>
             </a>
           ))
         }
@@ -147,14 +173,20 @@ const faqs = [
   <!-- Programs -->
   <section class="section" id="programs">
     <Container>
-      <SectionHeading
-        eyebrow="Programs"
-        title="Train in what moves you"
-        description="Six disciplines, one training philosophy: build real skill, safely and progressively."
-        align="center"
-      />
+      <div data-reveal>
+        <SectionHeading
+          eyebrow="Programs"
+          title="Train in what moves you"
+          description="Six disciplines, one training philosophy: build real skill, safely and progressively."
+          index="03"
+        />
+      </div>
       <div class="programs-grid">
-        {programs.map((program) => <ProgramCard program={program} />)}
+        {programs.map((program, i) => (
+          <div data-reveal>
+            <ProgramCard program={program} index={i + 1} />
+          </div>
+        ))}
       </div>
     </Container>
   </section>
@@ -162,9 +194,15 @@ const faqs = [
   <!-- Coaches -->
   <section class="section section--surface" id="coaches">
     <Container>
-      <SectionHeading eyebrow="Your Coaches" title="Meet the team" align="center" />
+      <div data-reveal>
+        <SectionHeading eyebrow="Your Coaches" title="Meet the team" index="04" />
+      </div>
       <div class="coaches-grid">
-        {coaches.map((coach) => <CoachCard coach={coach} />)}
+        {coaches.map((coach) => (
+          <div data-reveal>
+            <CoachCard coach={coach} />
+          </div>
+        ))}
       </div>
     </Container>
   </section>
@@ -172,21 +210,27 @@ const faqs = [
   <!-- Training Gallery -->
   <section class="section" id="gallery">
     <Container>
-      <SectionHeading
-        eyebrow="Gallery"
-        title="Inside the Den"
-        description="Real training photography is coming soon — the full gallery lands in a later phase."
-        align="center"
-      />
-      <Gallery count={6} />
+      <div data-reveal>
+        <SectionHeading
+          eyebrow="Gallery"
+          title="Inside the Den"
+          description="Real training photography is coming soon — the full gallery lands in a later phase."
+          index="05"
+        />
+      </div>
+      <div data-reveal>
+        <Gallery count={6} />
+      </div>
     </Container>
   </section>
 
   <!-- Locations -->
   <section class="section section--surface" id="locations">
     <Container>
-      <SectionHeading eyebrow="Locations" title="Train near you" align="center" />
-      <div class="locations-grid">
+      <div data-reveal>
+        <SectionHeading eyebrow="Locations" title="Train near you" index="06" />
+      </div>
+      <div class="locations-grid" data-reveal>
         {locations.map((location) => <LocationCard location={location} />)}
       </div>
     </Container>
@@ -195,8 +239,10 @@ const faqs = [
   <!-- FAQ -->
   <section class="section" id="faq">
     <Container class="faq-container">
-      <SectionHeading eyebrow="FAQ" title="Common questions" align="center" />
-      <div class="faq-list">
+      <div data-reveal>
+        <SectionHeading eyebrow="FAQ" title="Common questions" index="07" />
+      </div>
+      <div class="faq-list" data-reveal>
         {faqs.map((item) => <FAQItem question={item.q}>{item.a}</FAQItem>)}
       </div>
     </Container>
@@ -205,76 +251,183 @@ const faqs = [
   <!-- Final CTA -->
   <section class="final-cta">
     <Container class="final-cta__inner">
-      <h2 class="text-h1 final-cta__title">Ready to start training?</h2>
-      <p class="text-body final-cta__subhead">
+      <p class="text-micro final-cta__kicker">Ready when you are</p>
+      <h2 class="text-display-l final-cta__title">Ready to start training?</h2>
+      <p class="text-body-lg final-cta__subhead">
         Book your free trial class today — no experience, no equipment, no pressure.
       </p>
-      <Button href={withBase('/free-trial/')} variant="primary">Book a Free Trial</Button>
+      <Button href={withBase('/free-trial/')} variant="primary" arrow>Book a Free Trial</Button>
     </Container>
   </section>
 
   <!-- Contact / Free Trial Form -->
   <section class="section" id="free-trial">
     <Container class="trial-container">
-      <SectionHeading
-        eyebrow="Get Started"
-        title="Book Your Free Trial"
-        description="Fill in your details and our team will confirm your trial class."
-        align="center"
-      />
-      <TrialForm />
+      <div data-reveal>
+        <SectionHeading
+          eyebrow="Get Started"
+          title="Book Your Free Trial"
+          description="Fill in your details and our team will confirm your trial class."
+        />
+      </div>
+      <div class="trial-form-mount" data-reveal>
+        <TrialForm />
+      </div>
     </Container>
   </section>
 </BaseLayout>
 
 <style>
   .section {
-    padding-block: var(--space-20);
+    padding-block: var(--space-24);
+  }
+  .section--tight {
+    padding-block: var(--space-16);
   }
   .section--surface {
     background: var(--color-surface);
+    border-block: 1px solid var(--color-border);
+  }
+  .section__kicker {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-6);
   }
 
-  /* Hero */
+  /* ---------- Hero ---------- */
   .hero {
-    background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-background) 100%);
-    padding-block: var(--space-24) var(--space-20);
+    padding-block: var(--space-20) var(--space-24);
+    border-bottom: 1px solid var(--color-border);
   }
-  .hero__content {
-    max-width: 680px;
+  .hero :global(.hero__inner) {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+    align-items: center;
+  }
+  .hero__content,
+  .hero__media {
+    min-width: 0;
   }
   .hero__eyebrow {
-    color: var(--color-primary-strong); /* small text — primary-hover fails 4.5:1, see design-system.md §1 */
-    margin-bottom: var(--space-4);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-6);
+  }
+  .hero__eyebrow-rule {
+    width: 40px;
+    height: 1px;
+    background: var(--color-accent);
   }
   .hero__headline {
-    color: var(--color-secondary);
+    color: var(--color-text-strong);
+  }
+  .hero__headline-accent {
+    color: var(--color-accent);
   }
   .hero__subhead {
     margin-top: var(--space-6);
-    max-width: 56ch;
+    max-width: 52ch;
     color: var(--color-text-muted);
   }
   .hero__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-4);
+    gap: var(--space-3);
     margin-top: var(--space-8);
+  }
+  .hero__actions :global(.btn) {
+    flex: 1 1 auto;
+  }
+  @media (max-width: 479px) {
+    .hero__actions :global(.btn) {
+      flex-basis: 100%;
+    }
   }
   .hero__trust {
     margin-top: var(--space-6);
     color: var(--color-text-muted);
+    letter-spacing: 0.1em;
   }
 
-  /* Why grid */
+  /* ---------- Hero media frame ---------- */
+  .hero__media {
+    position: relative;
+  }
+  .media-frame {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    background:
+      linear-gradient(180deg, var(--color-surface-raised), var(--color-bg-sunken));
+    border: 1px solid var(--color-border-strong);
+    overflow: hidden;
+  }
+  .media-frame__crop {
+    position: absolute;
+    inset: 14% 12%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-border-strong);
+  }
+  .media-frame__glyph {
+    width: 62%;
+    height: auto;
+    color: var(--color-text-muted);
+    opacity: 0.5;
+  }
+  .media-frame__label {
+    position: absolute;
+    font-family: var(--font-body);
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--color-text-muted);
+  }
+  .media-frame__label--tl { top: var(--space-4); left: var(--space-4); }
+  .media-frame__label--bl { bottom: var(--space-4); left: var(--space-4); }
+  .media-frame__label--br { bottom: var(--space-4); right: var(--space-4); color: var(--color-accent-text); }
+  .media-frame__corner {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 52px;
+    height: 52px;
+    border-top: 2px solid var(--color-accent);
+    border-right: 2px solid var(--color-accent);
+  }
+
+  /* ---------- Why ---------- */
   .why-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-6);
     margin-top: var(--space-12);
+    border: 1px solid var(--color-border);
+  }
+  .why-card {
+    padding: var(--space-8) var(--space-6);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .why-card:last-child {
+    border-bottom: 0;
+  }
+  .why-card__index {
+    display: block;
+    font-size: 2rem;
+    color: var(--color-accent);
+    margin-bottom: var(--space-4);
+  }
+  .why-card__title {
+    font-family: var(--font-body);
+    font-size: var(--fs-ui-heading);
+    font-weight: 700;
+    color: var(--color-text-strong);
+    margin-bottom: var(--space-2);
   }
 
-  /* Goals */
+  /* ---------- Goals ---------- */
   .goals-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -282,90 +435,129 @@ const faqs = [
     margin-top: var(--space-12);
   }
   .goal-card {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
     padding: var(--space-6);
-    border-radius: var(--radius-lg);
-    background: var(--color-background);
+    background: var(--color-surface-raised);
     border: 1px solid var(--color-border);
-    transition: border-color var(--duration-base) var(--ease-standard), box-shadow var(--duration-base) var(--ease-standard);
+    transition:
+      border-color var(--duration-base) var(--ease-standard),
+      transform var(--duration-base) var(--ease-out);
   }
-  .goal-card:hover {
-    border-color: var(--color-primary);
-    box-shadow: var(--shadow-medium);
+  .goal-card__label {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--color-text-strong);
+  }
+  .goal-card__arrow {
+    position: absolute;
+    top: var(--space-6);
+    right: var(--space-6);
+    color: var(--color-accent);
+    opacity: 0;
+    transform: translateX(-4px);
+    transition:
+      opacity var(--duration-base) var(--ease-out),
+      transform var(--duration-base) var(--ease-out);
+  }
+  @media (hover: hover) {
+    .goal-card:hover {
+      border-color: var(--color-accent);
+      transform: translateY(-3px);
+    }
+    .goal-card:hover .goal-card__arrow {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .goal-card:hover {
+      transform: none;
+    }
   }
 
-  /* Programs */
+  /* ---------- Programs ---------- */
   .programs-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-6);
+    gap: var(--space-4);
     margin-top: var(--space-12);
   }
+  .programs-grid > * {
+    display: flex;
+  }
+  .programs-grid > * > :global(.program-card) {
+    width: 100%;
+  }
 
-  /* Coaches */
+  /* ---------- Coaches ---------- */
   .coaches-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-6);
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
     margin-top: var(--space-12);
-    max-width: 640px;
+    max-width: 620px;
     margin-inline: auto;
   }
 
-  /* Locations */
+  /* ---------- Locations ---------- */
   .locations-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-6);
+    gap: var(--space-4);
     margin-top: var(--space-12);
   }
 
-  /* FAQ */
-  .faq-container {
+  /* ---------- FAQ ---------- */
+  #faq :global(.faq-container) {
     max-width: 760px;
   }
   .faq-list {
     margin-top: var(--space-12);
   }
 
-  /* Final CTA */
+  /* ---------- Final CTA ---------- */
   .final-cta {
-    background: var(--color-secondary);
-    color: var(--color-text-inverse);
-    padding-block: var(--space-20);
+    background: var(--color-bg-sunken);
+    border-block: 1px solid var(--color-border);
+    padding-block: var(--space-24);
   }
-  .final-cta__inner {
-    text-align: center;
+  .final-cta :global(.final-cta__inner) {
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
     gap: var(--space-4);
   }
+  .final-cta__kicker {
+    color: var(--color-accent-text);
+  }
   .final-cta__title {
-    color: var(--color-text-inverse);
+    color: var(--color-text-strong);
   }
   .final-cta__subhead {
-    color: var(--color-text-inverse-muted);
-    max-width: 48ch;
+    color: var(--color-text-muted);
+    max-width: 46ch;
   }
   .final-cta :global(.btn) {
     margin-top: var(--space-4);
   }
 
-  /* Trial form section */
-  .trial-container {
+  /* ---------- Trial form ---------- */
+  #free-trial :global(.trial-container) {
     max-width: 760px;
   }
-  .trial-container :global(form),
-  .trial-container :global(.trial-form-wrap) {
+  .trial-form-mount {
     margin-top: var(--space-12);
   }
 
   @media (min-width: 600px) {
-    .why-grid {
-      grid-template-columns: repeat(3, 1fr);
+    .coaches-grid {
+      grid-template-columns: repeat(2, 1fr);
     }
     .goals-grid {
       grid-template-columns: repeat(2, 1fr);
@@ -375,6 +567,23 @@ const faqs = [
     }
     .locations-grid {
       grid-template-columns: repeat(2, 1fr);
+    }
+    .why-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .why-card {
+      border-bottom: 0;
+      border-right: 1px solid var(--color-border);
+    }
+    .why-card:last-child {
+      border-right: 0;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .hero :global(.hero__inner) {
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: var(--space-20);
     }
   }
 

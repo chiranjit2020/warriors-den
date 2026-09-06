@@ -1,9 +1,7 @@
 ---
-// Footer — site-wide footer nav + contact + legal. docs/design-system.md §14.
-// Only the primary phone number already public on the live site
-// (denmma.netlify.app) is shown here; per-location contact details are
-// built out on their own pages in Phase 6 once fully confirmed
-// (see docs/research.md §9).
+// Footer — site-wide footer nav + contact + legal. docs/design-system.md.
+// Only the primary phone number already public on the live site is shown;
+// per-location contact detail lives on the location pages (docs/research.md §9).
 import Container from './Container.astro';
 import { withBase } from '../lib/base';
 
@@ -37,51 +35,54 @@ const year = new Date().getFullYear();
   <Container>
     <div class="site-footer__grid">
       <div class="site-footer__brand">
-        <p class="text-h3">Warriors Den <span>MMA</span></p>
+        <p class="site-footer__wordmark">Warriors Den <span>MMA</span></p>
         <p class="text-small site-footer__tagline">
           Martial arts &amp; combat sports training in Kolkata, West Bengal.
         </p>
-        <a class="site-footer__phone text-body" href="tel:+918851084372">+91 88510 84372</a>
+        <a class="site-footer__phone" href="tel:+918851084372">+91 88510 84372</a>
+        <p class="text-micro site-footer__loc">Kolkata / India</p>
       </div>
 
       <nav class="site-footer__col" aria-label="Programs">
-        <p class="text-caption">Programs</p>
+        <p class="text-micro site-footer__col-title">Programs</p>
         <ul>
           {programLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
         </ul>
       </nav>
 
       <nav class="site-footer__col" aria-label="Locations">
-        <p class="text-caption">Locations</p>
+        <p class="text-micro site-footer__col-title">Locations</p>
         <ul>
           {locationLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
         </ul>
       </nav>
 
       <nav class="site-footer__col" aria-label="Company">
-        <p class="text-caption">Company</p>
+        <p class="text-micro site-footer__col-title">Company</p>
         <ul>
           {companyLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
         </ul>
       </nav>
 
       <div class="site-footer__col">
-        <p class="text-caption">Get Started</p>
-        <a class="site-footer__trial-link text-body" href={withBase('/free-trial/')}>Book a Free Trial →</a>
+        <p class="text-micro site-footer__col-title">Get Started</p>
+        <a class="site-footer__trial-link" href={withBase('/free-trial/')}>Book a Free Trial &rarr;</a>
       </div>
     </div>
 
     <div class="site-footer__bottom">
-      <p class="text-small text-inverse-muted">&copy; {year} Warriors Den MMA. All rights reserved.</p>
+      <p class="text-micro">&copy; {year} Warriors Den MMA</p>
+      <p class="text-micro site-footer__bottom-muted">All rights reserved</p>
     </div>
   </Container>
 </footer>
 
 <style>
   .site-footer {
-    background: var(--color-background-dark);
-    color: var(--color-text-inverse);
-    padding-block: var(--space-16) var(--space-24);
+    background: var(--color-bg-sunken);
+    color: var(--color-text);
+    border-top: 1px solid var(--color-border);
+    padding-block: var(--space-20) var(--space-16);
   }
 
   .site-footer__grid {
@@ -90,53 +91,75 @@ const year = new Date().getFullYear();
     gap: var(--space-12);
   }
 
-  .site-footer__brand p:first-child span {
-    color: var(--color-primary);
-  }
   .site-footer__brand {
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
   }
+  .site-footer__wordmark {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--color-text-strong);
+  }
+  .site-footer__wordmark span {
+    color: var(--color-accent);
+  }
   .site-footer__tagline {
-    /* NOT the .text-muted utility (--color-text-muted is for LIGHT
-       backgrounds, 2.78:1 here — caught by an axe-core audit, Phase 11) */
-    color: var(--color-text-inverse-muted);
+    color: var(--color-text-muted);
+    max-width: 34ch;
   }
   .site-footer__phone {
-    color: var(--color-primary);
-    font-weight: 600;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    letter-spacing: 0.02em;
+    color: var(--color-text-strong);
+  }
+  .site-footer__phone:hover {
+    color: var(--color-accent);
+  }
+  .site-footer__loc {
+    color: var(--color-text-muted);
   }
 
-  .site-footer__col p.text-caption {
-    color: var(--color-text-inverse-muted);
+  .site-footer__col-title {
+    color: var(--color-text-muted);
     margin-bottom: var(--space-4);
   }
   .site-footer__col ul {
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
+    gap: var(--space-3);
   }
-  .site-footer__col a,
+  .site-footer__col a {
+    font-size: var(--fs-small);
+    color: var(--color-text);
+    transition: color var(--duration-fast) var(--ease-standard);
+  }
+  .site-footer__col a:hover {
+    color: var(--color-accent);
+  }
   .site-footer__trial-link {
-    color: var(--color-text-inverse-muted);
-  }
-  .site-footer__col a:hover,
-  .site-footer__trial-link:hover {
-    color: var(--color-text-inverse);
-  }
-  .site-footer__trial-link {
-    color: var(--color-primary);
-    font-weight: 600;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--color-accent);
   }
 
   .site-footer__bottom {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-4);
     margin-top: var(--space-16);
-    padding-top: var(--space-6);
-    border-top: 1px solid var(--color-border-dark);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-muted);
   }
-  .text-inverse-muted {
-    color: var(--color-text-inverse-muted);
+  .site-footer__bottom-muted {
+    color: var(--color-text-muted);
+    opacity: 0.7;
   }
 
   @media (min-width: 600px) {
@@ -144,10 +167,10 @@ const year = new Date().getFullYear();
       grid-template-columns: repeat(2, 1fr);
     }
   }
-
   @media (min-width: 1024px) {
     .site-footer__grid {
-      grid-template-columns: 1.5fr repeat(3, 1fr) 1fr;
+      grid-template-columns: 1.6fr repeat(3, 1fr) 1fr;
+      gap: var(--space-8);
     }
   }
 </style>

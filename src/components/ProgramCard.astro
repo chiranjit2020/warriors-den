@@ -1,53 +1,102 @@
 ---
-// ProgramCard — docs/design-system.md §9. Links to /free-trial/ (built
-// this phase) rather than a program detail page (/programs/[slug]/,
-// which doesn't exist until Phase 5) so it never ships a broken link.
+// ProgramCard — one discipline in the unified program system.
+// docs/design-system.md §"Program / discipline visual language":
+// consistent component, differentiated by index + name + imagery, not by
+// a bespoke identity per discipline. Links to /free-trial/ (a program
+// detail page may not exist in every build context) so it never ships a
+// broken link.
 import type { Program } from '../../data/programs';
-import Card from './Card.astro';
 import Badge from './Badge.astro';
-import Button from './Button.astro';
 import { withBase } from '../lib/base';
 
 interface Props {
   program: Program;
+  /** 1-based position in the discipline list — rendered as "01 / MMA" */
+  index?: number;
 }
 
-const { program } = Astro.props;
+const { program, index } = Astro.props;
+const idx = index != null ? String(index).padStart(2, '0') : null;
 ---
 
-<Card as="article" interactive class="program-card">
-  <Badge tone="primary">{program.audience}</Badge>
-  <h3 class="text-h3 program-card__name">{program.name}</h3>
+<a class="program-card" href={withBase(`/free-trial/?program=${program.id}`)}>
+  <div class="program-card__top">
+    {idx && <span class="program-card__index">{idx}</span>}
+    <Badge tone="neutral">{program.audience}</Badge>
+  </div>
+
+  <h3 class="program-card__name">{program.name}</h3>
   <p class="text-small text-muted program-card__description">{program.shortDescription}</p>
+
   <ul class="program-card__benefits">
     {program.benefits.map((benefit) => <li class="text-small">{benefit}</li>)}
   </ul>
-  <Button
-    href={withBase(`/free-trial/?program=${program.id}`)}
-    variant="outline"
-    class="program-card__cta"
-  >
-    Try {program.name}
-  </Button>
-</Card>
+
+  <span class="program-card__cta text-micro">
+    Try {program.name} <span aria-hidden="true">&rarr;</span>
+  </span>
+</a>
 
 <style>
   .program-card {
     display: flex;
     flex-direction: column;
     height: 100%;
+    padding: var(--space-6);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    transition:
+      border-color var(--duration-base) var(--ease-standard),
+      transform var(--duration-base) var(--ease-out);
   }
+  @media (hover: hover) {
+    .program-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--color-accent);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .program-card:hover {
+      transform: none;
+    }
+  }
+
+  .program-card__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .program-card__index {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    line-height: 1;
+    color: var(--color-accent);
+    letter-spacing: 0.02em;
+  }
+
   .program-card__name {
-    margin-top: var(--space-3);
+    margin-top: var(--space-5);
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+    line-height: 0.95;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--color-text-strong);
   }
   .program-card__description {
-    margin-top: var(--space-2);
+    margin-top: var(--space-3);
   }
+
   .program-card__benefits {
     display: flex;
     flex-direction: column;
-    gap: var(--space-1);
-    margin: var(--space-4) 0;
+    gap: var(--space-2);
+    margin: var(--space-5) 0;
     color: var(--color-text-muted);
   }
   .program-card__benefits li {
@@ -58,14 +107,20 @@ const { program } = Astro.props;
     content: '';
     position: absolute;
     left: 0;
-    top: 0.55em;
+    top: 0.6em;
     width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--color-primary);
+    height: 1px;
+    background: var(--color-accent);
   }
-  .program-card :global(.program-card__cta) {
+
+  .program-card__cta {
     margin-top: auto;
-    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-text-strong);
+  }
+  .program-card:hover .program-card__cta {
+    color: var(--color-accent);
   }
 </style>

@@ -22,12 +22,8 @@
 
   :global(.toast) {
     /*
-      Deliberately a LIGHT surface with a colored accent border, not a
-      dark background — a toast is an overlay that can appear on top of
-      any section, including dark ones (e.g. the footer). A dark toast
-      on --color-secondary blended into a dark footer with too little
-      contrast to read; a light card + tone-colored border stays legible
-      regardless of what's behind it.
+      A raised surface + tone-colored left border + strong elevation
+      shadow — reads against any section it overlays, in either theme.
     */
     pointer-events: auto;
     display: flex;
@@ -35,8 +31,8 @@
     gap: var(--space-3);
     padding: var(--space-4);
     border-radius: var(--radius-md);
-    border: 1px solid var(--color-border);
-    background: var(--color-background);
+    border: 1px solid var(--color-border-strong);
+    background: var(--color-surface-raised);
     color: var(--color-text);
     box-shadow: var(--shadow-elevated);
     font-size: var(--text-small-size);

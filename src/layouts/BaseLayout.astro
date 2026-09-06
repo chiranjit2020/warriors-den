@@ -1,24 +1,24 @@
 ---
-// BaseLayout — shared shell: tokens/base CSS, meta/SEO slot, Header, Footer,
-// Toast region. Every real page (built from Phase 4 onward) wraps this.
-// docs/architecture.md §4.
-// Static per-weight files, not the variable font — WebKit/Safari fails to
-// resolve the variable font's weight axis (font-weight computes correctly
-// as 800, but renders as a much lighter static instance regardless;
-// confirmed via Playwright across chromium/webkit/firefox against the
-// live site). Static @font-face per weight has no axis to mis-resolve,
-// so it's reliable everywhere. Only the weights the type scale actually
-// uses (tokens.css) are loaded.
+// BaseLayout — shared shell: fonts, tokens/base CSS, meta/SEO, Header,
+// Footer, Toast, the atmosphere canvas + grain overlay. docs/architecture.md §4.
+//
+// Fonts are self-hosted, static per-weight files (NOT variable fonts):
+//   - Manrope: WebKit fails to resolve the variable font's weight axis
+//     (font-weight computes as 800 but renders a lighter static instance);
+//     static @font-face per weight has no axis to mis-resolve.
+//   - Bebas Neue: ships a single weight (400) anyway.
 import '@fontsource/manrope/400.css';
 import '@fontsource/manrope/500.css';
 import '@fontsource/manrope/600.css';
 import '@fontsource/manrope/700.css';
 import '@fontsource/manrope/800.css';
+import '@fontsource/bebas-neue/400.css';
 import '../styles/tokens.css';
 import '../styles/base.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Toast from '../components/Toast.astro';
+import Atmosphere from '../components/Atmosphere.astro';
 import { organizationSchema } from '../lib/schema';
 import { withBase, stripBase } from '../lib/base';
 
@@ -41,11 +41,26 @@ const allSchema = [organizationSchema(siteUrl), ...schema];
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark" class="no-js">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#111517" />
     <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+
+    {/* No-flash: apply the stored theme + drop .no-js before first paint. */}
+    <script is:inline>
+      (function () {
+        var r = document.documentElement;
+        r.classList.remove('no-js');
+        try {
+          var t = localStorage.getItem('wd-theme');
+          r.setAttribute('data-theme', t === 'light' ? 'light' : 'dark');
+        } catch (e) {
+          r.setAttribute('data-theme', 'dark');
+        }
+      })();
+    </script>
 
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -68,11 +83,40 @@ const allSchema = [organizationSchema(siteUrl), ...schema];
   </head>
   <body>
     <a href="#main" class="sr-only">Skip to content</a>
+    <Atmosphere />
+    <div class="grain-overlay" aria-hidden="true"></div>
     <Header />
     <main id="main">
       <slot />
     </main>
     <Footer />
     <Toast />
+
+    <script>
+      // Scroll-reveal: reveal [data-reveal] elements as they enter view.
+      // reduced-motion / no-JS are handled in base.css (always visible).
+      const els = Array.from(document.querySelectorAll<HTMLElement>('[data-reveal]'));
+      const showAll = () => els.forEach((el) => el.classList.add('is-visible'));
+
+      if (els.length && 'IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries, obs) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                (entry.target as HTMLElement).classList.add('is-visible');
+                obs.unobserve(entry.target);
+              }
+            });
+          },
+          { rootMargin: '200px 0px', threshold: 0.01 },
+        );
+        els.forEach((el) => io.observe(el));
+        // Safety net: never leave content hidden if the observer is
+        // starved (background tab on load, odd embed contexts, etc.).
+        setTimeout(showAll, 2500);
+      } else {
+        showAll();
+      }
+    </script>
   </body>
 </html>

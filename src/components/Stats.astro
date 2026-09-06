@@ -1,7 +1,7 @@
 ---
-// Stats — a row of stat tiles (e.g. "34 Google reviews", "5.0★ rating").
-// Only render stats that are real/confirmed — never a fabricated number.
-// docs/design-system.md §9/§14, master-prompt.md §34/§44.
+// Stats — a row of stat tiles. Large Bebas numerals as visual anchors,
+// Manrope for the supporting label. Only render real/confirmed figures —
+// never a fabricated number. docs/design-system.md §"Numbers & statistics".
 interface Stat {
   value: string;
   label: string;
@@ -19,8 +19,8 @@ const { stats, class: className } = Astro.props;
   {
     stats.map((stat) => (
       <div class="stats__item">
-        <dt class="text-display stats__value">{stat.value}</dt>
-        <dd class="text-small text-muted stats__label">{stat.label}</dd>
+        <dt class="stats__value">{stat.value}</dt>
+        <dd class="stats__label text-micro">{stat.label}</dd>
       </div>
     ))
   }
@@ -29,23 +29,47 @@ const { stats, class: className } = Astro.props;
 <style>
   .stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: var(--space-8);
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
     margin: 0;
+    background: var(--color-border);
+    border: 1px solid var(--color-border);
   }
 
   .stats__item {
     display: flex;
     flex-direction: column;
-    gap: var(--space-1);
+    gap: var(--space-2);
+    min-width: 0;
+    padding: var(--space-4);
+    background: var(--color-bg);
   }
 
   .stats__value {
-    font-size: clamp(1.75rem, 4vw, var(--text-display-size));
-    color: var(--color-primary-hover);
+    font-family: var(--font-display);
+    font-weight: 400;
+    line-height: 0.9;
+    letter-spacing: 0.01em;
+    font-variant-numeric: tabular-nums;
+    font-size: clamp(2.25rem, 8vw, 4.5rem);
+    color: var(--color-text-strong);
+    overflow-wrap: break-word;
   }
 
   .stats__label {
     margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  @media (min-width: 480px) {
+    .stats__item {
+      padding: var(--space-6);
+    }
+  }
+
+  @media (min-width: 720px) {
+    .stats {
+      grid-template-columns: repeat(4, 1fr);
+    }
   }
 </style>

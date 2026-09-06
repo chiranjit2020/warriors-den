@@ -1,14 +1,13 @@
 ---
-// Header — site nav + primary CTA + mobile hamburger + sticky mobile CTA
-// bar. docs/design-system.md §14, master-prompt.md §33.
+// Header — site nav + primary CTA + theme toggle + mobile hamburger +
+// sticky mobile CTA bar. docs/design-system.md §"Navigation".
 import Container from './Container.astro';
 import Button from './Button.astro';
+import ThemeToggle from './ThemeToggle.astro';
 import MobileMenu from './MobileMenu.astro';
 import { withBase } from '../lib/base';
 
 // Structural nav, not business data — matches docs/information-architecture.md.
-// Prefixed with withBase() here at the source, since MobileMenu just
-// renders whatever href string it's handed.
 const navItems = [
   { label: 'About', href: withBase('/about/') },
   { label: 'Programs', href: withBase('/programs/') },
@@ -24,22 +23,24 @@ const ctaLabel = 'Book Free Trial';
 
 <div class="announcement-bar">
   <Container>
-    <p class="text-caption announcement-bar__text">
-      Training now open across 3 Kolkata locations — Bablatala · Kestopur · Madhyamgram
+    <p class="text-micro announcement-bar__text">
+      <span class="announcement-bar__dot" aria-hidden="true"></span>
+      Now training across 3 Kolkata locations — Bablatala · Kestopur · Madhyamgram
     </p>
   </Container>
 </div>
 
-<header class="site-header">
-  <Container class="site-header__bar">
-    <a href={withBase('/')} class="site-header__logo text-h3">Warriors Den <span>MMA</span></a>
+<header class="site-header" data-scrolled="false">
+  <Container>
+    <div class="site-header__bar">
+    <a href={withBase('/')} class="site-header__logo">Warriors Den <span>MMA</span></a>
 
     <nav class="site-header__nav" aria-label="Primary">
       <ul class="site-header__nav-list">
         {
           navItems.map((item) => (
             <li>
-              <a class="site-header__nav-link text-body" href={item.href}>
+              <a class="site-header__nav-link" href={item.href}>
                 {item.label}
               </a>
             </li>
@@ -49,6 +50,7 @@ const ctaLabel = 'Book Free Trial';
     </nav>
 
     <div class="site-header__actions">
+      <ThemeToggle class="site-header__theme" />
       <Button href={ctaHref} variant="primary" class="site-header__cta">{ctaLabel}</Button>
       <button
         type="button"
@@ -58,44 +60,69 @@ const ctaLabel = 'Book Free Trial';
         aria-label="Open menu"
       >
         <svg class="icon-open" width="22" height="22" viewBox="0 0 22 22" aria-hidden="true">
-          <path
-            d="M2 5h18M2 11h18M2 17h18"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-          ></path>
+          <path d="M2 5h18M2 11h18M2 17h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
         </svg>
         <svg class="icon-close" width="22" height="22" viewBox="0 0 22 22" aria-hidden="true">
-          <path d="M3 3l16 16M19 3L3 19" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-          ></path>
+          <path d="M3 3l16 16M19 3L3 19" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
         </svg>
       </button>
     </div>
 
     <MobileMenu items={navItems} ctaHref={ctaHref} ctaLabel={ctaLabel} />
+    </div>
   </Container>
 </header>
 
 <div class="sticky-mobile-cta">
-  <Button href={ctaHref} variant="primary" class="sticky-mobile-cta__btn">{ctaLabel}</Button>
+  <Button href={ctaHref} variant="primary" class="sticky-mobile-cta__btn" arrow>{ctaLabel}</Button>
 </div>
 
 <style>
   .announcement-bar {
-    background: var(--color-secondary);
+    background: var(--color-bg-sunken);
+    border-bottom: 1px solid var(--color-border);
   }
   .announcement-bar__text {
-    color: var(--color-text-inverse-muted);
+    color: var(--color-text-muted);
     text-align: center;
+    letter-spacing: 0.08em;
     padding-block: var(--space-2);
+  }
+  .announcement-bar__dot {
+    display: none;
+  }
+  @media (min-width: 720px) {
+    .announcement-bar__text {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+    }
+    .announcement-bar__dot {
+      display: block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      flex-shrink: 0;
+    }
   }
 
   .site-header {
     position: sticky;
     top: 0;
     z-index: 50;
-    background: var(--color-background);
-    border-bottom: 1px solid var(--color-border);
+    background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid transparent;
+    transition:
+      border-color var(--duration-base) var(--ease-standard),
+      background-color var(--duration-base) var(--ease-standard);
+  }
+  .site-header[data-scrolled='true'] {
+    background: color-mix(in srgb, var(--color-bg) 95%, transparent);
+    border-bottom-color: var(--color-border);
   }
 
   .site-header__bar {
@@ -104,34 +131,54 @@ const ctaLabel = 'Book Free Trial';
     align-items: center;
     justify-content: space-between;
     gap: var(--space-4);
-    padding-block: var(--space-4);
+    padding-block: var(--space-3);
   }
 
   .site-header__logo {
-    color: var(--color-secondary);
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--color-text-strong);
     white-space: nowrap;
+    transform: translateY(0.05em);
   }
   .site-header__logo span {
-    /* text-h3, bold — large text, so primary-hover's 3.28:1 clears the 3:1
-       threshold here; see design-system.md §1 for why smaller text can't. */
-    color: var(--color-primary-hover);
+    color: var(--color-accent);
   }
 
   .site-header__nav {
     display: none;
   }
-
   .site-header__nav-list {
     display: flex;
     gap: var(--space-6);
   }
-
   .site-header__nav-link {
+    position: relative;
+    font-size: var(--fs-small);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
     color: var(--color-text);
-    font-weight: 500;
+    padding-block: var(--space-2);
+    transition: color var(--duration-fast) var(--ease-standard);
+  }
+  .site-header__nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 100%;
+    bottom: 0;
+    height: 2px;
+    background: var(--color-accent);
+    transition: right var(--duration-base) var(--ease-out);
   }
   .site-header__nav-link:hover {
-    color: var(--color-primary-strong); /* hover state — primary-hover fails 4.5:1, see design-system.md §1 */
+    color: var(--color-text-strong);
+  }
+  .site-header__nav-link:hover::after {
+    right: 0;
   }
 
   .site-header__actions {
@@ -139,7 +186,6 @@ const ctaLabel = 'Book Free Trial';
     align-items: center;
     gap: var(--space-3);
   }
-
   .site-header__cta {
     display: none;
   }
@@ -150,14 +196,15 @@ const ctaLabel = 'Book Free Trial';
     justify-content: center;
     width: 44px;
     height: 44px;
-    border: none;
-    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
     background: transparent;
-    color: var(--color-secondary);
+    color: var(--color-text-strong);
     cursor: pointer;
   }
   .site-header__toggle:hover {
-    background: var(--color-surface);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
   }
   .site-header__toggle .icon-close {
     display: none;
@@ -176,11 +223,11 @@ const ctaLabel = 'Book Free Trial';
     left: 0;
     right: 0;
     padding: var(--space-3) var(--gutter-mobile);
-    background: var(--color-background);
+    background: color-mix(in srgb, var(--color-bg) 92%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-top: 1px solid var(--color-border);
-    box-shadow: var(--shadow-elevated);
   }
-
   .sticky-mobile-cta :global(.sticky-mobile-cta__btn) {
     width: 100%;
   }
@@ -202,8 +249,13 @@ const ctaLabel = 'Book Free Trial';
 </style>
 
 <script>
+  const header = document.querySelector<HTMLElement>('.site-header');
   const toggle = document.querySelector<HTMLButtonElement>('.site-header__toggle');
   const menu = document.getElementById('wd-mobile-menu');
+
+  const onScroll = () => header?.setAttribute('data-scrolled', String(window.scrollY > 8));
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
 
   function closeMenu() {
     if (!toggle || !menu) return;
@@ -211,7 +263,6 @@ const ctaLabel = 'Book Free Trial';
     toggle.setAttribute('aria-label', 'Open menu');
     menu.hidden = true;
   }
-
   function openMenu() {
     if (!toggle || !menu) return;
     toggle.setAttribute('aria-expanded', 'true');
@@ -223,15 +274,12 @@ const ctaLabel = 'Book Free Trial';
     const isOpen = toggle.getAttribute('aria-expanded') === 'true';
     isOpen ? closeMenu() : openMenu();
   });
-
   menu?.addEventListener('click', (event) => {
     if ((event.target as HTMLElement).closest('a')) closeMenu();
   });
-
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') closeMenu();
   });
-
   window.addEventListener('resize', () => {
     if (window.innerWidth >= 900) closeMenu();
   });

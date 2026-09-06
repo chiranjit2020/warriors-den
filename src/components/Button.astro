@@ -1,12 +1,17 @@
 ---
 // Button — Primary / Secondary / Outline / Ghost / Text / Icon variants.
-// docs/design-system.md §7. Renders <a> when href is given, <button> otherwise.
+// docs/design-system.md §"Buttons". Renders <a> when href is given,
+// <button> otherwise. Labels are Bebas Neue, uppercase, tracked — condensed
+// caps read compact but clear the large-text contrast tier, which is what
+// lets #FFFFFF sit on the #EF0D33 primary fill.
 interface Props {
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'text' | 'icon';
   href?: string;
   type?: 'button' | 'submit' | 'reset';
   loading?: boolean;
   disabled?: boolean;
+  /** appends a → that nudges on hover */
+  arrow?: boolean;
   class?: string;
   ariaLabel?: string; // required in practice for variant="icon"
   [key: `data-${string}`]: string | undefined;
@@ -18,13 +23,14 @@ const {
   type = 'button',
   loading = false,
   disabled = false,
+  arrow = false,
   class: className,
   ariaLabel,
   ...rest
 } = Astro.props;
 
 const Tag = href ? 'a' : 'button';
-const classes = ['btn', `btn--${variant}`, className].filter(Boolean).join(' ');
+const classes = ['btn', `btn--${variant}`, arrow && 'btn--arrow', className].filter(Boolean).join(' ');
 ---
 
 <Tag
@@ -39,96 +45,159 @@ const classes = ['btn', `btn--${variant}`, className].filter(Boolean).join(' ');
 >
   {loading && <span class="btn__spinner" aria-hidden="true"></span>}
   <span class="btn__label"><slot /></span>
+  {arrow && <span class="btn__arrow" aria-hidden="true">&rarr;</span>}
 </Tag>
 
 <style>
   .btn {
+    --btn-pad-x: var(--space-6);
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: var(--space-2);
-    min-height: 44px;
-    padding-inline: var(--space-6);
-    border-radius: var(--radius-md);
-    border: 2px solid transparent;
+    min-height: 48px;
+    padding-inline: var(--btn-pad-x);
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-display);
     font-size: var(--text-button-size);
-    font-weight: var(--text-button-weight);
-    line-height: var(--text-button-line-height);
+    font-weight: 400;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
     cursor: pointer;
-    transition: background-color var(--duration-base) var(--ease-standard),
-      border-color var(--duration-base) var(--ease-standard),
-      color var(--duration-base) var(--ease-standard),
-      opacity var(--duration-base) var(--ease-standard);
+    transition:
+      background-color var(--duration-fast) var(--ease-standard),
+      border-color var(--duration-fast) var(--ease-standard),
+      color var(--duration-fast) var(--ease-standard),
+      transform var(--duration-fast) var(--ease-out);
+  }
+  .btn__label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    /* nudge Bebas baseline visually centred */
+    transform: translateY(0.06em);
+  }
+  /* icons passed into the slot alongside label text */
+  .btn__label :global(svg) {
+    display: block;
+    flex-shrink: 0;
   }
 
   .btn[disabled],
   .btn[aria-disabled='true'] {
-    opacity: 0.5;
+    opacity: 0.45;
     cursor: not-allowed;
     pointer-events: none;
   }
 
+  @media (hover: hover) {
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+  }
+  .btn:active {
+    transform: translateY(0);
+  }
+
+  /* Primary — the dominant action. Accent fill, white label. */
   .btn--primary {
-    background: var(--color-primary);
-    color: var(--color-primary-text);
+    background: var(--color-accent);
+    color: var(--color-on-accent);
   }
   .btn--primary:hover {
-    background: var(--color-primary-hover);
+    background: var(--color-accent-hover);
   }
 
+  /* Secondary — solid, on dark surfaces */
   .btn--secondary {
-    background: var(--color-secondary);
-    color: var(--color-text-inverse);
+    background: var(--color-surface-raised);
+    color: var(--color-text-strong);
+    border-color: var(--color-border-strong);
   }
   .btn--secondary:hover {
-    background: var(--color-secondary-hover);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
   }
 
+  /* Outline — transparent, hairline, red on hover */
   .btn--outline {
     background: transparent;
-    border-color: var(--color-secondary);
-    color: var(--color-secondary);
+    border-color: var(--color-border-strong);
+    color: var(--color-text-strong);
   }
   .btn--outline:hover {
-    background: var(--color-surface);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
   }
 
   .btn--ghost {
     background: transparent;
-    color: var(--color-secondary);
+    color: var(--color-text-strong);
   }
   .btn--ghost:hover {
-    background: var(--color-surface);
+    color: var(--color-accent);
   }
 
+  /* Text — inline, Manrope (not display), small */
   .btn--text {
+    font-family: var(--font-body);
+    font-size: var(--fs-small);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--color-accent-text);
     background: transparent;
-    color: var(--color-primary-strong); /* 15px normal weight — primary-hover fails 4.5:1, see design-system.md §1 */
     padding-inline: 0;
     min-height: auto;
+    border: 0;
+  }
+  .btn--text .btn__label {
+    transform: none;
+    padding-bottom: 2px;
+    border-bottom: 1px solid transparent;
   }
   .btn--text:hover {
-    text-decoration: underline;
+    transform: none;
+  }
+  .btn--text:hover .btn__label {
+    border-bottom-color: currentColor;
   }
 
   .btn--icon {
+    font-family: var(--font-body);
     padding: 0;
     width: 44px;
     height: 44px;
-    border-radius: var(--radius-pill);
+    min-height: 44px;
     background: transparent;
-    color: var(--color-secondary);
+    border-color: var(--color-border);
+    color: var(--color-text-strong);
   }
   .btn--icon:hover {
-    background: var(--color-surface);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
   }
 
-  .btn:active {
-    transform: scale(0.98);
+  /* Arrow nudge */
+  .btn__arrow {
+    display: inline-block;
+    transition: transform var(--duration-fast) var(--ease-out);
   }
+  @media (hover: hover) {
+    .btn--arrow:hover .btn__arrow {
+      transform: translateX(4px);
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    .btn:active {
-      transform: none;
+    .btn,
+    .btn:hover,
+    .btn:active,
+    .btn__arrow {
+      transform: none !important;
     }
   }
 
@@ -140,7 +209,6 @@ const classes = ['btn', `btn--${variant}`, className].filter(Boolean).join(' ');
     border-top-color: transparent;
     animation: btn-spin var(--duration-slow) linear infinite;
   }
-
   @keyframes btn-spin {
     to {
       transform: rotate(360deg);

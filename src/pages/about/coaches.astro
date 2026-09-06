@@ -63,12 +63,18 @@ const siteUrl = Astro.site?.toString() ?? '/';
   }
   .coaches-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-6);
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
     margin-top: var(--space-12);
     max-width: 640px;
   }
   .cta-row {
     margin-top: var(--space-12);
+  }
+  @media (min-width: 600px) {
+    .coaches-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-6);
+    }
   }
 </style>

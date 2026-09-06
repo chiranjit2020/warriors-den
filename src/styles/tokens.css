@@ -1,86 +1,142 @@
 /*
-  Design tokens — implements docs/design-system.md.
-  Single brand-controlled theme (not a user-toggleable light/dark mode).
-  --color-*-dark tokens are for dark SECTIONS (e.g. footer, dark hero),
-  used deliberately per component, not swapped via prefers-color-scheme.
+  Warriors Den MMA — design tokens.
+  Implements docs/design-system.md.
+
+  Two themes, ONE identity. Dark is the canonical brand expression and the
+  default; light is the same system translated to a bright environment.
+  Theme is selected by `data-theme` on <html> (set by the no-flash script
+  in BaseLayout and toggled by ThemeToggle.astro), NOT by prefers-color-scheme.
+
+  Structural tokens (space / radius / motion / container / type scale) keep
+  stable names so every component composes from the same vocabulary.
 */
 
 :root {
-  /* ---- Color: brand ---- */
-  --color-primary: #ff7810;
-  --color-primary-hover: #e56a00; /* backgrounds/borders only — 3.28:1 on white, fails 4.5:1 as text */
-  --color-primary-strong: #ad4a00; /* orange-family TEXT/icons on light backgrounds — 5.59:1 on white, WCAG AA */
-  --color-primary-text: #1c2045; /* required text color ON primary — 5.92:1 contrast */
-  --color-secondary: #1c2045;
-  --color-secondary-hover: #141733;
+  color-scheme: dark;
 
-  /* ---- Color: surfaces ---- */
-  --color-background: #ffffff;
-  --color-background-dark: #14172f;
-  --color-surface: #f7f7f9;
-  --color-surface-dark: #22264f;
+  /* ============================================================
+     COLOR — dark theme (default / canonical)
+     ============================================================ */
 
-  /* ---- Color: text ---- */
-  --color-text: #16182b;
-  --color-text-muted: #5b5f73;
-  --color-text-inverse: #ffffff;
-  --color-text-inverse-muted: #b7b9cc;
+  /* Surfaces — near-black brand canvas + restrained tonal steps */
+  --color-bg: #111517;
+  --color-bg-sunken: #0c0f10;
+  --color-surface: #1b2023;
+  --color-surface-raised: #232a2d;
 
-  /* ---- Color: border ---- */
-  --color-border: #e4e4ea;
-  --color-border-dark: #33375c;
+  /* Borders — hairline framing, never heavy */
+  --color-border: rgba(255, 255, 255, 0.11);
+  --color-border-strong: rgba(255, 255, 255, 0.22);
 
-  /* ---- Color: semantic ---- */
-  --color-success: #1f9254;
-  --color-warning: #b45309;
-  --color-error: #d92d20;
+  /* Text */
+  --color-text: #edeeee; /* body copy — 15.8:1 on bg */
+  --color-text-strong: #ffffff; /* headings / high-priority UI */
+  --color-text-muted: #9ba0a2; /* secondary text / metadata — 6.2–7.0:1 */
 
-  /* ---- Typography ---- */
-  /* Self-hosted static per-weight files via @fontsource/manrope (not the
-     variable font — see BaseLayout.astro for why), imported in BaseLayout. */
-  --font-family-base: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* Accent — controlled, intentional. #EF0D33 is the fixed brand red.
+     It clears 3:1 (large text, borders, focus, graphic accents, large
+     fills) but NOT 4.5:1 as small text — for small accent-colored text
+     use --color-accent-text. */
+  --color-accent: #ef0d33;
+  --color-accent-hover: #ff2a48;
+  --color-accent-text: #ff4a63; /* small accent text on dark — 5.6:1 */
+  --color-on-accent: #ffffff; /* text/icons on an accent fill */
 
-  --text-display-size: 2.25rem;
-  --text-display-weight: 800;
-  --text-display-line-height: 1.1;
+  /* Brand neutral swatch (per master prompt) — disabled states, quiet rules */
+  --color-neutral: #888888;
 
-  --text-h1-size: 1.875rem;
-  --text-h1-weight: 700;
-  --text-h1-line-height: 1.15;
+  /* Semantic — always paired with an icon/text, never color alone */
+  --color-success: #3ea875;
+  --color-warning: #e0a33a;
+  --color-error: #ff5a5f;
+  --color-error-surface: rgba(255, 90, 95, 0.14);
 
-  --text-h2-size: 1.5rem;
-  --text-h2-weight: 700;
-  --text-h2-line-height: 1.2;
+  /* ---- Compatibility aliases (older components/pages still name these) ---- */
+  --color-primary: var(--color-accent);
+  --color-primary-hover: var(--color-accent-hover);
+  --color-primary-strong: var(--color-accent-text);
+  --color-primary-text: var(--color-on-accent);
+  --color-secondary: var(--color-surface-raised);
+  --color-secondary-hover: var(--color-surface);
+  --color-background: var(--color-bg);
+  --color-background-dark: var(--color-bg-sunken);
+  --color-surface-dark: var(--color-surface);
+  --color-text-inverse: var(--color-text-strong);
+  --color-text-inverse-muted: var(--color-text-muted);
+  --color-border-dark: var(--color-border-strong);
+
+  /* ============================================================
+     TYPOGRAPHY
+     ============================================================ */
+
+  /* Display / titles — Bebas Neue (self-hosted, weight 400 only).
+     Condensed, uppercase, high-impact. Fallback stack is also condensed
+     so a font swap doesn't reflow catastrophically. */
+  --font-display: 'Bebas Neue', 'Oswald', 'Arial Narrow', 'Helvetica Neue', sans-serif;
+  /* Body / interface — Manrope (self-hosted static weights 400–800). */
+  --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-base: var(--font-body); /* alias */
+
+  /* Display scale (Bebas). Large, allowed to occupy space. */
+  --fs-display-xl: clamp(2.75rem, 7.6vw, 6.5rem);
+  --fs-display-l: clamp(2.35rem, 6vw, 4.75rem);
+  --fs-display-m: clamp(2rem, 4.5vw, 3.5rem);
+  --lh-display: 0.94;
+  --tracking-display: 0.012em;
+
+  /* Interface scale (Manrope) */
+  --fs-ui-heading: 1.0625rem; /* supporting headings, bold Manrope */
+  --fs-body-lg: 1.125rem;
+  --fs-body: 1rem;
+  --fs-small: 0.875rem;
+  --fs-micro: 0.75rem; /* uppercase tracked technical labels */
+  --tracking-micro: 0.18em;
+
+  /* ---- Legacy type-scale tokens (base.css classes + older pages) ---- */
+  --text-display-size: 2.5rem;
+  --text-display-weight: 400;
+  --text-display-line-height: 0.95;
+
+  --text-h1-size: 2rem;
+  --text-h1-weight: 400;
+  --text-h1-line-height: 1;
+
+  --text-h2-size: 1.625rem;
+  --text-h2-weight: 400;
+  --text-h2-line-height: 1;
 
   --text-h3-size: 1.25rem;
-  --text-h3-weight: 600;
-  --text-h3-line-height: 1.25;
+  --text-h3-weight: 700;
+  --text-h3-line-height: 1.2;
 
-  --text-h4-size: 1.125rem;
-  --text-h4-weight: 600;
+  --text-h4-size: 1.0625rem;
+  --text-h4-weight: 700;
   --text-h4-line-height: 1.3;
 
   --text-body-size: 1rem;
   --text-body-weight: 400;
-  --text-body-line-height: 1.6;
+  --text-body-line-height: 1.65;
 
   --text-small-size: 0.875rem;
   --text-small-weight: 400;
-  --text-small-line-height: 1.5;
+  --text-small-line-height: 1.55;
 
   --text-caption-size: 0.75rem;
-  --text-caption-weight: 500;
+  --text-caption-weight: 600;
   --text-caption-line-height: 1.4;
 
-  --text-button-size: 0.9375rem;
-  --text-button-weight: 600;
+  --text-button-size: 1.375rem; /* Bebas — reads compact; large-text contrast tier */
+  --text-button-weight: 400;
   --text-button-line-height: 1;
 
-  /* ---- Spacing scale (4px base) ---- */
+  /* ============================================================
+     SPACING — 4px base, editorial upper range
+     ============================================================ */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
   --space-4: 16px;
+  --space-5: 20px;
   --space-6: 24px;
   --space-8: 32px;
   --space-12: 48px;
@@ -88,38 +144,105 @@
   --space-20: 80px;
   --space-24: 96px;
   --space-30: 120px;
+  --space-40: 160px;
+  --space-48: 192px;
 
-  /* ---- Container ---- */
-  --container-max-width: 1280px;
-  --gutter-mobile: 16px;
-  --gutter-tablet: 24px;
-  --gutter-desktop: 32px;
+  /* ============================================================
+     LAYOUT
+     ============================================================ */
+  --container-max-width: 1320px;
+  --gutter-mobile: 20px;
+  --gutter-tablet: 32px;
+  --gutter-desktop: 48px;
 
-  /* ---- Radius ---- */
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
+  /* ============================================================
+     RADIUS — sharp geometry, near-square
+     ============================================================ */
+  --radius-sm: 2px;
+  --radius-md: 2px;
+  --radius-lg: 3px;
   --radius-pill: 999px;
 
-  /* ---- Shadow ---- */
-  --shadow-subtle: 0 1px 2px rgba(20, 23, 47, 0.06);
-  --shadow-medium: 0 4px 12px rgba(20, 23, 47, 0.1);
-  --shadow-elevated: 0 12px 32px rgba(20, 23, 47, 0.16);
+  /* ============================================================
+     ELEVATION — used sparingly; dark relies on borders, not shadow
+     ============================================================ */
+  --shadow-subtle: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-medium: 0 12px 30px -12px rgba(0, 0, 0, 0.6);
+  --shadow-elevated: 0 32px 64px -24px rgba(0, 0, 0, 0.7);
 
-  /* ---- Motion ---- */
-  --duration-fast: 120ms;
-  --duration-base: 200ms;
-  --duration-slow: 320ms;
+  /* ============================================================
+     MOTION — restrained, fast, physical
+     ============================================================ */
+  --duration-fast: 160ms;
+  --duration-base: 260ms;
+  --duration-slow: 480ms;
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Texture — almost subliminal grain overlay opacity */
+  --texture-grain-opacity: 0.035;
 }
 
-/* Desktop-scaled type (design-system.md §2: mobile → desktop sizes) */
+/* ================================================================
+   COLOR — light theme. Same identity, brighter environment.
+   ================================================================ */
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --color-bg: #ffffff;
+  --color-bg-sunken: #f2f2f2;
+  --color-surface: #f4f4f4;
+  --color-surface-raised: #ffffff;
+
+  --color-border: rgba(17, 21, 23, 0.12);
+  --color-border-strong: rgba(17, 21, 23, 0.26);
+
+  --color-text: #1a1e20; /* 15:1 on white */
+  --color-text-strong: #111517;
+  --color-text-muted: #5f6467; /* 5.3–6.0:1 */
+
+  --color-accent: #ef0d33;
+  --color-accent-hover: #c90026;
+  --color-accent-text: #c40027; /* small accent text on light — 6.2:1 */
+  --color-on-accent: #ffffff;
+
+  --color-neutral: #888888;
+
+  --color-success: #1f7a4d;
+  --color-warning: #a5610a;
+  --color-error: #c4241f;
+  --color-error-surface: rgba(196, 36, 31, 0.1);
+
+  --color-secondary: #111517; /* dark band on a light page (footer, CTA) */
+  --color-secondary-hover: #23292c;
+  --color-background-dark: #111517;
+  --color-surface-dark: #1b2023;
+  --color-text-inverse: #ffffff;
+  --color-text-inverse-muted: #9ba0a2;
+  --color-border-dark: rgba(255, 255, 255, 0.22);
+
+  --shadow-subtle: 0 1px 2px rgba(17, 21, 23, 0.06);
+  --shadow-medium: 0 12px 30px -12px rgba(17, 21, 23, 0.16);
+  --shadow-elevated: 0 32px 64px -24px rgba(17, 21, 23, 0.2);
+
+  --texture-grain-opacity: 0.025;
+}
+
+/* Very small screens — trim the condensed button label so long labels
+   (e.g. "Call +91 88510 84372") stay on one line. */
+@media (max-width: 360px) {
+  :root {
+    --text-button-size: 1.1875rem;
+  }
+}
+
+/* Desktop-scaled legacy type sizes (base.css .text-* classes) */
 @media (min-width: 900px) {
   :root {
     --text-display-size: 3.5rem;
-    --text-h1-size: 2.5rem;
-    --text-h2-size: 2rem;
+    --text-h1-size: 2.75rem;
+    --text-h2-size: 2.125rem;
     --text-h3-size: 1.5rem;
-    --text-h4-size: 1.25rem;
+    --text-h4-size: 1.1875rem;
   }
 }

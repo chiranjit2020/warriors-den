@@ -1,8 +1,9 @@
 ---
-// CoachCard — docs/design-system.md §9. No fabricated bio/photo — shows
-// a clearly-labeled placeholder when those fields aren't supplied yet.
+// CoachCard — docs/design-system.md §"Cards". No fabricated bio/photo —
+// shows a clearly-labeled placeholder when those fields aren't supplied.
+// Renders its own surface (rather than composing <Card>) so all of its
+// styling is in this component's scope.
 import type { Coach } from '../../data/coaches';
-import Card from './Card.astro';
 
 interface Props {
   coach: Coach;
@@ -15,31 +16,37 @@ const initials = coach.name
   .join('');
 ---
 
-<Card as="article" class="coach-card">
+<article class="coach-card">
   <div class="coach-card__avatar" aria-hidden="true">
     {coach.photo ? <img src={coach.photo} alt="" /> : <span>{initials}</span>}
   </div>
-  <h3 class="text-h3">{coach.name}</h3>
-  <p class="text-small text-muted">{coach.role}</p>
-  <p class="text-caption coach-card__pending">{coach.bio ?? 'Full bio coming soon'}</p>
-</Card>
+  <h3 class="coach-card__name">{coach.name}</h3>
+  <p class="text-micro coach-card__role">{coach.role}</p>
+  <p class="text-small text-muted coach-card__bio">{coach.bio ?? 'Full bio coming soon'}</p>
+</article>
 
 <style>
   .coach-card {
     text-align: center;
+    padding: var(--space-6);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
   }
   .coach-card__avatar {
-    width: 80px;
-    height: 80px;
+    width: 72px;
+    height: 72px;
     margin: 0 auto var(--space-4);
-    border-radius: 50%;
-    background: var(--color-secondary);
-    color: var(--color-text-inverse);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border-strong);
+    color: var(--color-text-strong);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: var(--text-h3-size);
-    font-weight: 700;
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    letter-spacing: 0.03em;
     overflow: hidden;
   }
   .coach-card__avatar img {
@@ -47,8 +54,19 @@ const initials = coach.name
     height: 100%;
     object-fit: cover;
   }
-  .coach-card__pending {
+  .coach-card__name {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--color-text-strong);
+  }
+  .coach-card__role {
+    margin-top: var(--space-2);
+    color: var(--color-accent-text);
+  }
+  .coach-card__bio {
     margin-top: var(--space-3);
-    color: var(--color-text-muted);
   }
 </style>
