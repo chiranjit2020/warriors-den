@@ -86,7 +86,7 @@ const faqs = [
           athletes — build confidence, discipline, and real fitness, one class at a time.
         </p>
         <div class="hero__actions">
-          <Button href={withBase('/free-trial/')} variant="primary" arrow>Book a Free Trial</Button>
+          <Button href={withBase('/free-trial/')} variant="primary" arrow class="hero__cta-primary">Book a Free Trial</Button>
           <Button href="#programs" variant="outline">Explore Programs</Button>
         </div>
         <p class="text-micro hero__trust">★ 5.0 rated on Google — Madhyamgram branch</p>
@@ -293,14 +293,19 @@ const faqs = [
 
   /* ---------- Hero ---------- */
   .hero {
-    padding-block: var(--space-20) var(--space-24);
+    padding-block: var(--space-6) var(--space-16);
     border-bottom: 1px solid var(--color-border);
   }
   .hero :global(.hero__inner) {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-12);
+    gap: var(--space-8);
     align-items: center;
+  }
+  /* the in-hero primary CTA is redundant on mobile — the fixed bottom
+     "Book Free Trial" bar covers it */
+  .hero__actions :global(.hero__cta-primary) {
+    display: none;
   }
   .hero__content,
   .hero__media {
@@ -576,9 +581,15 @@ const faqs = [
   }
 
   @media (min-width: 900px) {
+    .hero {
+      padding-block: var(--space-20) var(--space-24);
+    }
     .hero :global(.hero__inner) {
       grid-template-columns: 1.05fr 0.95fr;
       gap: var(--space-20);
+    }
+    .hero__actions :global(.hero__cta-primary) {
+      display: inline-flex;
     }
   }
 
