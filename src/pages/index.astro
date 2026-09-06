@@ -218,7 +218,7 @@ const faqs = [
           index="05"
         />
       </div>
-      <div data-reveal>
+      <div class="gallery-wrap" data-reveal>
         <Gallery count={6} />
       </div>
     </Container>
@@ -545,6 +545,16 @@ const faqs = [
   }
   .final-cta :global(.btn) {
     margin-top: var(--space-4);
+  }
+
+  /* ---------- Gallery ---------- */
+  .gallery-wrap {
+    margin-top: var(--space-12);
+  }
+  @media (max-width: 599px) {
+    #gallery :global(.section-heading__description) {
+      margin-bottom: var(--space-2);
+    }
   }
 
   /* ---------- Trial form ---------- */
