@@ -28,17 +28,24 @@ const steps = ['About you', 'Your training', 'Almost done'];
 
 <div class:list={['trial-form-wrap', className]}>
   <form id="trial-form" class="trial-form" novalidate>
-    <div class="trial-form__progress" data-enhanced-only>
-      <ol class="trial-form__bars" aria-hidden="true">
-        {steps.map(() => <li></li>)}
+    <div class="trial-form__progress">
+      <ol class="trial-form__steps-nav" aria-hidden="true">
+        {
+          steps.map((label, i) => (
+            <li class="trial-form__step-chip" data-state={i === 0 ? 'current' : 'upcoming'}>
+              <span class="trial-form__step-num">{i + 1}</span>
+              <span class="trial-form__step-name">{label}</span>
+            </li>
+          ))
+        }
       </ol>
       <p class="text-micro trial-form__progress-text" data-step-status aria-live="polite">
-        Step 1 of {steps.length} — {steps[0]}
+        Step 1 of {steps.length}
       </p>
     </div>
 
     <!-- Step 1 -->
-    <div class="trial-form__step" data-step="1" data-title={steps[0]} role="group" aria-label={steps[0]}>
+    <div class="trial-form__step" data-step="1" role="group" aria-label={steps[0]}>
       <div class="trial-form__row">
         <label class="trial-form__field">
           <span class="trial-form__label">Full Name <span aria-hidden="true">*</span></span>
@@ -55,7 +62,7 @@ const steps = ['About you', 'Your training', 'Almost done'];
     </div>
 
     <!-- Step 2 -->
-    <div class="trial-form__step" data-step="2" data-title={steps[1]} role="group" aria-label={steps[1]}>
+    <div class="trial-form__step" data-step="2" role="group" aria-label={steps[1]}>
       <label class="trial-form__field">
         <span class="trial-form__label">Preferred Location <span aria-hidden="true">*</span></span>
         <select name="location" required>
@@ -87,7 +94,7 @@ const steps = ['About you', 'Your training', 'Almost done'];
     </div>
 
     <!-- Step 3 -->
-    <div class="trial-form__step" data-step="3" data-title={steps[2]} role="group" aria-label={steps[2]}>
+    <div class="trial-form__step" data-step="3" role="group" aria-label={steps[2]}>
       <div class="trial-form__row">
         <label class="trial-form__field">
           <span class="trial-form__label">Email</span>
@@ -154,34 +161,79 @@ const steps = ['About you', 'Your training', 'Almost done'];
   .trial-form__progress {
     display: none;
     flex-direction: column;
-    gap: var(--space-3);
+    gap: var(--space-6);
   }
   .trial-form.is-enhanced .trial-form__progress {
     display: flex;
   }
-  .trial-form__bars {
+
+  .trial-form__steps-nav {
     display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: 1fr;
-    gap: var(--space-2);
+    grid-template-columns: repeat(3, 1fr);
+    margin: 0;
+    padding: 0;
   }
-  .trial-form__bars li {
-    height: 3px;
+  .trial-form__step-chip {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    text-align: center;
+  }
+  /* connector line into each chip (center of prev circle -> center of this) */
+  .trial-form__step-chip:not(:first-child)::before {
+    content: '';
+    position: absolute;
+    top: 13px;
+    left: -50%;
+    right: 50%;
+    height: 2px;
     background: var(--color-border-strong);
   }
-  .trial-form__bars li.is-done {
+  .trial-form__step-chip[data-state='done']::before,
+  .trial-form__step-chip[data-state='current']::before {
     background: var(--color-accent);
   }
-  .trial-form__progress-text {
+
+  .trial-form__step-num {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--color-border-strong);
+    background: var(--color-bg);
     color: var(--color-text-muted);
+    font-family: var(--font-body);
+    font-size: var(--fs-micro);
+    font-weight: 700;
+    line-height: 1;
+  }
+  .trial-form__step-chip[data-state='done'] .trial-form__step-num,
+  .trial-form__step-chip[data-state='current'] .trial-form__step-num {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+  .trial-form__step-chip[data-state='current'] .trial-form__step-num {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 25%, transparent);
   }
 
-  /* enhanced-only bits are hidden until the script opts in */
-  [data-enhanced-only] {
-    display: none;
+  .trial-form__step-name {
+    font-size: var(--fs-micro);
+    letter-spacing: 0.02em;
+    color: var(--color-text-muted);
   }
-  .trial-form.is-enhanced [data-enhanced-only] {
-    display: block;
+  .trial-form__step-chip[data-state='current'] .trial-form__step-name {
+    color: var(--color-text-strong);
+    font-weight: 700;
+  }
+
+  .trial-form__progress-text {
+    color: var(--color-text-muted);
   }
 
   /* ---- steps ---- */
@@ -382,7 +434,7 @@ const steps = ['About you', 'Your training', 'Almost done'];
   const errorBanner = document.querySelector<HTMLElement>('[data-form-error]');
   if (form && wrap) {
     const steps = Array.from(form.querySelectorAll<HTMLElement>('.trial-form__step'));
-    const bars = Array.from(form.querySelectorAll<HTMLElement>('.trial-form__bars li'));
+    const chips = Array.from(form.querySelectorAll<HTMLElement>('.trial-form__step-chip'));
     const status = form.querySelector<HTMLElement>('[data-step-status]');
     const backBtn = form.querySelector<HTMLButtonElement>('[data-step-back]');
     const nextBtn = form.querySelector<HTMLButtonElement>('[data-step-next]');
@@ -448,9 +500,11 @@ const steps = ['About you', 'Your training', 'Almost done'];
       steps.forEach((s) => {
         s.hidden = Number(s.dataset.step) !== current;
       });
-      bars.forEach((li, i) => li.classList.toggle('is-done', i < current));
-      const title = steps[current - 1].dataset.title ?? '';
-      if (status) status.textContent = `Step ${current} of ${TOTAL} — ${title}`;
+      chips.forEach((li, i) => {
+        const n = i + 1;
+        li.dataset.state = n < current ? 'done' : n === current ? 'current' : 'upcoming';
+      });
+      if (status) status.textContent = `Step ${current} of ${TOTAL}`;
       if (backBtn) backBtn.hidden = current === 1;
       const last = current === TOTAL;
       if (nextBtn) nextBtn.hidden = last;
