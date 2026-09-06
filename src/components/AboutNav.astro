@@ -21,7 +21,7 @@ const items = [
         <li>
           <a
             href={withBase(item.href)}
-            class="about-nav__link text-small"
+            class="about-nav__link"
             aria-current={item.id === active ? 'page' : undefined}
           >
             {item.label}
@@ -41,18 +41,25 @@ const items = [
   .about-nav__link {
     display: inline-block;
     padding: var(--space-2) var(--space-4);
-    border-radius: var(--radius-pill);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-size: var(--fs-micro);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
     color: var(--color-text-muted);
     border: 1px solid var(--color-border);
+    transition:
+      border-color var(--duration-fast) var(--ease-standard),
+      color var(--duration-fast) var(--ease-standard);
   }
   .about-nav__link:hover {
-    border-color: var(--color-primary);
-    color: var(--color-text);
+    border-color: var(--color-accent);
+    color: var(--color-text-strong);
   }
   .about-nav__link[aria-current='page'] {
-    background: var(--color-secondary);
-    border-color: var(--color-secondary);
-    color: var(--color-text-inverse);
-    font-weight: 600;
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-on-accent);
   }
 </style>

@@ -39,11 +39,11 @@ const breadcrumbList = {
       items.map((item, i) => (
         <li class="breadcrumbs__item">
           {item.href ? (
-            <a href={withBase(item.href)} class="text-small">
+            <a href={withBase(item.href)} class="text-micro">
               {item.label}
             </a>
           ) : (
-            <span class="text-small" aria-current="page">
+            <span class="text-micro" aria-current="page">
               {item.label}
             </span>
           )}
@@ -63,24 +63,24 @@ const breadcrumbList = {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--space-2);
+    gap: var(--space-3);
   }
   .breadcrumbs__item {
     display: flex;
     align-items: center;
-    gap: var(--space-2);
+    gap: var(--space-3);
   }
   .breadcrumbs__item a {
     color: var(--color-text-muted);
+    transition: color var(--duration-fast) var(--ease-standard);
   }
   .breadcrumbs__item a:hover {
-    color: var(--color-primary-strong); /* hover state — primary-hover fails 4.5:1, see design-system.md §1 */
+    color: var(--color-accent);
   }
   .breadcrumbs__item span[aria-current] {
-    color: var(--color-text);
-    font-weight: 600;
+    color: var(--color-text-strong);
   }
   .breadcrumbs__sep {
-    color: var(--color-border);
+    color: var(--color-accent);
   }
 </style>

@@ -38,17 +38,22 @@ const categories = [
   </section>
 
   <section class="section">
-    <Container class="gallery-sections">
-      {
-        categories.map((category) => (
-          <div class="gallery-section">
-            <h2 class="text-h3">{category.title}</h2>
-            <Gallery count={category.count} />
-          </div>
-        ))
-      }
-      <div class="cta-row">
-        <Button href={withBase('/free-trial/')} variant="primary">Book a Free Trial</Button>
+    <Container>
+      <div class="gallery-sections">
+        {
+          categories.map((category, i) => (
+            <div class="gallery-section">
+              <div class="gallery-section__head">
+                <span class="gallery-section__index text-index">{String(i + 1).padStart(2, '0')}</span>
+                <h2 class="gallery-section__title">{category.title}</h2>
+              </div>
+              <Gallery count={category.count} />
+            </div>
+          ))
+        }
+        <div class="cta-row">
+          <Button href={withBase('/free-trial/')} variant="primary" arrow>Book a Free Trial</Button>
+        </div>
       </div>
     </Container>
   </section>
@@ -56,13 +61,14 @@ const categories = [
 
 <style>
   .page-header {
-    padding-block: var(--space-12) var(--space-8);
+    padding-block: var(--space-16) var(--space-8);
+    border-bottom: 1px solid var(--color-border);
   }
   .page-header :global(.breadcrumbs) {
     margin-bottom: var(--space-8);
   }
   .section {
-    padding-block: var(--space-8) var(--space-20);
+    padding-block: var(--space-16) var(--space-24);
   }
   .gallery-sections {
     display: flex;
@@ -73,6 +79,25 @@ const categories = [
     display: flex;
     flex-direction: column;
     gap: var(--space-6);
+  }
+  .gallery-section__head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-4);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .gallery-section__index {
+    font-size: 1.5rem;
+    color: var(--color-accent);
+  }
+  .gallery-section__title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--color-text-strong);
   }
   .cta-row {
     margin-top: var(--space-4);

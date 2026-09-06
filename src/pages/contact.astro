@@ -27,49 +27,61 @@ import { locations } from '../../data/locations';
   </section>
 
   <section class="section">
-    <Container class="contact-layout">
-      <div class="contact-layout__form">
-        <h2 class="text-h3">Send a message</h2>
-        <ContactForm />
-      </div>
+    <Container>
+      <div class="contact-layout">
+        <div class="contact-layout__form">
+          <h2 class="text-h3">Send a message</h2>
+          <ContactForm />
+        </div>
 
-      <aside class="contact-layout__info">
-        <h2 class="text-h3">Call a branch directly</h2>
-        <ul class="branch-list">
-          {
-            locations.map((location) => (
-              <li class="branch-list__item">
-                <p class="text-h4">{location.name}</p>
-                {location.phone && (
-                  <a href={`tel:${location.phone.replace(/\s+/g, '')}`} class="text-body branch-list__phone">
-                    {location.phone}
-                  </a>
-                )}
-                <p class="text-small text-muted">{location.address}</p>
-              </li>
-            ))
-          }
-        </ul>
-      </aside>
+        <aside class="contact-layout__info">
+          <h2 class="text-h3">Call a branch directly</h2>
+          <ul class="branch-list">
+            {
+              locations.map((location) => (
+                <li class="branch-list__item">
+                  <p class="branch-list__name">{location.name}</p>
+                  {location.phone && (
+                    <a href={`tel:${location.phone.replace(/\s+/g, '')}`} class="branch-list__phone">
+                      <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M6.6 2.5 4 5.1c-.5.5-.7 1.3-.4 2 1.2 3.4 3.4 6.5 6.3 9s6.1 4.4 9.6 5.4c.7.2 1.5 0 2-.5l2.5-2.6c.5-.5.4-1.4-.2-1.8l-3.7-2.4c-.5-.3-1.1-.3-1.5.1l-1.5 1.3c-2-1-3.7-2.7-4.8-4.7l1.3-1.6c.3-.4.4-1 .1-1.5L8.6 2.7c-.4-.6-1.3-.7-1.9-.2Z"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                      {location.phone}
+                    </a>
+                  )}
+                  <p class="text-small text-muted">{location.address}</p>
+                </li>
+              ))
+            }
+          </ul>
+        </aside>
+      </div>
     </Container>
   </section>
 </BaseLayout>
 
 <style>
   .page-header {
-    padding-block: var(--space-12) var(--space-8);
+    padding-block: var(--space-16) var(--space-8);
+    border-bottom: 1px solid var(--color-border);
   }
   .page-header :global(.breadcrumbs) {
     margin-bottom: var(--space-8);
   }
   .section {
-    padding-block: var(--space-8) var(--space-20);
+    padding-block: var(--space-16) var(--space-24);
   }
 
   .contact-layout {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-12);
+    gap: var(--space-16);
   }
   .contact-layout__form,
   .contact-layout__info {
@@ -81,23 +93,38 @@ import { locations } from '../../data/locations';
   .branch-list {
     display: flex;
     flex-direction: column;
-    gap: var(--space-6);
   }
   .branch-list__item {
-    padding-bottom: var(--space-6);
-    border-bottom: 1px solid var(--color-border);
+    padding-block: var(--space-6);
+    border-top: 1px solid var(--color-border);
   }
   .branch-list__item:last-child {
-    border-bottom: none;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .branch-list__name {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--color-text-strong);
   }
   .branch-list__phone {
-    display: inline-block;
-    margin-top: var(--space-1);
-    color: var(--color-primary-strong); /* body text — primary-hover fails 4.5:1, see design-system.md §1 */
-    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+    color: var(--color-accent-text);
+    font-weight: 700;
+  }
+  .branch-list__phone:hover {
+    color: var(--color-accent);
+  }
+  .branch-list__phone svg {
+    flex-shrink: 0;
   }
   .branch-list__item p.text-small {
-    margin-top: var(--space-2);
+    margin-top: var(--space-3);
     max-width: 40ch;
   }
 

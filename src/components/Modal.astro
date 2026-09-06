@@ -45,13 +45,14 @@ const { id, titleId = `${id}-title`, class: className } = Astro.props;
   }
 
   .modal::backdrop {
-    background: rgba(20, 23, 47, 0.6);
+    background: rgba(8, 10, 11, 0.72);
   }
 
   .modal__panel {
     position: relative;
     padding: var(--space-8);
-    background: var(--color-background);
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border-strong);
   }
 
   .modal__close {
@@ -63,14 +64,15 @@ const { id, titleId = `${id}-title`, class: className } = Astro.props;
     justify-content: center;
     width: 36px;
     height: 36px;
-    border: none;
-    border-radius: var(--radius-pill);
-    background: var(--color-surface);
-    color: var(--color-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--color-text-strong);
     cursor: pointer;
   }
   .modal__close:hover {
-    background: var(--color-border);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
   }
 </style>
 

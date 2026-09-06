@@ -7,7 +7,6 @@ import Container from '../../components/Container.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Badge from '../../components/Badge.astro';
 import Button from '../../components/Button.astro';
-import Card from '../../components/Card.astro';
 import { programs, type Program } from '../../../data/programs';
 import { withBase } from '../../lib/base';
 
@@ -41,8 +40,8 @@ const otherPrograms = programs.filter((p) => p.id !== program.id);
         ]}
       />
       <Badge tone="primary" class="page-header__badge">{program.audience}</Badge>
-      <h1 class="text-display page-header__title">{program.name}</h1>
-      <p class="text-body text-muted page-header__lede">{program.shortDescription}</p>
+      <h1 class="text-display-l page-header__title">{program.name}</h1>
+      <p class="text-body-lg text-muted page-header__lede">{program.shortDescription}</p>
       <div class="page-header__actions">
         <Button href={withBase(`/free-trial/?program=${program.id}`)} variant="primary">
           Book a Free Trial
@@ -53,21 +52,23 @@ const otherPrograms = programs.filter((p) => p.id !== program.id);
   </section>
 
   <section class="section">
-    <Container class="content-grid">
-      <div class="content-grid__main">
-        <h2 class="text-h2">About {program.name}</h2>
-        {program.overview.map((paragraph) => <p class="text-body">{paragraph}</p>)}
-      </div>
+    <Container>
+      <div class="content-grid">
+        <div class="content-grid__main">
+          <h2 class="text-h2">About {program.name}</h2>
+          {program.overview.map((paragraph) => <p class="text-body">{paragraph}</p>)}
+        </div>
 
-      <Card as="aside" class="content-grid__aside">
-        <h2 class="text-h4">What you'll build</h2>
-        <ul class="benefits-list">
-          {program.benefits.map((benefit) => <li class="text-small">{benefit}</li>)}
-        </ul>
-        <Button href={withBase(`/free-trial/?program=${program.id}`)} variant="primary" class="aside-cta">
-          Try {program.name}
-        </Button>
-      </Card>
+        <aside class="content-grid__aside">
+          <p class="text-micro content-grid__aside-label">What you'll build</p>
+          <ul class="benefits-list">
+            {program.benefits.map((benefit) => <li class="text-small">{benefit}</li>)}
+          </ul>
+          <Button href={withBase(`/free-trial/?program=${program.id}`)} variant="primary" class="aside-cta">
+            Try {program.name}
+          </Button>
+        </aside>
+      </div>
     </Container>
   </section>
 
@@ -76,9 +77,13 @@ const otherPrograms = programs.filter((p) => p.id !== program.id);
       <h2 class="text-h2">Explore other programs</h2>
       <div class="other-programs">
         {
-          otherPrograms.map((p) => (
-            <a href={withBase(`/programs/${p.slug}/`)} class="other-programs__link text-h4">
-              {p.name} →
+          otherPrograms.map((p, i) => (
+            <a href={withBase(`/programs/${p.slug}/`)} class="other-programs__link">
+              <span class="other-programs__index text-micro">{String(i + 1).padStart(2, '0')}</span>
+              <span class="other-programs__row">
+                <span class="other-programs__name">{p.name}</span>
+                <span class="other-programs__arrow" aria-hidden="true">&rarr;</span>
+              </span>
             </a>
           ))
         }
@@ -89,7 +94,8 @@ const otherPrograms = programs.filter((p) => p.id !== program.id);
 
 <style>
   .page-header {
-    padding-block: var(--space-12) var(--space-12);
+    padding-block: var(--space-16) var(--space-12);
+    border-bottom: 1px solid var(--color-border);
   }
   .page-header :global(.breadcrumbs) {
     margin-bottom: var(--space-6);
@@ -101,8 +107,8 @@ const otherPrograms = programs.filter((p) => p.id !== program.id);
     color: var(--color-text-strong);
   }
   .page-header__lede {
-    margin-top: var(--space-4);
-    max-width: 60ch;
+    margin-top: var(--space-5);
+    max-width: 56ch;
   }
   .page-header__actions {
     display: flex;
@@ -112,10 +118,11 @@ const otherPrograms = programs.filter((p) => p.id !== program.id);
   }
 
   .section {
-    padding-block: var(--space-12);
+    padding-block: var(--space-16);
   }
   .section--surface {
     background: var(--color-surface);
+    border-block: 1px solid var(--color-border);
   }
 
   .content-grid {
@@ -130,6 +137,16 @@ const otherPrograms = programs.filter((p) => p.id !== program.id);
     max-width: 68ch;
   }
 
+  .content-grid__aside {
+    align-self: start;
+    padding: var(--space-6);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+  .content-grid__aside-label {
+    color: var(--color-accent-text);
+  }
   .benefits-list {
     display: flex;
     flex-direction: column;
@@ -145,11 +162,10 @@ const otherPrograms = programs.filter((p) => p.id !== program.id);
     content: '';
     position: absolute;
     left: 0;
-    top: 0.55em;
+    top: 0.6em;
     width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--color-primary);
+    height: 1px;
+    background: var(--color-accent);
   }
   .content-grid__aside :global(.aside-cta) {
     width: 100%;
@@ -158,18 +174,45 @@ const otherPrograms = programs.filter((p) => p.id !== program.id);
   .other-programs {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-4);
+    gap: var(--space-2);
     margin-top: var(--space-8);
   }
   .other-programs__link {
-    padding: var(--space-4);
-    border-radius: var(--radius-md);
-    background: var(--color-surface);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-5) var(--space-4);
+    background: var(--color-bg);
     border: 1px solid var(--color-border);
     color: var(--color-text);
+    transition:
+      border-color var(--duration-fast) var(--ease-standard),
+      transform var(--duration-base) var(--ease-out);
   }
-  .other-programs__link:hover {
-    border-color: var(--color-primary);
+  @media (hover: hover) {
+    .other-programs__link:hover {
+      border-color: var(--color-accent);
+      transform: translateY(-3px);
+    }
+  }
+  .other-programs__index {
+    color: var(--color-accent);
+  }
+  .other-programs__row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+  .other-programs__name {
+    font-family: var(--font-display);
+    font-size: 1.375rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--color-text-strong);
+  }
+  .other-programs__arrow {
+    color: var(--color-accent);
   }
 
   @media (min-width: 900px) {

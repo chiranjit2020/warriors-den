@@ -10,7 +10,6 @@ import Container from '../../components/Container.astro';
 import SectionHeading from '../../components/SectionHeading.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import AboutNav from '../../components/AboutNav.astro';
-import Card from '../../components/Card.astro';
 import Button from '../../components/Button.astro';
 import { withBase } from '../../lib/base';
 
@@ -38,14 +37,16 @@ const traits = [
   </section>
 
   <section class="section">
-    <Container class="philosophy-intro">
-      <p class="text-display philosophy-intro__statement">
-        "We don't just create fighters.<br />We forge warriors."
-      </p>
-      <p class="text-body text-muted">
-        At Warriors Den, "warrior" isn't about aggression. It's about what training builds in you
-        over time — on the mat and off it.
-      </p>
+    <Container>
+      <div class="philosophy-intro">
+        <p class="text-display-l philosophy-intro__statement">
+          "We don't just create fighters.<br />We forge warriors."
+        </p>
+        <p class="text-body-lg text-muted">
+          At Warriors Den, "warrior" isn't about aggression. It's about what training builds in you
+          over time — on the mat and off it.
+        </p>
+      </div>
     </Container>
   </section>
 
@@ -54,13 +55,12 @@ const traits = [
       <SectionHeading eyebrow="What a warrior means to us" title="Seven traits we train for" align="center" />
       <div class="traits-grid">
         {
-          traits.map((trait) => (
-            <Card>
-              <h3 class="text-h4">{trait.title}</h3>
-              <p class="text-small text-muted" style="margin-top: var(--space-2);">
-                {trait.description}
-              </p>
-            </Card>
+          traits.map((trait, i) => (
+            <article class="trait">
+              <span class="trait__index text-index">{String(i + 1).padStart(2, '0')}</span>
+              <h3 class="trait__title">{trait.title}</h3>
+              <p class="text-small text-muted">{trait.description}</p>
+            </article>
           ))
         }
       </div>
@@ -68,16 +68,20 @@ const traits = [
   </section>
 
   <section class="final-cta">
-    <Container class="final-cta__inner">
-      <h2 class="text-h1 final-cta__title">Ready to start?</h2>
-      <Button href={withBase('/free-trial/')} variant="primary">Book a Free Trial</Button>
+    <Container>
+      <div class="final-cta__inner">
+        <p class="text-micro final-cta__kicker">Ready when you are</p>
+        <h2 class="text-display-m final-cta__title">Ready to start?</h2>
+        <Button href={withBase('/free-trial/')} variant="primary" arrow>Book a Free Trial</Button>
+      </div>
     </Container>
   </section>
 </BaseLayout>
 
 <style>
   .page-header {
-    padding-block: var(--space-12) var(--space-8);
+    padding-block: var(--space-16) var(--space-8);
+    border-bottom: 1px solid var(--color-border);
   }
   .page-header :global(.breadcrumbs) {
     margin-bottom: var(--space-8);
@@ -87,10 +91,11 @@ const traits = [
   }
 
   .section {
-    padding-block: var(--space-12);
+    padding-block: var(--space-16);
   }
   .section--surface {
     background: var(--color-surface);
+    border-block: 1px solid var(--color-border);
   }
 
   .philosophy-intro {
@@ -98,40 +103,79 @@ const traits = [
   }
   .philosophy-intro__statement {
     color: var(--color-text-strong);
-    margin-bottom: var(--space-6);
+    margin-bottom: var(--space-8);
+  }
+  .philosophy-intro :global(.text-body-lg) {
+    max-width: 52ch;
   }
 
   .traits-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-6);
     margin-top: var(--space-12);
+    border: 1px solid var(--color-border);
+  }
+  .trait {
+    padding: var(--space-8) var(--space-6);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .trait__index {
+    display: block;
+    font-size: 1.75rem;
+    color: var(--color-accent);
+    margin-bottom: var(--space-3);
+  }
+  .trait__title {
+    font-family: var(--font-body);
+    font-size: var(--fs-ui-heading);
+    font-weight: 700;
+    color: var(--color-text-strong);
+    margin-bottom: var(--space-2);
   }
 
   .final-cta {
-    background: var(--color-secondary);
-    color: var(--color-text-inverse);
-    padding-block: var(--space-16);
+    background: var(--color-bg-sunken);
+    border-block: 1px solid var(--color-border);
+    padding-block: var(--space-20);
   }
   .final-cta__inner {
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-6);
+    gap: var(--space-4);
+  }
+  .final-cta__kicker {
+    color: var(--color-accent-text);
   }
   .final-cta__title {
-    color: var(--color-text-inverse);
+    color: var(--color-text-strong);
+  }
+  .final-cta :global(.btn) {
+    margin-top: var(--space-4);
   }
 
   @media (min-width: 600px) {
     .traits-grid {
       grid-template-columns: repeat(2, 1fr);
     }
+    .trait {
+      border-right: 1px solid var(--color-border);
+    }
+    /* last column has no right border */
+    .trait:nth-child(2n) {
+      border-right: 0;
+    }
   }
   @media (min-width: 1024px) {
     .traits-grid {
       grid-template-columns: repeat(3, 1fr);
+    }
+    .trait:nth-child(2n) {
+      border-right: 1px solid var(--color-border);
+    }
+    .trait:nth-child(3n) {
+      border-right: 0;
     }
   }
 </style>

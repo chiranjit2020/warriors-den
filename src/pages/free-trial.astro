@@ -38,35 +38,38 @@ const trustPoints = [
   </section>
 
   <section class="section">
-    <Container class="layout">
-      <div class="layout__form">
-        <TrialForm />
-      </div>
+    <Container>
+      <div class="layout">
+        <div class="layout__form">
+          <TrialForm />
+        </div>
 
-      <aside class="layout__aside">
-        <h2 class="text-h4">Our locations</h2>
-        <ul class="location-list">
-          {
-            locations.map((location) => (
-              <li>
-                <a href={withBase(`/locations/${location.slug}/`)} class="text-small">
-                  {location.name}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-        <p class="text-caption text-muted">
-          Not sure which branch? Leave it blank in the form and we'll help you pick.
-        </p>
-      </aside>
+        <aside class="layout__aside">
+          <p class="text-micro layout__aside-label">Our locations</p>
+          <ul class="location-list">
+            {
+              locations.map((location) => (
+                <li>
+                  <a href={withBase(`/locations/${location.slug}/`)} class="location-list__link">
+                    {location.name}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+          <p class="text-small text-muted">
+            Not sure which branch? Leave it blank in the form and we'll help you pick.
+          </p>
+        </aside>
+      </div>
     </Container>
   </section>
 </BaseLayout>
 
 <style>
   .page-header {
-    padding-block: var(--space-12) var(--space-8);
+    padding-block: var(--space-16) var(--space-8);
+    border-bottom: 1px solid var(--color-border);
   }
   .page-header :global(.breadcrumbs) {
     margin-bottom: var(--space-8);
@@ -93,24 +96,46 @@ const trustPoints = [
   }
 
   .section {
-    padding-block: var(--space-8) var(--space-20);
+    padding-block: var(--space-16) var(--space-24);
   }
 
   .layout {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-12);
+    gap: var(--space-16);
+  }
+  .layout__aside {
+    align-self: start;
+    padding: var(--space-6);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+  .layout__aside-label {
+    color: var(--color-accent-text);
   }
 
   .location-list {
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
-    margin: var(--space-4) 0 var(--space-6);
+    margin: var(--space-4) 0 var(--space-5);
+    border-top: 1px solid var(--color-border);
   }
-  .location-list a {
-    color: var(--color-primary-strong); /* small text — primary-hover fails 4.5:1, see design-system.md §1 */
-    font-weight: 600;
+  .location-list li {
+    border-bottom: 1px solid var(--color-border);
+  }
+  .location-list__link {
+    display: block;
+    padding: var(--space-3) 0;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--color-text-strong);
+    transition: color var(--duration-fast) var(--ease-standard);
+  }
+  .location-list__link:hover {
+    color: var(--color-accent);
   }
 
   @media (min-width: 900px) {
