@@ -1,0 +1,270 @@
+---
+// HeroVideo — click-to-play video inside the hero media frame.
+//
+// Weight-conscious by design: nothing but the poster image loads until the
+// viewer presses play. The <video> has no `src` at all until then — the
+// script sets it inside the play handler (also what iOS needs for the
+// gesture to count), calls load(), then play(). The browser streams the
+// MP4 progressively over HTTP range requests from there.
+//
+// Controls are custom (not the native `controls` bar) to keep the framed
+// aesthetic: a centre play button at rest, a compact pause + mute/unmute
+// cluster while playing. Starts muted; unmute is one tap.
+interface Props {
+  /** already base-prefixed .mp4 URL */
+  src: string;
+  /** already base-prefixed poster image URL */
+  poster: string;
+  class?: string;
+}
+
+const { src, poster, class: className } = Astro.props;
+---
+
+<div class:list={['hero-video', className]} data-state="idle" data-src={src}>
+  <img class="hero-video__poster" src={poster} alt="" loading="lazy" decoding="async" />
+  <!-- eslint-disable-next-line -->
+  <video class="hero-video__el" playsinline loop muted preload="none" poster={poster} tabindex="-1"></video>
+  <span class="hero-video__scrim" aria-hidden="true"></span>
+
+  <button type="button" class="hero-video__play" aria-label="Play video">
+    <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
+      <path d="M8 5v14l11-7z" fill="currentColor"></path>
+    </svg>
+  </button>
+
+  <div class="hero-video__controls">
+    <button type="button" class="hero-video__btn hero-video__toggle" aria-label="Pause video">
+      <svg class="i-pause" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+        <path d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor"></path>
+      </svg>
+      <svg class="i-play" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+        <path d="M8 5v14l11-7z" fill="currentColor"></path>
+      </svg>
+    </button>
+    <button type="button" class="hero-video__btn hero-video__mute" aria-label="Unmute video">
+      <svg class="i-muted" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+        <path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor"></path>
+        <path d="M16 8l5 8M21 8l-5 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+      </svg>
+      <svg class="i-sound" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+        <path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor"></path>
+        <path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<style>
+  .hero-video {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: var(--color-bg-sunken);
+  }
+
+  .hero-video__poster,
+  .hero-video__el {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    /* grade the raw footage into the dark brand system
+       (docs/design-system.md §"Image direction") — tune here */
+    filter: grayscale(0.3) saturate(0.6) contrast(1.12) brightness(0.72);
+  }
+  /* poster covers until the video has actually rendered a frame */
+  .hero-video__el {
+    opacity: 0;
+    transition: opacity var(--duration-base) var(--ease-standard);
+  }
+  .hero-video[data-state='playing'] .hero-video__el,
+  .hero-video[data-state='paused'] .hero-video__el {
+    opacity: 1;
+  }
+  /* broken/missing poster: hide the alt-text box, keep the dark ground */
+  .hero-video__poster:not([src]),
+  .hero-video__poster[src=''] {
+    display: none;
+  }
+
+  .hero-video__scrim {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.5) 0%,
+        rgba(0, 0, 0, 0.05) 24%,
+        rgba(0, 0, 0, 0.05) 56%,
+        rgba(0, 0, 0, 0.62) 100%
+      ),
+      radial-gradient(120% 90% at 50% 45%, transparent 55%, rgba(8, 10, 11, 0.5) 100%);
+  }
+
+  /* centre play button — shown at rest and when paused */
+  .hero-video__play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    padding-left: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: var(--radius-sm);
+    background: rgba(17, 21, 23, 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: #fff;
+    cursor: pointer;
+    transition:
+      background-color var(--duration-fast) var(--ease-standard),
+      border-color var(--duration-fast) var(--ease-standard),
+      color var(--duration-fast) var(--ease-standard);
+  }
+  .hero-video__play:hover {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+  .hero-video[data-state='playing'] .hero-video__play {
+    display: none;
+  }
+
+  /* compact pause + mute cluster — visible while playing */
+  .hero-video__controls {
+    position: absolute;
+    right: var(--space-4);
+    bottom: var(--space-4);
+    display: flex;
+    gap: var(--space-2);
+    opacity: 0;
+    transform: translateY(4px);
+    transition:
+      opacity var(--duration-base) var(--ease-standard),
+      transform var(--duration-base) var(--ease-standard);
+  }
+  .hero-video[data-state='playing'] .hero-video__controls,
+  .hero-video[data-state='paused'] .hero-video__controls {
+    opacity: 1;
+    transform: none;
+  }
+
+  .hero-video__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: var(--radius-sm);
+    background: rgba(17, 21, 23, 0.6);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: #fff;
+    cursor: pointer;
+    transition:
+      background-color var(--duration-fast) var(--ease-standard),
+      border-color var(--duration-fast) var(--ease-standard);
+  }
+  .hero-video__btn:hover {
+    border-color: var(--color-accent);
+    background: rgba(239, 13, 51, 0.9);
+  }
+
+  /* icon visibility per state */
+  .hero-video__toggle .i-play {
+    display: none;
+  }
+  .hero-video[data-state='paused'] .hero-video__toggle .i-pause {
+    display: none;
+  }
+  .hero-video[data-state='paused'] .hero-video__toggle .i-play {
+    display: block;
+  }
+  .hero-video__mute .i-sound {
+    display: none;
+  }
+  .hero-video[data-muted='false'] .hero-video__mute .i-muted {
+    display: none;
+  }
+  .hero-video[data-muted='false'] .hero-video__mute .i-sound {
+    display: block;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-video__el,
+    .hero-video__controls,
+    .hero-video__play {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.hero-video').forEach((root) => {
+    const video = root.querySelector<HTMLVideoElement>('.hero-video__el');
+    const src = root.dataset.src;
+    const playBtn = root.querySelector<HTMLButtonElement>('.hero-video__play');
+    const toggle = root.querySelector<HTMLButtonElement>('.hero-video__toggle');
+    const mute = root.querySelector<HTMLButtonElement>('.hero-video__mute');
+    if (!video || !src || !playBtn || !toggle || !mute) return;
+
+    const posterImg = root.querySelector<HTMLImageElement>('.hero-video__poster');
+    posterImg?.addEventListener('error', () => {
+      posterImg.style.display = 'none';
+    });
+
+    let loaded = false;
+    const load = () => {
+      if (loaded) return;
+      video.src = src;
+      video.load();
+      loaded = true;
+    };
+
+    const syncMuted = () => {
+      root.dataset.muted = String(video.muted);
+      mute.setAttribute('aria-label', video.muted ? 'Unmute video' : 'Mute video');
+    };
+
+    const start = () => {
+      load();
+      video.play().catch(() => {
+        root.dataset.state = 'paused';
+      });
+    };
+
+    playBtn.addEventListener('click', start);
+
+    toggle.addEventListener('click', () => {
+      if (video.paused) video.play().catch(() => {});
+      else video.pause();
+    });
+
+    mute.addEventListener('click', () => {
+      video.muted = !video.muted;
+      syncMuted();
+    });
+
+    video.addEventListener('playing', () => {
+      root.dataset.state = 'playing';
+    });
+    video.addEventListener('pause', () => {
+      root.dataset.state = 'paused';
+      toggle.setAttribute('aria-label', 'Play video');
+    });
+    video.addEventListener('play', () => {
+      toggle.setAttribute('aria-label', 'Pause video');
+    });
+
+    syncMuted();
+  });
+</script>

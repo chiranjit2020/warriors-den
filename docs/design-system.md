@@ -170,6 +170,7 @@ decoration. Sections breathe (`--space-24` block padding default).
 | **Badge** | Square micro-label, tracked, transparent + hairline. |
 | **FAQItem** | Native `<details>`; `+` → `×` on open, red icon. |
 | **Gallery** | Honest designed placeholders (frame + index + "photo pending"), never fake stock. |
+| **HeroVideo** | Real training footage in the hero media frame (4:5, `object-fit: cover`). **Click-to-play**: nothing loads until the viewer presses play — the `<video>` gets no `src` until then, then streams progressively over HTTP range requests (source MP4 must be `+faststart`). Custom controls only (no native bar): centre play button at rest, compact pause + mute/unmute cluster while playing; starts muted. Footage is graded into the dark system with a CSS `filter` (desaturate + darken) + a top/bottom scrim + edge vignette so the overlaid labels stay legible. Never autoplays. |
 | **Icons** | Simple, geometric, line-based, single consistent style. Support information, never dominate. |
 
 ---
