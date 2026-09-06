@@ -1,14 +1,16 @@
 ---
-// TrialForm — primary conversion form. docs/design-system.md §8,
+// TrialForm — primary conversion form, as a 3-step flow so the viewer
+// only ever sees 2–3 fields at once (no long scroll). docs/design-system.md §8,
 // master-prompt.md §17.
 //
+// Progressive enhancement: without JS every step is visible and the form
+// is a normal single submit. The script adds `.is-enhanced`, which turns
+// on the stepper (one step visible at a time + Back/Continue nav).
+//
 // IMPORTANT — submission is NOT wired to a real backend. Owner-confirmed
-// decision (docs/architecture.md §7.1): stay stubbed for now rather than
-// add Netlify Forms / a third-party endpoint / a custom backend. The
-// client script below simulates a network request so every UI state
-// (loading/success/error) is real and testable — but no submitted lead
-// actually reaches the business yet. Revisit before this site goes live.
-// Search "TODO: wire real submission" to find the spot.
+// decision (docs/architecture.md §7.1): stay stubbed for now. The client
+// script simulates a request so loading/success/error states are real.
+// Search "TODO: wire real submission".
 import type { Location } from '../../data/locations';
 import type { Program } from '../../data/programs';
 import { locations } from '../../data/locations';
@@ -20,40 +22,42 @@ interface Props {
 }
 
 const { class: className } = Astro.props;
+
+const steps = ['About you', 'Your training', 'Almost done'];
 ---
 
 <div class:list={['trial-form-wrap', className]}>
   <form id="trial-form" class="trial-form" novalidate>
-    <div class="trial-form__row">
-      <label class="trial-form__field">
-        <span class="text-small trial-form__label">Full Name <span aria-hidden="true">*</span></span>
-        <input type="text" name="fullName" required autocomplete="name" />
-        <span class="text-caption trial-form__error" data-error-for="fullName"></span>
-      </label>
-
-      <label class="trial-form__field">
-        <span class="text-small trial-form__label">Mobile Number <span aria-hidden="true">*</span></span>
-        <input type="tel" name="mobile" required autocomplete="tel" inputmode="tel" />
-        <span class="text-caption trial-form__error" data-error-for="mobile"></span>
-      </label>
+    <div class="trial-form__progress" data-enhanced-only>
+      <ol class="trial-form__bars" aria-hidden="true">
+        {steps.map(() => <li></li>)}
+      </ol>
+      <p class="text-micro trial-form__progress-text" data-step-status aria-live="polite">
+        Step 1 of {steps.length} — {steps[0]}
+      </p>
     </div>
 
-    <div class="trial-form__row">
-      <label class="trial-form__field">
-        <span class="text-small trial-form__label">Email</span>
-        <input type="email" name="email" autocomplete="email" />
-        <span class="text-caption trial-form__error" data-error-for="email"></span>
-      </label>
+    <!-- Step 1 -->
+    <div class="trial-form__step" data-step="1" data-title={steps[0]} role="group" aria-label={steps[0]}>
+      <div class="trial-form__row">
+        <label class="trial-form__field">
+          <span class="trial-form__label">Full Name <span aria-hidden="true">*</span></span>
+          <input type="text" name="fullName" required autocomplete="name" />
+          <span class="text-caption trial-form__error" data-error-for="fullName"></span>
+        </label>
 
-      <label class="trial-form__field">
-        <span class="text-small trial-form__label">Age</span>
-        <input type="number" name="age" min="4" max="99" inputmode="numeric" />
-      </label>
+        <label class="trial-form__field">
+          <span class="trial-form__label">Mobile Number <span aria-hidden="true">*</span></span>
+          <input type="tel" name="mobile" required autocomplete="tel" inputmode="tel" />
+          <span class="text-caption trial-form__error" data-error-for="mobile"></span>
+        </label>
+      </div>
     </div>
 
-    <div class="trial-form__row">
+    <!-- Step 2 -->
+    <div class="trial-form__step" data-step="2" data-title={steps[1]} role="group" aria-label={steps[1]}>
       <label class="trial-form__field">
-        <span class="text-small trial-form__label">Preferred Location <span aria-hidden="true">*</span></span>
+        <span class="trial-form__label">Preferred Location <span aria-hidden="true">*</span></span>
         <select name="location" required>
           <option value="" disabled selected>Select a location</option>
           {locations.map((loc: Location) => <option value={loc.id}>{loc.name}</option>)}
@@ -61,37 +65,63 @@ const { class: className } = Astro.props;
         <span class="text-caption trial-form__error" data-error-for="location"></span>
       </label>
 
-      <label class="trial-form__field">
-        <span class="text-small trial-form__label">Program Interested In</span>
-        <select name="program">
-          <option value="">No preference</option>
-          {programs.map((p: Program) => <option value={p.id}>{p.name}</option>)}
-        </select>
-      </label>
+      <div class="trial-form__row">
+        <label class="trial-form__field">
+          <span class="trial-form__label">Program Interested In</span>
+          <select name="program">
+            <option value="">No preference</option>
+            {programs.map((p: Program) => <option value={p.id}>{p.name}</option>)}
+          </select>
+        </label>
+
+        <label class="trial-form__field">
+          <span class="trial-form__label">Preferred Training Time</span>
+          <select name="preferredTime">
+            <option value="">No preference</option>
+            <option value="morning">Morning</option>
+            <option value="afternoon">Afternoon</option>
+            <option value="evening">Evening</option>
+          </select>
+        </label>
+      </div>
     </div>
 
-    <label class="trial-form__field">
-      <span class="text-small trial-form__label">Preferred Training Time</span>
-      <select name="preferredTime">
-        <option value="">No preference</option>
-        <option value="morning">Morning</option>
-        <option value="afternoon">Afternoon</option>
-        <option value="evening">Evening</option>
-      </select>
-    </label>
+    <!-- Step 3 -->
+    <div class="trial-form__step" data-step="3" data-title={steps[2]} role="group" aria-label={steps[2]}>
+      <div class="trial-form__row">
+        <label class="trial-form__field">
+          <span class="trial-form__label">Email</span>
+          <input type="email" name="email" autocomplete="email" />
+          <span class="text-caption trial-form__error" data-error-for="email"></span>
+        </label>
 
-    <label class="trial-form__field">
-      <span class="text-small trial-form__label">Message</span>
-      <textarea name="message" rows="3"></textarea>
-    </label>
+        <label class="trial-form__field">
+          <span class="trial-form__label">Age</span>
+          <input type="number" name="age" min="4" max="99" inputmode="numeric" />
+        </label>
+      </div>
+
+      <label class="trial-form__field">
+        <span class="trial-form__label">Anything we should know?</span>
+        <textarea name="message" rows="3"></textarea>
+      </label>
+    </div>
 
     <div class="trial-form__banner trial-form__banner--error" data-form-error hidden role="alert">
       Please fix the highlighted fields and try again.
     </div>
 
-    <Button type="submit" variant="primary" class="trial-form__submit">
-      <span class="trial-form__submit-label">Book My Free Trial</span>
-    </Button>
+    <div class="trial-form__nav">
+      <button type="button" class="trial-form__back" data-step-back hidden>
+        <span aria-hidden="true">&larr;</span> Back
+      </button>
+      <button type="button" class="trial-form__next" data-step-next hidden>
+        Continue <span aria-hidden="true">&rarr;</span>
+      </button>
+      <Button type="submit" variant="primary" class="trial-form__submit">
+        <span class="trial-form__submit-label">Book My Free Trial</span>
+      </Button>
+    </div>
   </form>
 
   <div class="trial-form__success" data-form-success hidden role="status">
@@ -104,23 +134,86 @@ const { class: className } = Astro.props;
 </div>
 
 <style>
-  .trial-form__row {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-4);
+  .trial-form-wrap {
+    /* keep the progress bar clear of the sticky header when the stepper
+       scrolls itself into view (and for #free-trial anchor jumps) */
+    scroll-margin-top: 96px;
   }
 
   .trial-form {
     display: flex;
     flex-direction: column;
-    gap: var(--space-4);
+    gap: var(--space-5);
   }
-  /* Author-origin `display: flex` above beats the UA stylesheet's
-     `[hidden]{display:none}` (author beats user-agent regardless of
-     specificity), so form.hidden = true from the script silently does
-     nothing unless we say so explicitly here. */
+  /* Author-origin display beats the UA `[hidden]{display:none}` — restate it. */
   .trial-form[hidden] {
     display: none;
+  }
+
+  /* ---- progress (enhanced only) ---- */
+  .trial-form__progress {
+    display: none;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .trial-form.is-enhanced .trial-form__progress {
+    display: flex;
+  }
+  .trial-form__bars {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: var(--space-2);
+  }
+  .trial-form__bars li {
+    height: 3px;
+    background: var(--color-border-strong);
+  }
+  .trial-form__bars li.is-done {
+    background: var(--color-accent);
+  }
+  .trial-form__progress-text {
+    color: var(--color-text-muted);
+  }
+
+  /* enhanced-only bits are hidden until the script opts in */
+  [data-enhanced-only] {
+    display: none;
+  }
+  .trial-form.is-enhanced [data-enhanced-only] {
+    display: block;
+  }
+
+  /* ---- steps ---- */
+  .trial-form__step {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    min-width: 0;
+  }
+  .trial-form.is-enhanced .trial-form__step {
+    min-height: 190px;
+    animation: trial-step-in var(--duration-base) var(--ease-out);
+  }
+  .trial-form__step[hidden] {
+    display: none;
+  }
+  @keyframes trial-step-in {
+    from {
+      opacity: 0;
+      transform: translateX(8px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .trial-form.is-enhanced .trial-form__step {
+      animation: none;
+    }
+  }
+
+  .trial-form__row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
   }
 
   .trial-form__field {
@@ -173,7 +266,6 @@ const { class: className } = Astro.props;
     color: var(--color-error);
     min-height: 1em;
   }
-
   .trial-form [aria-invalid='true'] {
     border-color: var(--color-error);
   }
@@ -188,14 +280,66 @@ const { class: className } = Astro.props;
     border: 1px solid color-mix(in srgb, var(--color-error) 40%, transparent);
   }
 
-  .trial-form :global(.trial-form__submit) {
-    align-self: flex-start;
-    min-width: 220px;
+  /* ---- nav row ---- */
+  .trial-form__nav {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+  .trial-form__back {
+    font-family: var(--font-body);
+    font-size: var(--fs-small);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+    background: transparent;
+    border: 0;
+    padding: var(--space-2) 0;
+    cursor: pointer;
+  }
+  .trial-form__back:hover {
+    color: var(--color-text-strong);
+  }
+  .trial-form__back[hidden] {
+    display: none;
   }
 
-  /* JS toggles aria-busy on submit; Button.astro only renders its own
-     spinner span from a server-side `loading` prop, so give the busy
-     state a visual treatment here too (dim label + spinner via ::after). */
+  .trial-form__next {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 48px;
+    padding-inline: var(--space-6);
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+    font-family: var(--font-display);
+    font-size: var(--text-button-size);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+  .trial-form__next:hover {
+    background: var(--color-accent-hover);
+  }
+  .trial-form__next[hidden] {
+    display: none;
+  }
+
+  .trial-form :global(.trial-form__submit) {
+    margin-left: auto;
+    min-width: 220px;
+  }
+  .trial-form :global(.trial-form__submit[hidden]) {
+    display: none;
+  }
+
+  /* submit busy spinner (JS toggles aria-busy) */
   .trial-form :global(.trial-form__submit[aria-busy='true']) {
     position: relative;
     color: transparent;
@@ -209,7 +353,7 @@ const { class: className } = Astro.props;
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    border: 2px solid var(--color-primary-text);
+    border: 2px solid var(--color-on-accent);
     border-top-color: transparent;
     animation: trial-form-spin var(--duration-slow) linear infinite;
   }
@@ -232,92 +376,161 @@ const { class: className } = Astro.props;
 </style>
 
 <script>
+  const wrap = document.querySelector<HTMLElement>('.trial-form-wrap');
   const form = document.getElementById('trial-form') as HTMLFormElement | null;
   const successEl = document.querySelector<HTMLElement>('[data-form-success]');
   const errorBanner = document.querySelector<HTMLElement>('[data-form-error]');
-
-  // Prefill from query params set by ProgramCard/LocationCard CTAs
-  // (?program=mma, ?location=bablatala).
-  const params = new URLSearchParams(window.location.search);
-  const programField = form?.elements.namedItem('program') as HTMLSelectElement | null;
-  const locationField = form?.elements.namedItem('location') as HTMLSelectElement | null;
-  if (programField && params.get('program')) programField.value = params.get('program')!;
-  if (locationField && params.get('location')) locationField.value = params.get('location')!;
-
-  function setFieldError(name: string, message: string) {
-    const field = form?.elements.namedItem(name) as HTMLElement | null;
-    field?.setAttribute('aria-invalid', 'true');
-    const errorEl = form?.querySelector<HTMLElement>(`[data-error-for="${name}"]`);
-    if (errorEl) errorEl.textContent = message;
-  }
-
-  function clearErrors() {
-    form?.querySelectorAll('[aria-invalid]').forEach((el) => el.removeAttribute('aria-invalid'));
-    form?.querySelectorAll('[data-error-for]').forEach((el) => (el.textContent = ''));
-    errorBanner?.setAttribute('hidden', '');
-  }
-
-  function validate(data: FormData): boolean {
-    let valid = true;
-    const fullName = String(data.get('fullName') ?? '').trim();
-    const mobile = String(data.get('mobile') ?? '').trim();
-    const location = String(data.get('location') ?? '').trim();
-    const email = String(data.get('email') ?? '').trim();
-
-    if (!fullName) {
-      setFieldError('fullName', 'Please enter your name.');
-      valid = false;
-    }
-    if (!mobile || mobile.replace(/\D/g, '').length < 10) {
-      setFieldError('mobile', 'Please enter a valid mobile number.');
-      valid = false;
-    }
-    if (!location) {
-      setFieldError('location', 'Please choose a location.');
-      valid = false;
-    }
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setFieldError('email', 'Please enter a valid email address.');
-      valid = false;
-    }
-    return valid;
-  }
-
-  form?.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    clearErrors();
-
-    const data = new FormData(form);
-    if (!validate(data)) {
-      errorBanner?.removeAttribute('hidden');
-      form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
-      return;
-    }
-
+  if (form && wrap) {
+    const steps = Array.from(form.querySelectorAll<HTMLElement>('.trial-form__step'));
+    const bars = Array.from(form.querySelectorAll<HTMLElement>('.trial-form__bars li'));
+    const status = form.querySelector<HTMLElement>('[data-step-status]');
+    const backBtn = form.querySelector<HTMLButtonElement>('[data-step-back]');
+    const nextBtn = form.querySelector<HTMLButtonElement>('[data-step-next]');
     const submitBtn = form.querySelector<HTMLButtonElement>('.trial-form__submit');
-    submitBtn?.setAttribute('aria-busy', 'true');
-    submitBtn?.setAttribute('disabled', 'true');
+    const TOTAL = steps.length;
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let current = 1;
 
-    try {
-      // TODO: wire real submission once a backend/form-service decision is made
-      // (see the component-level comment at the top of TrialForm.astro).
-      // Simulated for now so the loading/success/error states are all real
-      // and testable end to end.
-      await new Promise((resolve) => setTimeout(resolve, 900));
+    form.classList.add('is-enhanced');
 
-      form.hidden = true;
-      successEl?.removeAttribute('hidden');
-      // The form collapsing can leave the success message scrolled out of
-      // view (the user was scrolled down to the submit button a moment
-      // ago) — bring it into view so the confirmation is actually seen.
-      successEl?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      window.wdToast?.show("You're booked in — we'll be in touch shortly!", 'success');
-    } catch {
-      errorBanner?.removeAttribute('hidden');
-      window.wdToast?.show('Something went wrong. Please try again.', 'error');
-    } finally {
-      submitBtn?.removeAttribute('aria-busy');
-      submitBtn?.removeAttribute('disabled');
+    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    function field(name: string) {
+      return form!.elements.namedItem(name) as HTMLInputElement | HTMLSelectElement | null;
     }
-  });
+    function setFieldError(name: string, message: string) {
+      field(name)?.setAttribute('aria-invalid', 'true');
+      const el = form!.querySelector<HTMLElement>(`[data-error-for="${name}"]`);
+      if (el) el.textContent = message;
+    }
+    function clearErrors() {
+      form!.querySelectorAll('[aria-invalid]').forEach((el) => el.removeAttribute('aria-invalid'));
+      form!.querySelectorAll('[data-error-for]').forEach((el) => (el.textContent = ''));
+      errorBanner?.setAttribute('hidden', '');
+    }
+
+    // returns true if step `n` is valid; assumes errors were cleared by the caller
+    function validateStep(n: number): boolean {
+      let ok = true;
+      const val = (name: string) => String((field(name) as HTMLInputElement)?.value ?? '').trim();
+      if (n === 1) {
+        if (!val('fullName')) {
+          setFieldError('fullName', 'Please enter your name.');
+          ok = false;
+        }
+        if (val('mobile').replace(/\D/g, '').length < 10) {
+          setFieldError('mobile', 'Please enter a valid mobile number.');
+          ok = false;
+        }
+      }
+      if (n === 2) {
+        if (!val('location')) {
+          setFieldError('location', 'Please choose a location.');
+          ok = false;
+        }
+      }
+      if (n === 3) {
+        const email = val('email');
+        if (email && !emailRe.test(email)) {
+          setFieldError('email', 'Please enter a valid email address.');
+          ok = false;
+        }
+      }
+      return ok;
+    }
+
+    function focusFirstInvalid(scope: HTMLElement) {
+      scope.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+    }
+
+    function showStep(n: number, opts: { focus?: boolean } = {}) {
+      current = Math.min(Math.max(n, 1), TOTAL);
+      steps.forEach((s) => {
+        s.hidden = Number(s.dataset.step) !== current;
+      });
+      bars.forEach((li, i) => li.classList.toggle('is-done', i < current));
+      const title = steps[current - 1].dataset.title ?? '';
+      if (status) status.textContent = `Step ${current} of ${TOTAL} — ${title}`;
+      if (backBtn) backBtn.hidden = current === 1;
+      const last = current === TOTAL;
+      if (nextBtn) nextBtn.hidden = last;
+      if (submitBtn) submitBtn.hidden = !last;
+
+      if (opts.focus !== false) {
+        const f = steps[current - 1].querySelector<HTMLElement>('input, select, textarea');
+        f?.focus({ preventScroll: true });
+
+        // if the top of the form (progress bar) is above the fold or tucked
+        // under the sticky header, bring it back down; otherwise leave the
+        // page where it is so advancing feels in-place
+        const top = wrap!.getBoundingClientRect().top;
+        if (top < 96 || top > window.innerHeight - 220) {
+          wrap!.scrollIntoView({ block: 'start', behavior: prefersReduced ? 'auto' : 'smooth' });
+        }
+      }
+    }
+
+    nextBtn?.addEventListener('click', () => {
+      clearErrors();
+      if (validateStep(current)) {
+        showStep(current + 1);
+      } else {
+        errorBanner?.removeAttribute('hidden');
+        focusFirstInvalid(steps[current - 1]);
+      }
+    });
+    backBtn?.addEventListener('click', () => showStep(current - 1));
+
+    // Enter advances instead of submitting, except on the last step / in textarea
+    form.addEventListener('keydown', (e) => {
+      const t = e.target as HTMLElement;
+      if (e.key === 'Enter' && t.tagName !== 'TEXTAREA' && current < TOTAL) {
+        e.preventDefault();
+        nextBtn?.click();
+      }
+    });
+
+    // Prefill from query params (?program=mma, ?location=bablatala)
+    const params = new URLSearchParams(window.location.search);
+    const programField = field('program') as HTMLSelectElement | null;
+    const locationField = field('location') as HTMLSelectElement | null;
+    if (programField && params.get('program')) programField.value = params.get('program')!;
+    if (locationField && params.get('location')) locationField.value = params.get('location')!;
+
+    showStep(1, { focus: false });
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      clearErrors();
+
+      // validate every step; jump to the first that fails
+      for (let n = 1; n <= TOTAL; n++) {
+        if (!validateStep(n)) {
+          errorBanner?.removeAttribute('hidden');
+          showStep(n, { focus: false });
+          focusFirstInvalid(steps[n - 1]);
+          return;
+        }
+      }
+
+      submitBtn?.setAttribute('aria-busy', 'true');
+      submitBtn?.setAttribute('disabled', 'true');
+
+      try {
+        // TODO: wire real submission once a backend/form-service decision is made.
+        await new Promise((resolve) => setTimeout(resolve, 900));
+
+        form.hidden = true;
+        successEl?.removeAttribute('hidden');
+        successEl?.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'center' });
+        window.wdToast?.show("You're booked in — we'll be in touch shortly!", 'success');
+      } catch {
+        errorBanner?.removeAttribute('hidden');
+        window.wdToast?.show('Something went wrong. Please try again.', 'error');
+      } finally {
+        submitBtn?.removeAttribute('aria-busy');
+        submitBtn?.removeAttribute('disabled');
+      }
+    });
+  }
 </script>
